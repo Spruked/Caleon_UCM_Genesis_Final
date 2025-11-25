@@ -1,0 +1,7 @@
+{
+  "remote": null,
+  "timeout": 3000,
+  "secure": false,
+  "docker_host": "ucm:8000",
+  "local_host": "localhost:8000"
+}

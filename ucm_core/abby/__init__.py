@@ -1,0 +1,1 @@
+# Abby Protocol - Core purpose layer for protecting and guiding Abby
