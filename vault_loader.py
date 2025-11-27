@@ -390,6 +390,11 @@ class VaultLoader:
 vault_loader = VaultLoader()
 
 
+def load_seed_vault() -> Dict[str, Dict[str, Any]]:
+    """Convenience function to load all seed vaults"""
+    return vault_loader.load_all_vaults()
+
+
 def load_seed_vaults() -> Dict[str, Dict[str, Any]]:
     """Convenience function to load all seed vaults"""
     return vault_loader.load_all_vaults()

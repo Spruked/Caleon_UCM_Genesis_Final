@@ -2,8 +2,8 @@
 Production telemetry and monitoring setup
 """
 
-import sentry_sdk
-from sentry_sdk.integrations.fastapi import FastAPIIntegration
+# import sentry_sdk
+# from sentry_sdk.integrations.fastapi import FastAPIIntegration
 from prometheus_client import Counter, Histogram, Gauge
 from config import settings
 
@@ -38,13 +38,13 @@ COGNITION_CYCLES = Counter(
 
 def setup_monitoring():
     """Initialize monitoring and error tracking"""
-    if settings.sentry_dsn:
-        sentry_sdk.init(
-            dsn=settings.sentry_dsn,
-            integrations=[FastAPIIntegration()],
-            environment=settings.environment,
-            traces_sample_rate=1.0 if settings.environment == "production" else 0.1,
-        )
+    # if settings.sentry_dsn:
+    #     sentry_sdk.init(
+    #         dsn=settings.sentry_dsn,
+    #         integrations=[FastAPIIntegration()],
+    #         environment=settings.environment,
+    #         traces_sample_rate=1.0 if settings.environment == "production" else 0.1,
+    #     )
 
     if settings.prometheus_metrics:
         # Additional setup if needed

@@ -1,5 +1,5 @@
 # Production Settings
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 import os
 from typing import List, Optional
 

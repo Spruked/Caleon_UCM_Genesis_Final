@@ -5,6 +5,7 @@ import os
 import random
 import numpy as np
 from typing import Any, Dict, Optional, List, Callable
+from pathlib import Path
 
 class EchoStack:
     """
@@ -21,6 +22,8 @@ class EchoStack:
         harmonizer_cb: Optional[Callable[[Dict[str, Any]], None]] = None,
         telemetry_path: Optional[str] = None
     ):
+        if vaults is None:
+            vaults = self._load_vaults()
         self.vaults = vaults or {}
         self.harmonizer_cb = harmonizer_cb
         self.reflection_vault = []  # Simple list for reflections
@@ -34,6 +37,21 @@ class EchoStack:
         self.telemetry_path = telemetry_path or os.getenv("TELEMETRY_PATH", "echostack_module/telemetry.json")
 
         self._load_seed_logic()
+
+    def _load_vaults(self) -> Dict[str, Any]:
+        """Load vaults from master_seed_vault."""
+        vaults = {}
+        vault_path = Path("../Vault_System_1.0/master_seed_vault")
+        if vault_path.exists():
+            for json_file in vault_path.glob("*.json"):
+                try:
+                    with open(json_file, 'r') as f:
+                        vault_data = json.load(f)
+                        vault_name = json_file.stem  # filename without .json
+                        vaults[vault_name] = vault_data
+                except Exception as e:
+                    print(f"Failed to load vault {json_file}: {e}")
+        return vaults
 
     def _load_seed_logic(self) -> None:
         """

@@ -10,6 +10,8 @@ import json
 import os
 from typing import Dict, Any, List
 from dataclasses import dataclass
+from gyro_cortical_harmonizer_module.gyro_cortical_harmonizer import GyroCorticalHarmonizer
+from pathlib import Path
 
 
 @dataclass
@@ -21,22 +23,28 @@ class ReflectionObject:
     cycles_completed: int
     final_consensus: str
     timestamp: float
+    harmonized_verdict: Any = None
 
 
 class EchoRipple:
     """
     EchoRipple: Recursive verifier using randomized logic cycles (20ms spacing)
     Runs 5 cycles drawing from entire logic seed set including paradox filters.
+    Selects 5 seeds per cycle (4 logic + 1 philosopher).
     """
     
     def __init__(self, logic_seeds: Dict[str, Any] = None):
+        if logic_seeds is None:
+            logic_seeds = self._load_logic_seeds()
         self.logic_seeds = logic_seeds or {}
         self.cycles_run = 0
         self.reflection_history = []
+        self.harmonizer = GyroCorticalHarmonizer()
         
     async def resonate(self, delta: Dict[str, Any]) -> ReflectionObject:
         """
-        Run 5 randomized recursive logic cycles with 20ms spacing.
+        Run 5 randomized recursive logic cycles with 20ms spacing, selecting 5 seeds per cycle.
+        Trails EchoStack by 20ms, checks for conflict, and delivers verdict to GyroHarmonizer if no conflict.
         Returns final stabilized reflection object.
         
         Args:
@@ -45,6 +53,9 @@ class EchoRipple:
         Returns:
             ReflectionObject: Final stabilized reflection
         """
+        # Trail EchoStack by 20ms
+        await asyncio.sleep(0.02)
+        
         reflection_delta = delta.get("reflection_delta", 0.0)
         drift_magnitude = delta.get("drift_magnitude", 0.0)
         
@@ -61,7 +72,7 @@ class EchoRipple:
                 available_seeds = ["default_logic"]
                 self.logic_seeds["default_logic"] = {"name": "default", "weight": 1.0}
             
-            selected_seeds = random.sample(available_seeds, min(3, len(available_seeds)))
+            selected_seeds = random.sample(available_seeds, min(5, len(available_seeds)))
             
             # Run logic pass
             cycle_result = await self._run_logic_pass(reflection_delta, selected_seeds)
@@ -87,7 +98,8 @@ class EchoRipple:
             stability_score=stability_score,
             cycles_completed=len(cycle_results),
             final_consensus=consensus,
-            timestamp=time.time()
+            timestamp=time.time(),
+            harmonized_verdict=None
         )
         
         # Log to history
@@ -97,7 +109,35 @@ class EchoRipple:
             "input_delta": delta
         })
         
+        # Check for conflict from EchoStack
+        conflict = delta.get("conflict", False) or (drift_magnitude > 1.0) or (stability_score < 0.5)
+        
+        if not conflict:
+            # Deliver verdict to GyroHarmonizer
+            harmonizer_input = {
+                "reflection_verdict": reflection_obj.__dict__,
+                "input_delta": delta,
+                "cycle_results": cycle_results
+            }
+            harmonized_result = self.harmonizer.final_alignment(harmonizer_input)
+            reflection_obj.harmonized_verdict = harmonized_result  # Add dynamically
+        
         return reflection_obj
+    
+    def _load_logic_seeds(self) -> Dict[str, Any]:
+        """Load logic seeds from master_seed_vault."""
+        seeds = {}
+        vault_path = Path("../Vault_System_1.0/master_seed_vault")
+        if vault_path.exists():
+            for json_file in vault_path.glob("*.json"):
+                try:
+                    with open(json_file, 'r') as f:
+                        seed_data = json.load(f)
+                        seed_name = json_file.stem  # filename without .json
+                        seeds[seed_name] = seed_data
+                except Exception as e:
+                    print(f"Failed to load seed {json_file}: {e}")
+        return seeds
     
     async def _run_logic_pass(self, current_delta: float, selected_seeds: List[str]) -> Dict[str, Any]:
         """

@@ -2,7 +2,7 @@
 Unified Cognition Loop
 Orchestrates the complete cognitive processing pipeline with asyncio.
 
-Sequence: Resonator → Anterior → EchoStack → EchoRipple → Posterior → Harmonizer → Consent → Articulation
+Sequence: Resonator (2340 nodes → inverted pyramid) → [Anterior Helix, EchoStack, EchoRipple, Posterior Helix] simultaneously → Gyro-Cortical Harmonizer → Consent → Articulation
 """
 
 import asyncio
@@ -10,6 +10,7 @@ import time
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
 import sys
+import os
 
 # Add path to Vault_System_1.0
 sys.path.append(os.path.join(os.path.dirname(__file__), "Vault_System_1.0"))
@@ -21,11 +22,6 @@ except ImportError:
     AdvancedVaultSystem = None
     print("Warning: Vault_System_1.0 not found, running without advanced vault system")
 
-# Mock speaker for testing
-class MockSpeaker:
-    def speak(self, text: str) -> None:
-        print(f"[MOCK SPEAKER] Speaking: {text}")
-
 # Import core modules
 from cerebral_cortex.llm_bridge import LLMBridge
 from symbolic_memory_vault import SymbolicMemoryVault
@@ -34,46 +30,28 @@ from voice_consent import VoiceConsentListener
 from echostack.echostack import EchoStack
 from echoripple.echoripple import EchoRipple
 
-# Mock articulation bridge for testing
-class MockArticulationBridge:
-    def __init__(self):
-        self.speaker = MockSpeaker()
-    
-    def articulate(self, text: str) -> str:
-        self.speaker.speak(text)
-        return f"Articulated: {text}"
-
 # Import helix modules (assuming they have process methods)
 try:
-    from synaptic_resonator.main import SynapticResonator
+    from synaptic_resonator_core.resonator import Resonator as SynapticResonator
 except ImportError:
-    # Fallback mock
-    class SynapticResonator:
-        async def process(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-            await asyncio.sleep(0.01)  # Simulate processing
-            return {"resonance": 0.7, "patterns": ["pattern1"], "id": "res_001"}
+    raise ImportError("SynapticResonator not found - system requires real implementation")
 
 try:
     from anterior_helix.main import AnteriorHelix
 except ImportError:
-    class AnteriorHelix:
-        async def process(self, resonance_data: Dict[str, Any]) -> Dict[str, Any]:
-            await asyncio.sleep(0.01)
-            return {"verdict": "approved", "confidence": 0.8, "id": "ant_001"}
+    raise ImportError("AnteriorHelix not found - system requires real implementation")
 
 try:
     from posterior_helix.main import PosteriorHelix
 except ImportError:
-    class PosteriorHelix:
-        async def process(self, reflection_data: Dict[str, Any]) -> Dict[str, Any]:
-            await asyncio.sleep(0.01)
-            return {"final_output": "processed", "stability": 0.9, "id": "post_001"}
+    raise ImportError("PosteriorHelix not found - system requires real implementation")
 
-# GyroHarmonizer mock (needs implementation)
-class GyroHarmonizer:
-    def compute_drift(self, reflection: Dict[str, Any]) -> float:
-        # Simple drift computation
-        return abs(reflection.get("delta", 0.0)) * 0.1
+# Import real GyroHarmonizer
+try:
+    from gyro_cortical_harmonizer_module.gyro_cortical_harmonizer import GyroCorticalHarmonizer
+    GyroHarmonizer = GyroCorticalHarmonizer
+except ImportError:
+    raise ImportError("GyroCorticalHarmonizer not found - system requires real implementation")
 
 
 @dataclass
@@ -107,7 +85,7 @@ class UnifiedCognitionLoop:
         self.consent_manager = CaleonConsentManager(mode="voice")
         self.voice_listener = VoiceConsentListener(self.consent_manager)
         self.llm_bridge = LLMBridge()
-        self.articulation_bridge = MockArticulationBridge()
+        self.articulation_bridge = None  # Real implementation required
 
         # Initialize cognitive components
         self.resonator = SynapticResonator()
@@ -294,7 +272,7 @@ class UnifiedCognitionLoop:
                 "adjustment": "increased_monitoring",
                 "reason": "High drift requires enhanced monitoring"
             }
-        return None
+        return {}
 
     def check_endpoint_wiring(self) -> Dict[str, Any]:
         """Check and report on endpoint wiring status"""
@@ -362,7 +340,7 @@ class UnifiedCognitionLoop:
 
         try:
             # Step 1: Synaptic Resonator
-            print("🔍 Step 1: Synaptic Resonator")
+            print("🔍 Step 1: Synaptic Resonator (2340 nodes → inverted pyramid)")
             resonance_data = await self.resonator.process({"input": input_text})
             reflection_data["resonator"] = resonance_data
             
@@ -373,73 +351,68 @@ class UnifiedCognitionLoop:
                 "patterns": resonance_data.get("patterns", [])
             })
 
-            # Step 2: Anterior Helix
-            print("⬆️ Step 2: Anterior Helix")
-            anterior_verdict = await self.anterior.process(resonance_data)
+            # Step 2-5: Simultaneous delivery to 4 core modules
+            print("🚀 Step 2-5: Simultaneous processing by Anterior Helix, EchoStack, EchoRipple, Posterior Helix")
+            
+            # Run all 4 modules concurrently with resonance_data
+            anterior_task = self.anterior.process(resonance_data)
+            echo_stack_task = asyncio.to_thread(self.echo_stack.process, resonance_data)  # Assuming process can take resonance_data
+            echo_ripple_task = self.echo_ripple.resonate({"reflection_delta": resonance_data.get("resonance", 0.0), "drift_magnitude": 0.1})
+            posterior_task = self.posterior.process(resonance_data)
+            
+            anterior_verdict, echo_delta, final_reflection, posterior_output = await asyncio.gather(
+                anterior_task, echo_stack_task, echo_ripple_task, posterior_task
+            )
+            
             reflection_data["anterior"] = anterior_verdict
-            
-            # Store verdict for anterior
-            self.store_verdict("anterior", {
-                "verdict": anterior_verdict.get("verdict", "processed"),
-                "confidence": anterior_verdict.get("confidence", 0.5),
-                "tier_context": anterior_verdict.get("tier_context", {})
-            })
-
-            # Step 3: EchoStack Processing
-            print("📊 Step 3: EchoStack Processing")
-            echo_delta = self.echo_stack.process(anterior_verdict)
             reflection_data["echo_stack"] = echo_delta
-            
-            # Store verdict for echo_stack
-            self.store_verdict("echo_stack", {
-                "verdict": "delta_computed" if echo_delta else "no_delta",
-                "delta_value": echo_delta,
-                "logic_applied": "echo_processing"
-            })
-
-            # Step 4: EchoRipple Resonance
-            print("🌊 Step 4: EchoRipple Resonance")
-            final_reflection = await self.echo_ripple.resonate(echo_delta)
             reflection_data["echo_ripple"] = {
                 "delta": final_reflection.delta,
                 "magnitude": final_reflection.magnitude,
                 "stability_score": final_reflection.stability_score,
                 "consensus": final_reflection.final_consensus
             }
+            reflection_data["posterior"] = posterior_output
             
-            # Store verdict for echo_ripple
+            # Store verdicts for all
+            self.store_verdict("anterior", {
+                "verdict": anterior_verdict.get("verdict", "processed"),
+                "confidence": anterior_verdict.get("confidence", 0.5),
+                "tier_context": anterior_verdict.get("tier_context", {})
+            })
+            self.store_verdict("echo_stack", {
+                "verdict": "delta_computed" if echo_delta else "no_delta",
+                "delta_value": echo_delta,
+                "logic_applied": "echo_processing"
+            })
             self.store_verdict("echo_ripple", {
                 "verdict": "consensus_achieved" if final_reflection.final_consensus else "consensus_pending",
                 "stability": final_reflection.stability_score,
                 "magnitude": final_reflection.magnitude,
                 "delta": final_reflection.delta
             })
-
-            # Step 5: Posterior Helix
-            print("⬇️ Step 5: Posterior Helix")
-            posterior_output = await self.posterior.process({
-                "reflection": final_reflection,
-                "anterior_verdict": anterior_verdict
-            })
-            reflection_data["posterior"] = posterior_output
-            
-            # Store verdict for posterior
             self.store_verdict("posterior", {
                 "verdict": posterior_output.get("final_output", "processed"),
                 "stability": posterior_output.get("stability", 0.5),
                 "recursion_cycles": posterior_output.get("recursion_cycles", 0)
             })
 
-            # Step 6: GyroHarmonizer
-            print("⚖️ Step 6: GyroHarmonizer")
-            drift_score = self.harmonizer.compute_drift(reflection_data)
-            reflection_data["harmonizer"] = {"drift_score": drift_score}
+            # Step 6: Gyro-Cortical Harmonizer collects verdicts from all 4 modules
+            print("⚖️ Step 6: Gyro-Cortical Harmonizer")
+            harmonizer_input = {
+                "anterior_verdict": anterior_verdict,
+                "echo_stack_delta": echo_delta,
+                "echo_ripple_reflection": final_reflection.__dict__ if hasattr(final_reflection, '__dict__') else final_reflection,
+                "posterior_output": posterior_output
+            }
+            harmonized_result = self.harmonizer.final_alignment(harmonizer_input)
+            reflection_data["harmonizer"] = harmonized_result
+            drift_score = harmonized_result.get("drift_score", 0.0)
             
             # Store verdict for harmonizer
             self.store_verdict("harmonizer", {
-                "verdict": "drift_computed",
-                "drift_score": drift_score,
-                "acceptable_drift": drift_score < 0.3  # Example threshold
+                "verdict": "harmonized",
+                "result": harmonized_result
             })
 
             # Step 7: Consent Manager
@@ -471,7 +444,7 @@ class UnifiedCognitionLoop:
                     self.store_verdict("articulation", {
                         "verdict": "articulated_successfully",
                         "response_length": len(final_output),
-                        "confidence": articulation_result.confidence if hasattr(articulation_result, 'confidence') else 0.8
+                        "confidence": 0.0
                     })
             else:
                 print("❌ Consent denied - no articulation")
