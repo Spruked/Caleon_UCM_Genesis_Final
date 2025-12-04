@@ -5,12 +5,14 @@ from vault_loader import load_seed_vault
 from trace_router import trace_reasoning
 from api.bubble import router as bubble_router
 from api.seed_vault import router as seed_vault_router
+from caleon.routers.ingest_clusters import router as ingest_router
 
 router = APIRouter()
 
 # Include API routers
 router.include_router(bubble_router)
 router.include_router(seed_vault_router)
+router.include_router(ingest_router)
 
 class ReasonRequest(BaseModel):
     content: str

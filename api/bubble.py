@@ -1,11 +1,17 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, HTTPException
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 from utils.context_manager import BubbleContext
 from articulator.router import stream_response
 from generative.router import GenerativeRouter
 from ucm_core.continuity.session_store import SessionStore
 from ucm_core.vault.vault_core import vault
 from ucm_core.vault.abby_memory import abby_memory
+from utils.phi3_client import phi3_client
+import logging
+
+class BubblePrompt(BaseModel):
+    prompt: str
 
 router = APIRouter(prefix="/api/bubble", tags=["Bubble"])
 
@@ -82,17 +88,16 @@ async def get_abby_memory():
     }
 
 @router.post("/ask")
-async def bubble_ask(message: str = Body(..., embed=True), session_id: str = Body(None, embed=True), user: str = Body(None, embed=True)):
-    """
-    Primary entry point for the Bubble.
-    Decides whether to use scripted or generative Caleon.
-    """
-    route = BubbleContext.route(message)
+async def ask_bubble(payload: BubblePrompt):
+    logging.info(f"[BUBBLE] Incoming prompt: {payload.prompt}")
 
-    if route == "scripted":
-        return BubbleContext.scripted(message)
-
-    return await BubbleContext.generative(message, session_id, user)
+    try:
+        reply = await phi3_client.generate(payload.prompt)
+        logging.info(f"[BUBBLE] Outgoing reply: {reply}")
+        return {"reply": reply}
+    except Exception as e:
+        logging.error(f"[BUBBLE] Internal error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="LLM generation failed")
 
 
 @router.post("/stream")

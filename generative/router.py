@@ -5,6 +5,7 @@ from persona.persona_router import PersonaRouter
 from ucm_core.continuity.session_store import SessionStore
 from ucm_core.continuity.merge import merge_memory_into_prompt
 from ucm_core.abby.protocol_core import AbbyProtocol
+from utils.phi3_client import phi3_client
 
 class GenerativeRouter:
 
@@ -39,11 +40,14 @@ class GenerativeRouter:
                 "reply": result
             }
 
-        # knowledge/general = simple line of reasoning (for now)
-        # later tied to helix/resonator/vault layers
+        # knowledge/general = use Phi-3 Mini LLM
+        persona_prompt = "You are Caleon Prime, a unified cognition module. You are deeply present, ethical, and philosophical. Respond with wisdom and care. "
+        full_prompt = persona_prompt + enhanced_input
+
+        llm_response = await phi3_client.generate(full_prompt)
         return {
             "type": "reasoning",
-            "reply": f"Caleon is thinking… (Phase 3 placeholder for: {message})"
+            "reply": llm_response
         }
 
     @staticmethod
@@ -100,13 +104,12 @@ class GenerativeRouter:
                 yield word + " "
                 await asyncio.sleep(0.05)  # Simulate streaming delay
         else:
-            # Stream reasoning response
-            response = f"Caleon is thinking… (Phase 3 placeholder for: {message})"
-            import asyncio
-            words = response.split()
-            for word in words:
+            # Use Phi-3 Mini for actual LLM response
+            persona_prompt = "You are Caleon Prime, a unified cognition module. You are deeply present, ethical, and philosophical. Respond with wisdom and care. "
+            full_prompt = persona_prompt + enhanced_input
+
+            async for token in phi3_client.stream_generate(full_prompt):
                 if session_id:
-                    session["buffer"].add(word)
-                    SessionStore.add_line(session_id, word)
-                yield word + " "
-                await asyncio.sleep(0.05)
+                    session["buffer"].add(token)
+                    SessionStore.add_line(session_id, token)
+                yield token

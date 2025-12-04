@@ -11,6 +11,7 @@ from config import settings
 from telemetry import setup_monitoring
 from api.bubble import router as bubble_router
 from api.health import router as health_router
+from cognition.knowledge_store import KnowledgeStore
 
 # Configure structured logging
 logging.basicConfig(level=getattr(logging, settings.log_level))
@@ -70,6 +71,21 @@ app.add_middleware(
 app.include_router(router, prefix="/api/v1")
 app.include_router(bubble_router)
 app.include_router(health_router)
+
+@app.get("/")
+async def root():
+    return {
+        "service": "Unified Cognition Module",
+        "entity": "Caleon Prime",
+        "status": "active",
+        "version": "2.0.0",
+        "endpoints": {
+            "docs": "/docs",
+            "health": "/health",
+            "api": "/api/v1",
+            "bubble": "/api/bubble"
+        }
+    }
 
 @app.get("/health")
 async def health_check():

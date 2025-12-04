@@ -960,7 +960,7 @@
             constructor() {
                 this.isRecording = false;
                 this.isContinuousListening = false;
-                this.cerebralUrl = 'http://localhost:8000'; // Adjust if needed
+                this.cerebralUrl = 'http://localhost:8081'; // UCM service port
                 this.setupEventListeners();
                 this.updateModuleStatus();
                 this.statusCheckInterval = setInterval(() => this.updateModuleStatus(), 5000);

@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  ucm-caleon-genesis:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - UCM_HOST=0.0.0.0
+      - UCM_PORT=8000
+      - VAULT_DATA_DIR=/app/data/vault
+      - SESSION_DATA_DIR=/app/data/sessions
+      - ABBY_DATA_DIR=/app/data/abby
+    volumes:
+      - ../ucm_vault_data/vault:/app/data/vault
+      - ../ucm_vault_data/sessions:/app/data/sessions
+      - ../ucm_vault_data/abby_memory:/app/data/abby
+    networks:
+      - caleon-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  caleon-network:
+    driver: bridge
+
+volumes:
+  vault-data:

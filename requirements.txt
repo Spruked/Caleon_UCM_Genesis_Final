@@ -27,4 +27,6 @@ structlog
 prometheus-client
 torch==2.0.1
 torchvision==0.15.2 -f https://download.pytorch.org/whl/cpu
+torch-geometric
+networkx
 sentry-sdk

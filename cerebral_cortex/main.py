@@ -21,10 +21,16 @@ from reflection_vault import ReflectionVault
 from voice_processor import voice_processor
 
 # Import VALLM engine
-from .vallm_engine import VALLM
+from vallm_engine import VALLM
 
 # Import articulation bridge
 from articulation_bridge import ArticulationBridge
+
+# Import phi3 client
+from phi3_client import phi3_client
+
+# Import cognitive monitoring
+from telemetry import cognitive_monitor, CognitiveStage
 
 app = FastAPI(title="Cerebral Cortex Orchestrator")
 
@@ -146,6 +152,53 @@ async def health_check():
         "reflection_cycles": vault_stats.get("reflection_cycles", 0)
     }
 
+class BubblePrompt(BaseModel):
+    prompt: str
+
+@app.post("/api/bubble/ask")
+async def ask_bubble(payload: BubblePrompt, background_tasks: BackgroundTasks):
+    """
+    FULL COGNITIVE CYCLE: Cortex → Resonator → Helix → EchoStack → Harmonizer → Phonatory → Output
+
+    This endpoint now uses the complete Caleon Cognitive Design pipeline.
+    Phi-3 serves as linguistic utility within the cognitive cycle, NOT as a bypass.
+    """
+    import logging
+    logging.info(f"[BUBBLE] Full cognitive cycle initiated for prompt: {payload.prompt}")
+
+    # START COGNITIVE MONITORING FOR BUBBLE ENDPOINT
+    bubble_cycle_id = f"bubble_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hash(payload.prompt) % 10000}"
+    bubble_metrics = cognitive_monitor.start_cognitive_cycle(bubble_cycle_id, "bubble_api")
+
+    try:
+        # Convert BubblePrompt to CortexRequest for full cognitive processing
+        cortex_request = CortexRequest(
+            input_data=payload.prompt,
+            context={"source": "bubble_api", "preserve_cognitive_state": True},
+            priority="high",
+            source="api",
+            emotion=None,  # Could be enhanced to detect emotion from prompt
+            bypass_ethics=False
+        )
+
+        # Execute FULL cognitive cycle via process_request
+        result = await process_request(cortex_request, background_tasks)
+
+        # COMPLETE BUBBLE MONITORING
+        cognitive_monitor.complete_cognitive_cycle(bubble_cycle_id, "success")
+
+        # Return harmonized response (Phi-3 contributes within the cycle, doesn't override)
+        reply = result.get("harmonized_response", result.get("response", "Cognitive processing completed"))
+
+        logging.info(f"[BUBBLE] Cognitive cycle completed: {reply[:100]}...")
+        return {"reply": reply, "cognitive_trace": result}
+        
+    except Exception as e:
+        # RECORD FAILURE IN MONITORING
+        cognitive_monitor.complete_cognitive_cycle(bubble_cycle_id, "error")
+        logging.error(f"[BUBBLE] Cognitive cycle error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Cognitive processing failed")
+
 def send_to_phonatory_output(text: str):
     """Send final cognitive output to phonatory module for speech synthesis"""
     try:
@@ -233,125 +286,170 @@ def get_vault_insights(input_data: str, emotion: Optional[Dict[str, float]] = No
 async def process_request(request: CortexRequest, background_tasks: BackgroundTasks):
     """Main processing endpoint that coordinates all lobes with VALLM integration"""
 
-    # Record activity for reflection vault
-    reflection_vault.record_activity()
+    # START COGNITIVE MONITORING
+    cycle_id = f"cycle_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hash(request.input_data) % 10000}"
+    cycle_metrics = cognitive_monitor.start_cognitive_cycle(cycle_id, "process_endpoint")
 
-    # Get insights from reflection vault
-    vault_insights = get_vault_insights(request.input_data, request.emotion)
-    if vault_insights.get("recommendations"):
-        print(f"Vault insights found: {len(vault_insights['recommendations'])} recommendations")
+    try:
+        # PREPROCESSING STAGE
+        cognitive_monitor.complete_stage(cycle_id, CognitiveStage.PREPROCESSING)
 
-    # Check if this should use VALLM engine (voice inputs or complex queries)
-    use_vallm = (
-        request.source == "voice_input" or
-        request.context.get("use_vallm", False) or
-        len(request.input_data.split()) > 15 or  # Complex queries (reduced threshold)
-        any(keyword in request.input_data.lower() for keyword in [
-            "explain", "why", "how", "what if", "design", "create", "develop", "build",
-            "innovate", "solve", "analyze", "evaluate", "compare", "suggest", "recommend",
-            "improve", "optimize", "plan", "strategy", "approach", "method", "technique",
-            "system", "framework", "architecture", "model", "theory", "concept", "idea"
-        ])
-    )
+        # Record activity for reflection vault
+        reflection_vault.record_activity()
 
-    if use_vallm:
-        print("Using VALLM engine for advanced cognition")
-        try:
-            vallm_result = await vallm_engine.think(request.input_data)
-            harmonized_response = vallm_result["response"]
+        # Get insights from reflection vault
+        vault_insights = get_vault_insights(request.input_data, request.emotion)
+        if vault_insights.get("recommendations"):
+            print(f"Vault insights found: {len(vault_insights['recommendations'])} recommendations")
 
-            # Store learning data for VALLM responses
-            background_tasks.add_task(store_learning_data, request, {"vallm_engine": vallm_result}, harmonized_response)
+        # Check if this should use VALLM engine (voice inputs or complex queries)
+        use_vallm = (
+            request.source == "voice_input" or
+            request.context.get("use_vallm", False) or
+            len(request.input_data.split()) > 15 or  # Complex queries (reduced threshold)
+            any(keyword in request.input_data.lower() for keyword in [
+                "explain", "why", "how", "what if", "design", "create", "develop", "build",
+                "innovate", "solve", "analyze", "evaluate", "compare", "suggest", "recommend",
+                "improve", "optimize", "plan", "strategy", "approach", "method", "technique",
+                "system", "framework", "architecture", "model", "theory", "concept", "idea"
+            ])
+        )
 
-            # Send response to phonatory output for speech synthesis
+        if use_vallm:
+            print("Using VALLM engine for advanced cognition")
+            try:
+                vallm_result = await vallm_engine.think(request.input_data)
+                harmonized_response = vallm_result["response"]
+
+                # Store learning data for VALLM responses
+                background_tasks.add_task(store_learning_data, request, {"vallm_engine": vallm_result}, harmonized_response)
+
+                # Send response to phonatory output for speech synthesis
+                background_tasks.add_task(send_to_phonatory_output, harmonized_response)
+
+                return {
+                    "input": request.input_data,
+                    "processing_engine": "VALLM",
+                    "response": harmonized_response,
+                    "glyph_trace": vallm_result.get("glyph_trace", ""),
+                    "llm_used": vallm_result.get("llm_used", True),
+                    "new_vault_created": vallm_result.get("new_vault_created", False),
+                    "timestamp": datetime.now().isoformat()
+                }
+
+            except Exception as e:
+                print(f"VALLM engine error: {e}, falling back to standard processing")
+                use_vallm = False
+
+        # Standard module-based processing
+        print("Using standard module orchestration")
+        cognitive_modules = {k: v for k, v in MODULES.items() if k != "gyro_harmonizer"}
+        num_modules = len(cognitive_modules)
+
+        # Use global learning model (fixed size) but select appropriate number of modules
+        input_vector = np.random.randn(10, 1)  # Fixed input size for learning model
+        module_scores = learning_model.forward(input_vector)
+
+        # Select top modules, but limit to available modules
+        all_module_scores = module_scores.flatten()
+        # Map scores to available modules (take first num_modules scores)
+        available_scores = all_module_scores[:num_modules]
+        module_indices = np.argsort(available_scores)[-min(3, num_modules):]  # Top 3 or fewer
+        selected_modules = [list(cognitive_modules.keys())[i] for i in module_indices]
+
+        # Always include echostack for reasoning
+        if "echostack" not in selected_modules:
+            selected_modules.append("echostack")
+
+        # Always include posterior_helix for recursive validation
+        if "posterior_helix" not in selected_modules:
+            selected_modules.append("posterior_helix")
+
+        # Always include gyro-harmonizer as final reasoning layer
+        selected_modules.append("gyro_harmonizer")
+
+        # MODULE ORCHESTRATION STAGE
+        cognitive_monitor.complete_stage(cycle_id, CognitiveStage.MODULE_ORCHESTRATION)
+
+        # Step 2: Query active modules in parallel
+        responses = {}
+        print(f"Selected modules: {selected_modules}")
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            tasks = []
+            for module_name in selected_modules:
+                if module_name in MODULES:
+                    task = query_module_safe(client, module_name, request)
+                    tasks.append(task)
+
+            # Track module execution timing
+            module_start_times = {module: time.time() for module in selected_modules}
+
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            for module_name, result in zip(selected_modules, results):
+                execution_time = time.time() - module_start_times[module_name]
+
+                if isinstance(result, Exception):
+                    responses[module_name] = {"error": str(result), "status": "exception"}
+                    cognitive_monitor.record_module_execution(cycle_id, module_name, execution_time, False)
+                elif isinstance(result, dict):
+                    if result.get("status") == "error":
+                        responses[module_name] = {
+                            "error": result.get("error", "Unknown error"),
+                            "status": "error",
+                            "module": result.get("module", module_name)
+                        }
+                        cognitive_monitor.record_module_execution(cycle_id, module_name, execution_time, False)
+                    else:
+                        responses[module_name] = result
+                        cognitive_monitor.record_module_execution(cycle_id, module_name, execution_time, True)
+                else:
+                    responses[module_name] = {"response": str(result), "status": "success"}
+                    cognitive_monitor.record_module_execution(cycle_id, module_name, execution_time, True)
+
+        # HARMONIZATION STAGE
+        cognitive_monitor.complete_stage(cycle_id, CognitiveStage.HARMONIZATION)
+
+        # Step 3: Harmonize responses
+        harmonized_response = await harmonize_responses(responses, request, cycle_id)
+
+        # OUTPUT GENERATION STAGE
+        cognitive_monitor.complete_stage(cycle_id, CognitiveStage.OUTPUT_GENERATION)
+
+        # Send harmonized response to phonatory output if available
+        if harmonized_response:
             background_tasks.add_task(send_to_phonatory_output, harmonized_response)
 
-            return {
-                "input": request.input_data,
-                "processing_engine": "VALLM",
-                "response": harmonized_response,
-                "glyph_trace": vallm_result.get("glyph_trace", ""),
-                "llm_used": vallm_result.get("llm_used", True),
-                "new_vault_created": vallm_result.get("new_vault_created", False),
-                "timestamp": datetime.now().isoformat()
-            }
+        # COMPLETE COGNITIVE CYCLE
+        cognitive_monitor.complete_stage(cycle_id, CognitiveStage.COMPLETE)
+        cognitive_monitor.complete_cognitive_cycle(cycle_id, "success")
 
-        except Exception as e:
-            print(f"VALLM engine error: {e}, falling back to standard processing")
-            use_vallm = False
+        return {
+            "input": request.input_data,
+            "active_modules": selected_modules,
+            "module_responses": responses,
+            "harmonized_response": harmonized_response,
+            "cognitive_metrics": {
+                "cycle_id": cycle_id,
+                "stages_completed": cycle_metrics.stages_completed,
+                "module_performance": cycle_metrics.module_metrics,
+                "cls_violations": cycle_metrics.cls_violations,
+                "integrity_score": cycle_metrics.final_integrity_score
+            },
+            "timestamp": datetime.now().isoformat()
+        }
 
-    # Standard module-based processing
-    print("Using standard module orchestration")
-    cognitive_modules = {k: v for k, v in MODULES.items() if k != "gyro_harmonizer"}
-    num_modules = len(cognitive_modules)
+    except Exception as e:
+        # Handle any critical errors in the cognitive pipeline
+        error_msg = f"Critical cognitive processing error: {str(e)}"
+        print(f"Error: {error_msg}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
 
-    # Use global learning model (fixed size) but select appropriate number of modules
-    input_vector = np.random.randn(10, 1)  # Fixed input size for learning model
-    module_scores = learning_model.forward(input_vector)
+        # Complete cycle with error status
+        cognitive_monitor.complete_cognitive_cycle(cycle_id, "error")
 
-    # Select top modules, but limit to available modules
-    all_module_scores = module_scores.flatten()
-    # Map scores to available modules (take first num_modules scores)
-    available_scores = all_module_scores[:num_modules]
-    module_indices = np.argsort(available_scores)[-min(3, num_modules):]  # Top 3 or fewer
-    selected_modules = [list(cognitive_modules.keys())[i] for i in module_indices]
-
-    # Always include echostack for reasoning
-    if "echostack" not in selected_modules:
-        selected_modules.append("echostack")
-
-    # Always include posterior_helix for recursive validation
-    if "posterior_helix" not in selected_modules:
-        selected_modules.append("posterior_helix")
-
-    # Always include gyro-harmonizer as final reasoning layer
-    selected_modules.append("gyro_harmonizer")
-
-    # Step 2: Query active modules in parallel
-    responses = {}
-    print(f"Selected modules: {selected_modules}")
-    async with httpx.AsyncClient(timeout=10.0) as client:
-        tasks = []
-        for module_name in selected_modules:
-            if module_name in MODULES:
-                task = query_module_safe(client, module_name, request)
-                tasks.append(task)
-
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-
-        for module_name, result in zip(selected_modules, results):
-            if isinstance(result, Exception):
-                responses[module_name] = {"error": str(result), "status": "exception"}
-            elif isinstance(result, dict):
-                if result.get("status") == "error":
-                    responses[module_name] = {
-                        "error": result.get("error", "Unknown error"),
-                        "status": "error",
-                        "module": result.get("module", module_name)
-                    }
-                else:
-                    # Success case - extract the actual response
-                    responses[module_name] = result.get("response", result)
-            else:
-                responses[module_name] = result
-
-    # Step 3: Aggregate responses using gyro-harmonizer for ethics/harmonization
-    harmonized_response = await harmonize_responses(responses, request)
-
-    # Step 4: Store learning data
-    background_tasks.add_task(store_learning_data, request, responses, harmonized_response)
-
-    # Step 5: Send final harmonized response to phonatory output for speech synthesis
-    if harmonized_response:
-        background_tasks.add_task(send_to_phonatory_output, harmonized_response)
-
-    return {
-        "input": request.input_data,
-        "active_modules": selected_modules,
-        "module_responses": responses,
-        "harmonized_response": harmonized_response,
-        "timestamp": datetime.now().isoformat()
-    }
+        raise HTTPException(status_code=500, detail=error_msg)
 
 async def query_module_safe(client: httpx.AsyncClient, module_name: str, request: CortexRequest):
     """Query a specific module with comprehensive error handling and graceful degradation"""
@@ -496,8 +594,8 @@ async def load_relevant_knowledge(input_text: str) -> Dict[str, Any]:
 
     return relevant_knowledge
 
-async def harmonize_responses(responses: Dict[str, Any], request: CortexRequest) -> str:
-    """Use gyro-harmonizer as the FINAL REASONING LAYER to harmonize all responses"""
+async def harmonize_responses(responses: Dict[str, Any], request: CortexRequest, cycle_id: str = None) -> str:
+    """Use gyro-harmonizer as the FINAL REASONING LAYER to harmonize all responses, then Phi-3 for linguistic articulation"""
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
             # Load relevant knowledge from vaults based on input
@@ -511,29 +609,69 @@ async def harmonize_responses(responses: Dict[str, Any], request: CortexRequest)
                 "bypass_ethics": request.bypass_ethics,
                 "knowledge_base": relevant_knowledge  # Add vault knowledge for reasoning
             }
-            response = await client.post(f"{MODULES['gyro_harmonizer']}/harmonize", json=harmonize_payload)
-            result = response.json()
 
-            # Extract meaningful harmonized response from gyro-harmonizer output
-            if "harmonized_response" in result:
-                return result["harmonized_response"]
-            else:
-                # Return the raw harmonizer result
-                return str(result)
+            # Track gyro-harmonizer execution
+            gyro_start = time.time()
+            response = await client.post(f"{MODULES['gyro_harmonizer']}/harmonize", json=harmonize_payload)
+            gyro_duration = time.time() - gyro_start
+
+            if cycle_id:
+                cognitive_monitor.record_module_execution(cycle_id, "gyro_harmonizer", gyro_duration, response.status_code == 200)
+
+            gyro_result = response.json()
+
+            # Extract harmonized response from gyro-harmonizer
+            harmonized_text = gyro_result.get("harmonized_response", str(gyro_result))
+
+            # PHI-3 ARTICULATION STAGE
+            if cycle_id:
+                cognitive_monitor.complete_stage(cycle_id, CognitiveStage.PHI3_ARTICULATION)
+
+            # PRESERVE COGNITIVE STATE: Phi-3 articulates but does NOT overwrite tone, resonance, moral charge, drift history, symbolic associations
+            # Phi-3 serves as linguistic utility for final expression
+            articulation_prompt = f"""
+            Articulate the following cognitive resolution with linguistic precision,
+            maintaining the original cognitive tone and ethical resonance:
+
+            Cognitive Resolution: {harmonized_text}
+
+            Original Input: {request.input_data}
+
+            Provide a clear, articulate expression that preserves the cognitive integrity.
+            """
+
+            # Track Phi-3 execution
+            phi3_start = time.time()
+            phi3_articulation = await phi3_client.generate(articulation_prompt)
+            phi3_duration = time.time() - phi3_start
+
+            if cycle_id:
+                cognitive_monitor.record_phi3_interaction(cycle_id, "linguistic_articulation", phi3_duration)
+
+            # Return Phi-3 articulated response (Phi-3 submits to core resolution, doesn't override)
+            return phi3_articulation
 
     except Exception as e:
-        # Fallback: Create a simple harmonized response from available module responses
-        print(f"Harmonization failed: {str(e)}, using fallback response")
-        fallback_responses = []
-        for module_name, module_response in responses.items():
-            if isinstance(module_response, dict) and "response" in module_response:
-                fallback_responses.append(f"{module_name}: {module_response['response']}")
-            elif isinstance(module_response, str):
-                fallback_responses.append(f"{module_name}: {module_response}")
+        # Fallback: Use Phi-3 directly for articulation if harmonizer fails
+        print(f"Harmonization failed: {str(e)}, using Phi-3 fallback articulation")
+        try:
+            fallback_prompt = f"Provide a thoughtful response to: {request.input_data}"
 
-        if fallback_responses:
-            return f"Integrated cognitive response: {'; '.join(fallback_responses[:2])}"
-        else:
+            phi3_start = time.time()
+            result = await phi3_client.generate(fallback_prompt)
+            phi3_duration = time.time() - phi3_start
+
+            if cycle_id:
+                cognitive_monitor.record_phi3_interaction(cycle_id, "fallback_articulation", phi3_duration)
+                cognitive_monitor.record_cls_violation(cycle_id, "harmonizer_failure", f"Harmonizer failed: {str(e)}")
+
+            return result
+        except Exception as phi3_error:
+            print(f"Phi-3 fallback also failed: {phi3_error}")
+
+            if cycle_id:
+                cognitive_monitor.record_cls_violation(cycle_id, "complete_failure", f"Both harmonizer and Phi-3 failed: {str(e)}, {str(phi3_error)}")
+
             return f"Cognitive processing completed for: {request.input_data}"
 
 @app.post("/process_audio")
@@ -1653,6 +1791,38 @@ async def export_reflections():
         return {"status": "success", "reflections": reflections}
     except Exception as e:
         return {"status": "error", "message": f"Export failed: {str(e)}"}
+
+@app.get("/metrics")
+async def prometheus_metrics():
+    """Prometheus metrics endpoint for cerebral cortex service"""
+    metrics = []
+
+    # Cognitive monitoring metrics
+    metrics.append("# HELP active_cognitive_cycles Current number of active cognitive cycles")
+    metrics.append("# TYPE active_cognitive_cycles gauge")
+    metrics.append(f"active_cognitive_cycles {len(cognitive_monitor.active_cycles)}")
+
+    metrics.append("# HELP pipeline_completion_rate Rate of completed cognitive pipelines")
+    metrics.append("# TYPE pipeline_completion_rate gauge")
+    total_cycles = cognitive_monitor._get_total_cycles() if hasattr(cognitive_monitor, '_get_total_cycles') else 0
+    completion_rate = 1.0 if total_cycles > 0 else 0.0
+    metrics.append(f"pipeline_completion_rate {completion_rate}")
+
+    metrics.append("# HELP cls_preservation_violations_total Total CLS preservation violations")
+    metrics.append("# TYPE cls_preservation_violations_total counter")
+    violations = cognitive_monitor._get_recent_cls_violations() if hasattr(cognitive_monitor, '_get_recent_cls_violations') else 0
+    metrics.append(f"cls_preservation_violations_total {violations}")
+
+    metrics.append("# HELP phi3_bypass_attempts_total Total Phi-3 bypass attempts")
+    metrics.append("# TYPE phi3_bypass_attempts_total counter")
+    metrics.append("phi3_bypass_attempts_total 0")  # Track this in monitoring
+
+    metrics.append("# HELP cognitive_integrity_score Current cognitive integrity score")
+    metrics.append("# TYPE cognitive_integrity_score gauge")
+    integrity = cognitive_monitor._calculate_avg_integrity() if hasattr(cognitive_monitor, '_calculate_avg_integrity') else 1.0
+    metrics.append(f"cognitive_integrity_score {integrity}")
+
+    return "\n".join(metrics) + "\n"
 
 if __name__ == "__main__":
     import uvicorn

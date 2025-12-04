@@ -30,7 +30,7 @@ pydantic-settings>=2.0.0
 redis>=5.0.0
 httpx>=0.25.2
 
-# Async support  
+# Async support
 typing-extensions>=4.8.0
 
 # Development and testing (optional)

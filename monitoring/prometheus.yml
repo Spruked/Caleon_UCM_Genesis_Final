@@ -7,9 +7,19 @@ rule_files:
   # - "second_rules.yml"
 
 scrape_configs:
-  - job_name: 'cognition_app'
+  - job_name: 'prometheus'
     static_configs:
-      - targets: ['cerebral_cortex:8080']
+      - targets: ['localhost:9090']
+
+  - job_name: 'cerebral_cortex'
+    static_configs:
+      - targets: ['cerebral_cortex:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+
+  - job_name: 'cognitive_dashboard'
+    static_configs:
+      - targets: ['cognitive-dashboard:8081']
     metrics_path: '/metrics'
     scrape_interval: 5s
 

@@ -135,9 +135,7 @@ async def shutdown_event():
     """Cleanup on shutdown"""
     global iss_instance
     
-    if iss_instance:
-        await iss_instance.shutdown()
-    
+    # ISS instance does not have a shutdown method
     logger.info("ISS Module API shutdown complete")
 
 
@@ -171,27 +169,36 @@ async def dashboard(request: Request):
 async def get_system_status():
     """Get current system status"""
     try:
-        status = iss_instance.get_status()
-        
+        # Compose status manually since ISS.get_status() does not exist
+        # Fallbacks for missing attributes
+        system_status = "online"
+        active_modules = []
+        startup_time = None
+        current_time = format_timestamp()
+        stardate_val = get_stardate()
+        if iss_instance:
+            # Try to get some info from iss_instance if possible
+            active_modules = getattr(iss_instance, 'active_modules', [])
+            startup_time = getattr(iss_instance, 'startup_time', None)
+            system_status = getattr(iss_instance, 'system_status', system_status)
         # Get log entry count
-        total_entries = len(captain_log.entries) if captain_log else 0
-        
+        total_entries = len(captain_log.entries) if captain_log and hasattr(captain_log, 'entries') else 0
         # Calculate uptime
-        startup_time = status['system_state'].get('startup_time')
         uptime = None
         if startup_time:
-            delta = datetime.now(timezone.utc) - datetime.fromisoformat(startup_time)
-            uptime = str(delta).split('.')[0]  # Remove microseconds
-        
+            try:
+                delta = datetime.now(timezone.utc) - datetime.fromisoformat(startup_time)
+                uptime = str(delta).split('.')[0]
+            except Exception:
+                uptime = None
         return SystemStatusResponse(
-            status=status['system_state']['system_status'],
+            status=system_status,
             uptime=uptime,
-            active_modules=status['system_state']['active_modules'],
-            current_time=status['current_time'],
-            stardate=status['stardate'],
+            active_modules=active_modules,
+            current_time=current_time,
+            stardate=stardate_val,
             total_log_entries=total_entries
         )
-        
     except Exception as e:
         logger.error(f"Failed to get system status: {e}")
         raise HTTPException(status_code=500, detail="Failed to get system status")
@@ -215,6 +222,11 @@ async def create_log_entry(
 ):
     """Create a new log entry"""
     try:
+        global captain_log
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
+
         entry = await captain_log.create_entry(
             content=entry_data.content,
             category=entry_data.category,
@@ -222,9 +234,9 @@ async def create_log_entry(
             mood=entry_data.mood,
             location=entry_data.location
         )
-        
+
         return LogEntryResponse(**entry.to_dict())
-        
+
     except Exception as e:
         logger.error(f"Failed to create log entry: {e}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -244,12 +256,16 @@ async def get_log_entries(
         # Parse dates if provided
         start_dt = None
         end_dt = None
-        
+
         if start_date:
             start_dt = datetime.fromisoformat(start_date)
         if end_date:
             end_dt = datetime.fromisoformat(end_date)
-        
+
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
+
         entries = await captain_log.get_entries(
             category=category,
             tags=tags,
@@ -257,9 +273,9 @@ async def get_log_entries(
             end_date=end_dt,
             limit=limit
         )
-        
+
         return [LogEntryResponse(**entry.to_dict()) for entry in entries]
-        
+
     except Exception as e:
         logger.error(f"Failed to get log entries: {e}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -272,12 +288,26 @@ async def get_log_entry(
 ):
     """Get a specific log entry by ID"""
     try:
+        global captain_log
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
+
+        # Defensive: check if get_entry_by_id exists
+        if not hasattr(captain_log, 'get_entry_by_id') or not callable(getattr(captain_log, 'get_entry_by_id')):
+            logger.error("CaptainLog does not have method get_entry_by_id.")
+            raise HTTPException(status_code=500, detail="Captain's Log is misconfigured.")
+
         entry = await captain_log.get_entry_by_id(entry_id)
-        if not entry:
+        if entry is None:
             raise HTTPException(status_code=404, detail="Log entry not found")
-        
-        return LogEntryResponse(**entry.to_dict())
-        
+        if not hasattr(entry, 'to_dict') or not callable(getattr(entry, 'to_dict', None)):
+            logger.error(f"Entry object for id {entry_id} does not have a to_dict method.")
+            raise HTTPException(status_code=500, detail="Log entry object is invalid.")
+        entry_dict = entry.to_dict()
+        if entry_dict is None:
+            raise HTTPException(status_code=404, detail="Log entry not found")
+        return LogEntryResponse(**entry_dict)
     except HTTPException:
         raise
     except Exception as e:
@@ -293,6 +323,11 @@ async def update_log_entry(
 ):
     """Update a log entry"""
     try:
+        global captain_log
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
+
         success = await captain_log.update_entry(
             entry_id=entry_id,
             content=update_data.content,
@@ -306,6 +341,8 @@ async def update_log_entry(
         
         # Return updated entry
         entry = await captain_log.get_entry_by_id(entry_id)
+        if entry is None:
+            raise HTTPException(status_code=404, detail="Log entry not found")
         return LogEntryResponse(**entry.to_dict())
         
     except HTTPException:
@@ -322,17 +359,23 @@ async def delete_log_entry(
 ):
     """Delete a log entry"""
     try:
+        global captain_log
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
+
         success = await captain_log.delete_entry(entry_id)
         if not success:
             raise HTTPException(status_code=404, detail="Log entry not found")
-        
+
         return {"message": "Log entry deleted successfully"}
-        
+
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Failed to delete log entry {entry_id}: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
+
 
 
 @app.get("/api/log/search")
@@ -342,9 +385,12 @@ async def search_log_entries(
 ):
     """Search log entries"""
     try:
+        global captain_log
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
         entries = await captain_log.search_entries(q)
         return [LogEntryResponse(**entry.to_dict()) for entry in entries]
-        
     except Exception as e:
         logger.error(f"Failed to search log entries: {e}")
         raise HTTPException(status_code=400, detail=str(e))
@@ -354,9 +400,12 @@ async def search_log_entries(
 async def get_log_statistics(current_user=Depends(get_current_user)):
     """Get log statistics"""
     try:
+        global captain_log
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
         stats = await captain_log.get_statistics()
         return stats
-        
     except Exception as e:
         logger.error(f"Failed to get log statistics: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
@@ -370,22 +419,31 @@ async def export_data(
 ):
     """Export log data in various formats"""
     try:
+        global data_exporter
+        if data_exporter is None:
+            logger.error("DataExporter instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Data Exporter is not initialized.")
+
         # Get filtered entries
         start_dt = None
         end_dt = None
-        
+
         if export_request.start_date:
             start_dt = datetime.fromisoformat(export_request.start_date)
         if export_request.end_date:
             end_dt = datetime.fromisoformat(export_request.end_date)
-        
+
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
+
         entries = await captain_log.get_entries(
             category=export_request.category_filter,
             tags=export_request.tag_filter,
             start_date=start_dt,
             end_date=end_dt
         )
-        
+
         # Export in requested format
         if export_request.format == "json":
             filepath = await data_exporter.export_log_entries_json(
@@ -404,7 +462,7 @@ async def export_data(
             )
         else:
             raise HTTPException(status_code=400, detail="Unsupported export format")
-        
+
         # Return file
         filename = os.path.basename(filepath)
         return FileResponse(
@@ -412,7 +470,7 @@ async def export_data(
             filename=filename,
             media_type='application/octet-stream'
         )
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -424,12 +482,20 @@ async def export_data(
 async def create_backup(current_user=Depends(get_current_user)):
     """Create a complete backup of all data"""
     try:
+        global captain_log, data_exporter
+        if captain_log is None:
+            logger.error("CaptainLog instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Captain's Log is not initialized.")
+        if data_exporter is None:
+            logger.error("DataExporter instance is not initialized.")
+            raise HTTPException(status_code=500, detail="Data Exporter is not initialized.")
+
         backup_dir = await data_exporter.create_backup(captain_log)
-        
+
         # Create a zip file of the backup directory
         import zipfile
         import tempfile
-        
+
         zip_fd, zip_path = tempfile.mkstemp(suffix='.zip')
         try:
             with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -438,16 +504,16 @@ async def create_backup(current_user=Depends(get_current_user)):
                         file_path = os.path.join(root, file)
                         arc_name = os.path.relpath(file_path, backup_dir)
                         zipf.write(file_path, arc_name)
-            
+
             return FileResponse(
                 zip_path,
                 filename=f"iss_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip",
                 media_type='application/zip'
             )
-            
+
         finally:
             os.close(zip_fd)
-            
+
     except Exception as e:
         logger.error(f"Failed to create backup: {e}")
         raise HTTPException(status_code=500, detail="Backup failed")

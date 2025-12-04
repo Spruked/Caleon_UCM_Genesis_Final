@@ -1,4 +1,4 @@
-from articulator.phi3_driver import Articulator
+from utils.phi3_client import phi3_client
 from articulator.prompt_builder import build_prompt
 from persona.persona_bible import PERSONA_BIBLE
 import asyncio
@@ -26,17 +26,14 @@ Never say: {', '.join(PERSONA_BIBLE['prohibitions'])}
 
 async def stream_response(message: str):
     """
-    Streaming response using Phi-3 with simulated token streaming.
+    Streaming response using Phi-3 via Ollama with real token streaming.
     """
     persona_prompt = get_persona_prompt()
+    full_prompt = f"{persona_prompt}\n\nUser: {message}\n\nCaleon:"
 
-    # Generate full response
-    full_response = Articulator.articulate(message, persona_prompt)
-
-    # Simulate streaming by yielding chunks
-    words = full_response.split()
-    for i, word in enumerate(words):
-        yield f"data: {word}{' ' if i < len(words)-1 else ''}\n\n"
-        await asyncio.sleep(0.05)  # Small delay to simulate streaming
+    # Use real streaming from Ollama
+    async for token in phi3_client.stream_generate(full_prompt, max_tokens=300, temperature=0.7):
+        yield f"data: {token}\n\n"
+        await asyncio.sleep(0.01)  # Small delay for smooth streaming
 
     yield "data: [DONE]\n\n"

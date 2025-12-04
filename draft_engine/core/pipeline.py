@@ -1,10 +1,11 @@
-from articulator.phi3_driver import Articulator
+from utils.phi3_client import phi3_client
 from articulator.prompt_builder import build_prompt
 from persona.persona_bible import PERSONA_BIBLE
+import asyncio
 
 class DraftPipeline:
     def __init__(self):
-        self.articulator = Articulator
+        self.articulator = phi3_client
 
     def get_persona_prompt(self) -> str:
         """Format PERSONA_BIBLE into a coherent prompt."""
@@ -27,15 +28,16 @@ Never say: {', '.join(PERSONA_BIBLE['prohibitions'])}
 """
         return prompt
 
-    def generator_from_message(self, message: str) -> str:
+    async def generator_from_message(self, message: str) -> str:
         """
         ScribeCore content generation pipeline.
-        Uses Phi-3 Mini with Caleon persona for creative content.
+        Uses Phi-3 Mini via Ollama with Caleon persona for creative content.
         """
         persona_prompt = self.get_persona_prompt()
+        full_prompt = f"{persona_prompt}\n\nUser: {message}\n\nCaleon:"
 
-        # Generate with Phi-3
-        response = self.articulator.articulate(message, persona_prompt)
+        # Generate with Phi-3 via Ollama
+        response = await self.articulator.generate(full_prompt, max_tokens=300, temperature=0.7)
 
         return response
 

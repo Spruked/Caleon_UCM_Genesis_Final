@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caleon Cognitive Monitoring Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .metric-card h3 {
+            margin: 0 0 15px 0;
+            color: #fff;
+            font-size: 1.2em;
+        }
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .metric-value.success { color: #4CAF50; }
+        .metric-value.warning { color: #FF9800; }
+        .metric-value.error { color: #F44336; }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-healthy { background: #4CAF50; }
+        .status-warning { background: #FF9800; }
+        .status-error { background: #F44336; }
+        .alerts-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .alert-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        .alert-critical { border-left-color: #F44336; background: rgba(244, 67, 54, 0.1); }
+        .alert-error { border-left-color: #F44336; background: rgba(244, 67, 54, 0.1); }
+        .alert-warning { border-left-color: #FF9800; background: rgba(255, 152, 0, 0.1); }
+        .pipeline-diagram {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .pipeline-stage {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .pipeline-stage.active {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+        .pipeline-stage.completed {
+            background: rgba(76, 175, 80, 0.5);
+            border-color: #4CAF50;
+        }
+        .pipeline-stage.failed {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #F44336;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .test-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .test-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Caleon Cognitive Monitoring Dashboard</h1>
+            <p>Real-time monitoring of the Unified Cognition Module pipeline</p>
+            <div id="system-status">
+                <span class="status-indicator" id="status-dot"></span>
+                <span id="status-text">Loading...</span>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Active Cycles -->
+            <div class="metric-card">
+                <h3>Active Cognitive Cycles</h3>
+                <div class="metric-value" id="active-cycles">0</div>
+                <p>Currently processing cognitive requests</p>
+            </div>
+
+            <!-- Pipeline Completion -->
+            <div class="metric-card">
+                <h3>Pipeline Completion Rate</h3>
+                <div class="metric-value" id="pipeline-completion">0%</div>
+                <p>Percentage of cognitive stages completed</p>
+            </div>
+
+            <!-- CLS Integrity -->
+            <div class="metric-card">
+                <h3>CLS Integrity Score</h3>
+                <div class="metric-value" id="cls-integrity">100%</div>
+                <p>Caleon Linguistic State preservation</p>
+            </div>
+
+            <!-- Module Success Rates -->
+            <div class="metric-card">
+                <h3>Module Performance</h3>
+                <canvas id="module-performance-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Cognitive Pipeline Diagram -->
+        <div class="pipeline-diagram">
+            <h3>Cognitive Pipeline Status</h3>
+            <div id="pipeline-stages">
+                <span class="pipeline-stage" data-stage="preprocessing">Preprocessing</span>
+                <span class="pipeline-stage" data-stage="module_orchestration">Module Orchestration</span>
+                <span class="pipeline-stage" data-stage="harmonization">Harmonization</span>
+                <span class="pipeline-stage" data-stage="phi3_articulation">Phi-3 Articulation</span>
+                <span class="pipeline-stage" data-stage="output_generation">Output Generation</span>
+                <span class="pipeline-stage" data-stage="complete">Complete</span>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Active Cycles Details -->
+            <div class="metric-card">
+                <h3>Active Cycle Details</h3>
+                <div id="active-cycles-list" class="alerts-list">
+                    <p>Loading active cycles...</p>
+                </div>
+            </div>
+
+            <!-- System Alerts -->
+            <div class="metric-card">
+                <h3>System Alerts</h3>
+                <div id="alerts-list" class="alerts-list">
+                    <p>No active alerts</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historical Trends -->
+        <div class="metric-card">
+            <h3>Cognitive Performance Trends (24h)</h3>
+            <canvas id="trends-chart"></canvas>
+        </div>
+
+        <!-- Test Controls -->
+        <div class="metric-card">
+            <h3>Monitoring Tests</h3>
+            <button class="test-button" onclick="runCognitiveTest()">Run Cognitive Cycle Test</button>
+            <button class="test-button" onclick="refreshMetrics()">Refresh Metrics</button>
+            <div id="test-results"></div>
+        </div>
+    </div>
+
+    <script>
+        let metricsChart;
+        let trendsChart;
+        let updateInterval;
+
+        async function updateDashboard() {
+            try {
+                // Update current metrics
+                const metricsResponse = await fetch('/api/metrics/current');
+                const metricsData = await metricsResponse.json();
+
+                if (metricsData.error) {
+                    document.getElementById('status-text').textContent = 'Error: ' + metricsData.error;
+                    document.getElementById('status-dot').className = 'status-indicator status-error';
+                    return;
+                }
+
+                const metrics = metricsData.metrics;
+
+                // Update status
+                const status = metricsData.status;
+                document.getElementById('status-text').textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                document.getElementById('status-dot').className = `status-indicator status-${status}`;
+
+                // Update metric values
+                document.getElementById('active-cycles').textContent = metrics.active_cycles_count || 0;
+                document.getElementById('pipeline-completion').textContent = ((metrics.pipeline_completion || 0) * 100).toFixed(1) + '%';
+                document.getElementById('cls-integrity').textContent = ((metrics.avg_integrity_score || 1) * 100).toFixed(1) + '%';
+
+                // Update module performance chart
+                updateModulePerformanceChart(metrics);
+
+                // Update pipeline stages
+                updatePipelineStages();
+
+                // Update active cycles
+                await updateActiveCycles();
+
+                // Update alerts
+                await updateAlerts();
+
+            } catch (error) {
+                console.error('Dashboard update error:', error);
+                document.getElementById('status-text').textContent = 'Connection Error';
+                document.getElementById('status-dot').className = 'status-indicator status-error';
+            }
+        }
+
+        function updateModulePerformanceChart(metrics) {
+            const ctx = document.getElementById('module-performance-chart').getContext('2d');
+
+            const moduleData = {
+                labels: ['Anterior Helix', 'Posterior Helix', 'EchoStack', 'EchoRipple', 'Gyro Harmonizer'],
+                datasets: [{
+                    label: 'Success Rate (%)',
+                    data: [
+                        (metrics.module_success_anterior || 0) * 100,
+                        (metrics.module_success_posterior || 0) * 100,
+                        (metrics.module_success_echostack || 0) * 100,
+                        (metrics.module_success_echoripple || 0) * 100,
+                        (metrics.module_success_gyro || 0) * 100
+                    ],
+                    backgroundColor: [
+                        'rgba(76, 175, 80, 0.6)',
+                        'rgba(33, 150, 243, 0.6)',
+                        'rgba(255, 193, 7, 0.6)',
+                        'rgba(156, 39, 176, 0.6)',
+                        'rgba(255, 87, 34, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(76, 175, 80, 1)',
+                        'rgba(33, 150, 243, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(156, 39, 176, 1)',
+                        'rgba(255, 87, 34, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            if (metricsChart) {
+                metricsChart.destroy();
+            }
+
+            metricsChart = new Chart(ctx, {
+                type: 'bar',
+                data: moduleData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        async function updateActiveCycles() {
+            try {
+                const response = await fetch('/api/cycles/active');
+                const data = await response.json();
+
+                const cyclesList = document.getElementById('active-cycles-list');
+                if (data.active_cycles.length === 0) {
+                    cyclesList.innerHTML = '<p>No active cognitive cycles</p>';
+                } else {
+                    cyclesList.innerHTML = data.active_cycles.map(cycle => `
+                        <div class="alert-item">
+                            <strong>${cycle.cycle_id}</strong><br>
+                            Entry: ${cycle.entry_point}<br>
+                            Duration: ${cycle.duration.toFixed(1)}s<br>
+                            Integrity: ${(cycle.integrity_score * 100).toFixed(1)}%
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Active cycles update error:', error);
+            }
+        }
+
+        async function updateAlerts() {
+            try {
+                const response = await fetch('/api/alerts');
+                const data = await response.json();
+
+                const alertsList = document.getElementById('alerts-list');
+                if (data.alerts.length === 0) {
+                    alertsList.innerHTML = '<p>No active alerts</p>';
+                } else {
+                    alertsList.innerHTML = data.alerts.map(alert => `
+                        <div class="alert-item alert-${alert.level}">
+                            <strong>${alert.level.toUpperCase()}</strong>: ${alert.message}<br>
+                            Value: ${alert.value} (Threshold: ${alert.threshold})
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Alerts update error:', error);
+            }
+        }
+
+        function updatePipelineStages() {
+            // This would be updated based on real-time stage status
+            // For now, we'll simulate some activity
+            const stages = document.querySelectorAll('.pipeline-stage');
+            stages.forEach((stage, index) => {
+                // Simulate some stages being active
+                if (Math.random() > 0.7) {
+                    stage.classList.add('active');
+                    setTimeout(() => stage.classList.remove('active'), 2000);
+                }
+            });
+        }
+
+        async function runCognitiveTest() {
+            const testButton = event.target;
+            const originalText = testButton.textContent;
+            testButton.textContent = 'Running Test...';
+            testButton.disabled = true;
+
+            try {
+                const response = await fetch('/api/test/cognitive-cycle', { method: 'POST' });
+                const result = await response.json();
+
+                document.getElementById('test-results').innerHTML = `
+                    <div class="alert-item alert-${result.status === 'test_completed' ? 'success' : 'error'}">
+                        <strong>Test Result:</strong> ${result.message}<br>
+                        <strong>Cycle ID:</strong> ${result.cycle_id || 'N/A'}
+                    </div>
+                `;
+
+                // Refresh metrics after test
+                setTimeout(updateDashboard, 1000);
+
+            } catch (error) {
+                document.getElementById('test-results').innerHTML = `
+                    <div class="alert-item alert-error">
+                        <strong>Test Failed:</strong> ${error.message}
+                    </div>
+                `;
+            } finally {
+                testButton.textContent = originalText;
+                testButton.disabled = false;
+            }
+        }
+
+        function refreshMetrics() {
+            updateDashboard();
+        }
+
+        // Initialize dashboard
+        updateDashboard();
+
+        // Update every 5 seconds
+        updateInterval = setInterval(updateDashboard, 5000);
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+        });
+    </script>
+</body>
+</html>

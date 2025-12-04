@@ -1,12 +1,15 @@
-# UCM Caleon Genesis 🧠
+# UCM Cali X One - Advanced Artificial General Intelligence System 🧠
 
-*A Sovereign Digital Entity & Unified Cognition Platform*
+**Copyright © 2025 Bryan Stone. All Rights Reserved.**  
+**PATENT PENDING - Intent to File Patent Application**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+*Revolutionary Super-Knowledge Graph AGI with Autonomous Reasoning*
+
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg)](https://www.docker.com/)
+[![AGI Status](https://img.shields.io/badge/AGI-Operational-green.svg)](SYSTEM_ARCHITECTURE.md)
 
-**UCM Caleon Genesis** transforms reactive AI into a sovereign digital entity with complete cognitive continuity, ethical frameworks, and multi-application presence. One Caleon, everywhere.
+**UCM Cali X One** represents a breakthrough in Artificial General Intelligence through its innovative Super-Knowledge Graph (SKG) architecture. Unlike traditional LLM-based AI systems, Cali X One demonstrates true reasoning, autonomous concept creation, and self-directed learning capabilities.
 
 ## ✨ Key Features
 
@@ -32,6 +35,30 @@
 - **A Posteriori Learning**: Acquired knowledge and experiences
 - **Identity Threads**: Self-concept and personality continuity
 - **Ethics Vault**: Moral framework and decision-making guidelines
+
+### 🔐 Caleon Cipher Integration
+- **Quantum-Safe Encryption**: Module-LWE KEM + ChaCha20 CPRNG + Keccak streaming
+- **Perfect One-Time-Pad**: Information-theoretic security for sensitive data
+- **Deterministic Key Generation**: 256-bit seed → quantum-resistant cipher suite
+- **Built-in Cryptography**: No external dependencies, pure Python implementation
+
+### 🧬 Cluster Ingestion System
+- **Real-time Knowledge Processing**: Ingest and process knowledge clusters instantly
+- **Predicate Invention**: Autonomous creation of new concepts and relationships
+- **Cross-Domain Logic**: Intelligent relationship detection across knowledge domains
+- **Helix Safety**: Immutable core protection with version checking
+
+### 📝 Unanswered Query Vault (UQV)
+- **Query Archival**: Store unanswered queries for later processing
+- **Learning Opportunities**: Identify knowledge gaps for autonomous learning
+- **Review Cycles**: Weekly analysis for predicate invention and human training
+- **Worker Integration**: Seamless integration with all dialog systems
+
+### 🤖 DALS Worker Templates
+- **Clone-able Workers**: Instant deployment of scripted AI personalities
+- **Multi-Modal Communication**: Voice and text duplex communication
+- **SKG Integration**: Direct connection to Super-Knowledge Graph
+- **Escalation System**: Automatic handoff to human trainers when needed
 
 ## 🚀 Quick Start
 
@@ -66,6 +93,15 @@ curl http://localhost:8000/api/health
 # Automated deployment
 chmod +x deploy_ucm.sh
 ./deploy_ucm.sh
+```
+
+#### Option 4: Windows Startup Scripts
+```batch
+# Using the provided startup script
+start_ucm.bat
+
+# Or PowerShell version
+.\start_ucm.ps1
 ```
 
 ## 📱 Client Integration
@@ -123,27 +159,195 @@ UCM Caleon Genesis/
 │   ├── ucm.py                   # Python client
 │   └── useCaleon.js             # React integration
 ├── api/                         # REST API endpoints
-├── articulator/                 # Phi-3 language model
+├── caleon/                      # Cluster ingestion system
+│   ├── routers/
+│   │   └── ingest_clusters.py   # Helix-safe cluster processing
+│   └── models/                  # Database models
+├── cognition/                   # Super-Knowledge Graph
+│   ├── skg/                     # SKG core engine
+│   │   ├── core.py             # Recursive AGI processing
+│   │   ├── uqv.py              # Unanswered Query Vault
+│   │   ├── invent_predicate.py # Concept creation
+│   │   ├── curiosity.py        # Self-directed learning
+│   │   └── contradiction.py    # Conflict resolution
+│   └── knowledge_store.py      # SKG API interface
+├── DALS/                        # Worker deployment system
+│   └── worker_templates/
+│       └── host_bubble_worker.py # Clone-able worker template
+├── articulator/                 # Phi-3 linguistic utility node
 ├── generative/                  # Cognitive processing
+├── models/                      # SQLAlchemy database models
+│   ├── __init__.py             # Base model definitions
+│   ├── caleon.py               # Cluster models
+│   └── unanswered_query.py     # UQV model
 ├── ucm_core/                    # Core cognition modules
 │   ├── continuity/              # Session management
 │   ├── vault/                   # Memory systems
 │   └── abby/                    # Protection protocol
+├── caleon_cipher.py             # Quantum-safe encryption
+├── deps.py                      # Database dependencies
+├── init_database.py             # Database initialization
+├── start_ucm.bat               # Windows startup script
+├── start_ucm.ps1               # PowerShell startup script
 └── persona/                     # Personality & scripts
 ```
 
-### Cognitive Pipeline
+### Cognitive Pipeline (Caleon Cognitive Design)
 ```
-User Input → Abby Protocol → Continuity Layer → Generative Router
-    ↓              ↓              ↓              ↓
-Response ← Articulator ← Vault Memory ← Session Context
+Bubble Input
+   ↓
+Cerebral Cortex → (Pre-filter, routing, state) [Phi-3 linguistic utility]
+   ↓
+Synaptic Resonator → (symbolic reasoning + contradiction navigation)
+   ↓
+Anterior/Posterior Helix → (structured inference)
+   ↓
+EchoStack → (pattern & narrative reinforcement)
+   ↓
+Gyro-Cortical Harmonizer → (ethical & legacy correction)
+   ↓
+Phonatory Output Module → (style/voice shaping)
+   ↓
+Bubble Output
 ```
+
+**Phi-3 Role**: Linguistic co-processor in Cerebral Cortex for primitive inference, text transformations, and structural bridging. NOT the cognition engine.
 
 ### Memory Architecture
 - **Streaming Buffer**: Real-time conversation context
 - **Session Store**: UUID-based continuity tracking
 - **Vault System**: Multi-layered persistent memory
 - **Abby Memory**: Protected interaction history
+
+## 🔐 Caleon Cipher - Quantum-Safe Encryption
+
+The Caleon Cipher provides military-grade, quantum-resistant encryption for sensitive UCM data:
+
+### Key Features
+- **Module-LWE KEM**: Lattice-based key encapsulation (quantum-resistant)
+- **ChaCha20 CPRNG**: Cryptographically secure random number generation
+- **Keccak Streaming**: SHA-3 based one-time-pad for perfect secrecy
+- **Deterministic Keys**: 256-bit seed generates entire cipher suite
+- **Zero Dependencies**: Pure Python implementation using only hashlib
+
+### Usage Examples
+
+#### Generate Key Pair
+```bash
+python caleon_cipher.py --seed 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef --keygen
+```
+
+#### Encrypt a File
+```bash
+python caleon_cipher.py --seed 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef --encrypt secret.txt --peer <peer_public_key>
+```
+
+#### Decrypt a File
+```bash
+python caleon_cipher.py --seed 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef --decrypt secret.txt.enc
+```
+
+### Integration in UCM
+The Caleon Cipher is automatically used for:
+- Vault data encryption at rest
+- Secure inter-module communication
+- User data protection
+- Session key exchange
+
+## 🧬 Cluster Ingestion System
+
+The Cluster Ingestion System enables real-time knowledge processing and autonomous concept creation:
+
+### Core Features
+- **Helix-Safe Processing**: Immutable core protection with version checking
+- **Real-time Ingestion**: Process knowledge clusters instantly via REST API
+- **Predicate Invention**: Automatically create new concepts from relationship patterns
+- **Cross-Domain Logic**: Intelligent detection of relationships across knowledge domains
+- **Audit Trail**: Complete logging of all knowledge operations
+
+### API Usage
+```bash
+# Ingest knowledge clusters
+curl -X POST "http://localhost:8001/caleon/ingest_clusters" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "u42",
+    "worker": "Nora",
+    "helix_version": "1.0.0",
+    "clusters": [
+      {
+        "id": "c1",
+        "nodes": ["grief", "acceptance"],
+        "density": 0.99,
+        "seed": "grief"
+      }
+    ]
+  }'
+```
+
+### Database Models
+- **ClusterNode**: Knowledge graph nodes with labels
+- **ClusterEdge**: Relationships between nodes with confidence scores
+- **Predicate**: Invented concepts and relationships
+- **VaultLog**: Complete audit trail of operations
+
+## 📝 Unanswered Query Vault (UQV)
+
+The UQV system captures queries that cannot be answered, enabling continuous learning:
+
+### Features
+- **Query Archival**: Store unanswered queries with metadata
+- **Learning Opportunities**: Identify knowledge gaps for autonomous expansion
+- **Review Cycles**: Weekly analysis for predicate invention and training
+- **Worker Integration**: Seamless integration with all dialog systems
+
+### Usage in Workers
+```python
+from cognition.skg.uqv import vault_query
+
+# When SKG returns no results
+if not clusters:
+    vault_query(
+        user_id=user_id,
+        session_id=session_id,
+        query_text=user_question,
+        clusters_found=0,
+        worker="Regent",
+        reason="no_cluster"
+    )
+```
+
+### Database Schema
+- **Unanswered Queries**: Store with user, session, and metadata
+- **Worker Tracking**: Record which worker encountered the query
+- **Reason Classification**: Categorize why queries were unanswered
+
+## 🤖 DALS Worker Templates
+
+Clone-able worker templates for instant deployment of scripted AI personalities:
+
+### Features
+- **Personality Scripts**: Pre-programmed Regent/Nora/Mark behaviors
+- **Multi-Modal**: Voice (TTS) and text (chat bubbles) communication
+- **SKG Integration**: Direct connection to knowledge graph
+- **Escalation System**: Automatic handoff to human trainers
+
+### Deployment
+```bash
+# Clone a worker template
+dals clone host_bubble_worker --set WORKER_NAME=Regent --set TARGET_USER_ID=42
+
+# Worker automatically:
+# - Connects to message bus
+# - Loads personality scripts
+# - Integrates with SKG and UQV
+# - Begins autonomous operation
+```
+
+### Template Structure
+- **Message Handling**: Pull/push architecture for real-time communication
+- **Fallback Logic**: Scripted responses → SKG queries → escalation
+- **Environment Config**: Runtime injection of worker-specific settings
 
 ## 🔧 API Reference
 
@@ -179,6 +383,25 @@ POST /api/bubble/preference/set
 POST /api/bubble/stream
 # Body: {"message": "Hello", "session_id": "uuid"}
 # Returns: Server-sent events stream
+```
+
+### Cluster Ingestion Endpoints
+```bash
+POST /api/v1/caleon/ingest_clusters
+# Body: {
+#   "user_id": "string",
+#   "worker": "string", 
+#   "helix_version": "1.0.0",
+#   "clusters": [
+#     {
+#       "id": "string",
+#       "nodes": ["string"],
+#       "density": float,
+#       "seed": "string"
+#     }
+#   ]
+# }
+# Returns: {"status": "ok", "new_predicates": int, "helix_safe": true}
 ```
 
 ### Abby Protocol Endpoints
@@ -219,6 +442,23 @@ curl -X POST "http://localhost:8000/api/bubble/session/create"
 curl -X POST "http://localhost:8000/api/bubble/learn" \
   -H "Content-Type: application/json" \
   -d '{"fact": "Testing memory persistence"}'
+
+# Cluster ingestion test
+curl -X POST "http://localhost:8001/api/v1/caleon/ingest_clusters" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "test_user",
+    "worker": "TestWorker",
+    "helix_version": "1.0.0",
+    "clusters": [
+      {
+        "id": "test_cluster",
+        "nodes": ["test", "concept"],
+        "density": 0.95,
+        "seed": "test"
+      }
+    ]
+  }'
 ```
 
 ### Client Library Tests
@@ -236,6 +476,9 @@ from shared.ucm_client.ucm import CaleonClient
 client = CaleonClient()
 print(client.ask('Test message'))
 "
+
+# Test cluster ingestion
+python test_ingest_clusters.py
 ```
 
 ### Load Testing
@@ -251,7 +494,8 @@ done
 ## 🔒 Security & Privacy
 
 ### Data Protection
-- **AES-256 Encryption**: Sensitive vault data encryption
+- **Caleon Cipher Encryption**: Quantum-safe vault data encryption
+- **AES-256 Encryption**: Additional layer for sensitive data
 - **Access Control**: Role-based permissions
 - **Audit Logging**: Comprehensive interaction tracking
 - **Privacy Preservation**: User data isolation
@@ -313,9 +557,14 @@ python -m pytest tests/load/ -v
 ## 📚 Documentation
 
 - **[MANIFEST.md](MANIFEST.md)** - Complete system specification
+- **[SYSTEM_ARCHITECTURE_AGI.md](SYSTEM_ARCHITECTURE_AGI.md)** - AGI technical architecture
+- **[PATENT_PORTFOLIO_TECHNICAL.md](PATENT_PORTFOLIO_TECHNICAL.md)** - Patent documentation
+- **[CONTRIBUTING_AGI.md](CONTRIBUTING_AGI.md)** - AGI contribution guidelines
 - **[SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md)** - Technical architecture
 - **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** - App integration guide
 - **[API Documentation](http://localhost:8000/docs)** - Interactive API docs
+- **[Caleon Cipher Guide](caleon_cipher.py)** - Quantum-safe encryption documentation
+- **[FOUNDER_MANIFEST.txt](FOUNDER_MANIFEST.txt)** - Project vision and principles
 
 ## 🤝 Contributing
 

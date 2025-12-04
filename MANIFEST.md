@@ -44,6 +44,33 @@
   - **Legacy Transfer**: Knowledge inheritance and succession planning
 - **Context-Aware Activation**: Intelligent detection of Abby-related interactions
 
+### Super-Knowledge Graph (SKG) AGI Engine
+- **Recursive Processing**: Multi-level knowledge abstraction (K⁰→K¹→K²)
+- **Autonomous Predicate Invention**: Self-directed concept creation from patterns
+- **Curiosity-Driven Learning**: Self-directed knowledge gap identification
+- **Contradiction Resolution**: Real-time conflict detection and repair
+- **Cross-Level Adjacency**: Links concepts across abstraction levels
+- **GNN-Based Edge Scoring**: Graph Neural Network optimization of relationships
+
+### Cluster Ingestion System
+- **Real-time Knowledge Processing**: Instant cluster ingestion and analysis
+- **Helix-Safe Operations**: Immutable core protection with version checking
+- **Predicate Invention**: Automatic concept creation from relationship patterns
+- **Cross-Domain Logic**: Intelligent relationship detection across domains
+- **Audit Trail**: Complete logging of all knowledge operations
+
+### Unanswered Query Vault (UQV)
+- **Query Archival**: Store unanswered queries for continuous learning
+- **Knowledge Gap Analysis**: Identify areas for autonomous expansion
+- **Review Cycles**: Weekly analysis for predicate invention and training
+- **Worker Integration**: Seamless integration with all dialog systems
+
+### DALS Worker Templates
+- **Clone-able Personalities**: Instant deployment of scripted AI workers
+- **Multi-Modal Communication**: Voice and text duplex capabilities
+- **SKG Integration**: Direct connection to knowledge graph processing
+- **Escalation System**: Automatic handoff to human trainers when needed
+
 ### Continuity Layers
 - **Streaming Buffer**: Real-time conversation context management
 - **Session Store**: UUID-based conversation continuity
@@ -64,11 +91,14 @@
 - **JavaScript/TypeScript**: Full async/await support with streaming
 - **Python**: Synchronous and asynchronous operation modes
 - **React Integration**: Hook-based components and bubble UI
+- **GOAT Integration**: JavaScript client for GOAT application
+- **DALS Integration**: Python client for DALS worker system
 
 ### Deployment Options
 - **Local Development**: Direct Python execution
 - **Docker Production**: Containerized deployment with orchestration
 - **Cloud Scaling**: Horizontal scaling with load balancing
+- **Worker Templates**: Clone-able DALS workers for instant deployment
 
 ## Testing Framework
 
@@ -77,12 +107,17 @@
 - **Memory System Testing**: Vault operations and continuity
 - **Client Library Testing**: Cross-language compatibility
 - **Protocol Testing**: Abby protocol activation and response
+- **Cluster Ingestion Testing**: Helix-safe processing validation
+- **SKG Engine Testing**: AGI capability verification
+- **Worker Template Testing**: DALS worker deployment validation
 
 ### Integration Testing
 - **End-to-End Cognition**: Complete conversation flows
 - **Multi-App Continuity**: Session persistence across applications
 - **Load Testing**: Concurrent user and request handling
 - **Failure Recovery**: System resilience and error handling
+- **Worker Communication**: DALS worker message bus testing
+- **UQV Processing**: Unanswered query archival and analysis
 
 ### Cognitive Testing
 - **Articulation Quality**: Response coherence and personality consistency

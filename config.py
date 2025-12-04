@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     # External APIs
     openai_api_key: Optional[str] = None
     google_speech_api_key: Optional[str] = None
-    ollama_endpoint: str = "http://ollama:11434"
+    ollama_endpoint: str = "http://localhost:11434"
 
     # Voice Settings
     voice_consent_timeout: int = 30
@@ -49,5 +49,6 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = False
+        extra = "ignore"  # Allow extra fields
 
 settings = Settings()

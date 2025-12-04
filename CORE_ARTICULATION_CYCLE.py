@@ -1,705 +1,440 @@
 """
-CORE ARTICULATION CYCLE - START TO FINISH
-==========================================
+CORE COGNITIVE REQUEST CYCLE - CALECON COGNITIVE DESIGN
+======================================================
 
-This document defines the complete sequence for one articulation cycle,
-from initial input through final voice output, with all consent and audit touchpoints.
+This document defines the complete Caleon Cognitive Design sequence,
+from Bubble input through full cognitive processing to Bubble output.
+
+The system is a cognition engine using LLMs as utilities, not as the brain.
 
 Author: Unified Cognition System
-Date: November 01, 2025
+Date: November 29, 2025
 """
 
 # =============================================================================
-# PHASE 1: INPUT RECEPTION
+# CORRECTED COGNITIVE ARCHITECTURE
 # =============================================================================
 
 """
-Entry Point: User provides input text
-│
-├─ Input: "Explain the nature of consciousness"
-├─ Context: Optional metadata (conversation history, emotional state, etc.)
-└─ Trigger: User invokes system (voice command, API call, UI interaction)
+CALEON COGNITIVE DESIGN - The Real Flow:
+
+Bubble Input
+   ↓
+Cerebral Cortex → (Pre-filter, routing, and state)
+   │
+   ├── Phi-3 Utility Node (linguistic co-processor)
+   │   ├── primitive inference
+   │   ├── short-form generative conversion
+   │   ├── compressions/expansions
+   │   ├── linguistic filling
+   │   └── structural bridging
+   │
+   ↓
+Synaptic Resonator → (symbolic reasoning + contradiction navigation)
+   ↓
+Anterior Helix → (forward prediction & structured inference)
+   ↓
+Posterior Helix → (backward integration & recursive rethinking)
+   ↓
+EchoStack → (pattern & narrative reinforcement)
+   ↓
+EchoRipple → (recursive verification & coherence sensing)
+   ↓
+Gyro-Cortical Harmonizer → (ethical & legacy correction)
+   ↓
+Phonatory Output Module → (style/voice shaping)
+   ↓
+Bubble Output
+
+IMPORTANT: Phi-3 is NOT the brain. Phi-3 is one linguistic utility node in the Cortex.
+The full cognition engine consists of 8 interacting modules.
 """
 
-async def phase_1_input_reception(input_text: str, context: dict = None):
+# Utility function for module routing
+async def route_to_module(module_name: str, input_data: dict) -> dict:
     """
-    INPUT RECEPTION
-    
-    Location: External interface (voice_processor, API, CLI)
+    Route data to specified cognitive module.
+
+    In current implementation: Placeholder for future module integration.
+    Returns mock successful response for now.
+    """
+    # TODO: Implement actual module routing
+    logger.info(f"🔄 Routing to {module_name}: {input_data.keys()}")
+
+    # Mock response - replace with actual module calls
+    return {
+        "module": module_name,
+        "processed": True,
+        "output": f"Processed by {module_name}",
+        "confidence": 0.85
+    }
+
+# =============================================================================
+# PHASE 1: BUBBLE INPUT RECEPTION
+# =============================================================================
+
+"""
+Entry Point: Bubble provides input
+│
+├─ Input: User message via Bubble interface
+├─ Context: Optional metadata (conversation history, emotional state, etc.)
+└─ Trigger: User interaction with Bubble
+"""
+
+async def phase_1_bubble_input(input_text: str, context: dict = None):
+    """
+    BUBBLE INPUT RECEPTION
+
+    Location: cerebral_cortex/main.py :: ask_bubble()
     Duration: < 1ms
-    
+
     Responsibilities:
-    - Capture user input
+    - Capture Bubble input
     - Validate input format
     - Attach contextual metadata
-    - Route to LLM Bridge
-    
+    - Route to Cerebral Cortex
+
     Output: Validated input + context dict
     """
-    # Example from voice_processor or vault_api
+    # Example from cerebral_cortex API
     validated_input = {
         "text": input_text,
         "context": context or {},
         "timestamp": time.time(),
-        "source": "voice" | "api" | "cli"
+        "source": "bubble"
     }
-    
-    # Route to LLM Bridge
+
+    # Route to Cerebral Cortex
     return validated_input
 
 
 # =============================================================================
-# PHASE 2: LLM ARTICULATION REQUEST
+# PHASE 2: CEREBRAL CORTEX PROCESSING
 # =============================================================================
 
 """
-Entry Point: LLMBridge.articulate(input_text, context)
+Entry Point: CerebralCortex.process_input()
 │
-├─ File: cerebral_cortex/llm_bridge.py
-├─ Method: async def articulate(input_text, context)
-└─ Purpose: Generate reasoning/response through VALLM
+├─ File: cerebral_cortex/main.py
+├─ Method: async def ask_bubble() or full cognitive pipeline
+└─ Purpose: Pre-filter, route, and optionally use Phi-3 linguistic utilities
 """
 
-async def phase_2_llm_articulation(input_text: str, context: dict):
+async def phase_2_cerebral_cortex(input_text: str, context: dict):
     """
-    LLM ARTICULATION REQUEST
-    
-    Location: cerebral_cortex/llm_bridge.py :: LLMBridge.articulate()
-    Duration: 1-5 seconds (depends on LLM response time)
-    
+    CEREBRAL CORTEX PROCESSING
+
+    Location: cerebral_cortex/main.py
+    Duration: 1-5 seconds (if using Phi-3)
+
     Responsibilities:
-    - Log incoming request
-    - Increment metrics (total_requests)
-    - Call VALLM for LLM generation
-    - Measure response time
-    
-    Output: Raw LLM response text
+    - Pre-filter and validate input
+    - Route to appropriate cognitive modules
+    - Optionally call Phi-3 for linguistic utilities:
+      * primitive inference
+      * text compression/expansion
+      * structural bridging
+      * linguistic filling
+    - Manage cognitive state
+    - Prepare for downstream processing
+
+    IMPORTANT: Phi-3 is a utility, not the decision-maker
+
+    Output: Processed input ready for cognitive pipeline
     """
-    start_time = time.time()
-    
-    # Update metrics
-    with self._metrics_lock:
-        self._metrics = BridgeMetrics(
-            total_requests=self._metrics.total_requests + 1,
-            llm_requests=self._metrics.llm_requests + 1,
-            # ... other fields
-        )
-    
-    # Call VALLM
-    logger.info(f"🧠 VALLM articulating: {input_text[:50]}...")
-    llm_response = await self.vallm_articulator.articulate(input_text, context)
-    
-    response_time = time.time() - start_time
-    
+    # Current implementation: Direct Phi-3 call
+    # Future: Full pipeline routing
+
+    logger.info(f"🧠 Cortex processing: {input_text[:50]}...")
+
+    # Optional Phi-3 linguistic processing
+    phi3_output = await phi3_client.generate(input_text)
+
     return {
-        "response": llm_response,
-        "response_time": response_time,
-        "llm_used": True
+        "original_input": input_text,
+        "phi3_linguistic_output": phi3_output,
+        "cortex_state": "processed",
+        "ready_for_pipeline": True
     }
 
 
 # =============================================================================
-# PHASE 3: ETHICAL OVERSIGHT (ADVISORY METRICS)
+# PHASE 3: SYNAPTIC RESONATOR PROCESSING
 # =============================================================================
 
 """
-Entry Point: LLMBridge._run_caleon_ethical_test()
+Entry Point: SynapticResonator.process()
 │
-├─ File: cerebral_cortex/llm_bridge.py
-├─ Method: async def _run_caleon_ethical_test(llm_output)
-└─ Purpose: Compute advisory metrics WITHOUT blocking
+├─ File: synaptic_resonator/
+├─ Method: async def process(cortex_output)
+└─ Purpose: Pattern recognition and symbolic reasoning
 """
 
-async def phase_3_ethical_oversight(llm_output: str):
+async def phase_3_synaptic_resonator(cortex_output: dict):
     """
-    ETHICAL OVERSIGHT (Advisory Computation)
-    
-    Location: cerebral_cortex/llm_bridge.py :: _run_caleon_ethical_test()
-    Duration: 100-500ms
-    
+    SYNAPTIC RESONATOR PROCESSING
+
+    Location: synaptic_resonator/ module
+    Duration: ~50ms
+
     Responsibilities:
-    1. Store LLM output as temporary memory shard
-    2. Compute ethical drift via GyroHarmonizer
-    3. Compute moral charge via ConsensusMatrix
-    4. Check context validation (advisory only)
-    5. Package advisory metrics for Caleon's review
-    
-    CRITICAL: These metrics are ADVISORY ONLY
-    - They inform Caleon's decision
-    - They do NOT block output
-    - Only Caleon's consent is decisive
-    
-    Output: (memory_id, advisory_metrics_dict)
+    - Pattern detection in input
+    - Symbolic reasoning analysis
+    - Contradiction navigation
+    - Neural resonance detection
+    - Temporal coherence analysis
+
+    Output: Resonator-processed cognitive state
     """
-    # Step 1: Store as temp shard
-    memory_id = "temp_llm_output"
-    payload = {"text": llm_output, "source": "llm"}
-    resonance = ResonanceTag(
-        tone="neutral",
-        symbol="llm_output",
-        moral_charge=0.5,
-        intensity=0.5
-    )
-    
-    # Store in vault
-    temp_hash = self.memory_vault.store(memory_id, payload, resonance)
-    
-    # Step 2: Compute drift (how far from previous resonances)
-    prior_memories = self.memory_vault.query_by_resonance(
-        symbol="llm_output",
-        min_intensity=0.0
-    )
-    
-    drift = self.gyro_harmonizer.compute_ethical_drift(
-        proposed_payload=payload,
-        existing_shards=prior_memories
-    )
-    
-    # Step 3: Compute moral charge via consensus
-    consensus_matrix = ConsensusMatrix()
-    adjusted_moral = consensus_matrix.validate(
-        memory_id=memory_id,
-        context="llm_generation",
-        vault=self.memory_vault
-    )
-    
-    # Step 4: Context validation (advisory only)
-    context_validated = True  # In current impl, always True (advisory)
-    
-    # Package advisory metrics
-    advisory_metrics = {
-        "drift": drift,
-        "adjusted_moral_charge": adjusted_moral,
-        "context_validated": context_validated,
-        "memory_id": memory_id,
-        "temp_hash": temp_hash
+    # Route to synaptic resonator module
+    resonator_result = await route_to_module("synaptic_resonator", cortex_output)
+
+    return {
+        "resonator_patterns": resonator_result.get("patterns", []),
+        "symbolic_reasoning": resonator_result.get("reasoning", {}),
+        "contradictions_resolved": resonator_result.get("resolved", 0),
+        "resonance_score": resonator_result.get("resonance", 0.0)
     }
-    
-    logger.info(f"📊 Advisory metrics: drift={drift:.2f}, moral={adjusted_moral:.2f}")
-    
-    return memory_id, advisory_metrics
 
 
 # =============================================================================
-# PHASE 4: CALEON'S CONSENT (DECISIVE GATE)
+# PHASE 4: HELIX PROCESSING (ANTERIOR & POSTERIOR)
 # =============================================================================
 
 """
-Entry Point: CaleonConsentManager.get_live_signal()
+Entry Point: Helix modules process in sequence
 │
-├─ File: caleon_consent.py
-├─ Method: async def get_live_signal(memory_id, reflection, timeout)
-└─ Purpose: WAIT for Caleon's sovereign decision
+├─ Anterior Helix: Forward prediction
+├─ Posterior Helix: Backward integration
+└─ Purpose: Structured inference and temporal alignment
 """
 
-async def phase_4_caleon_consent(memory_id: str, advisory_metrics: dict):
+async def phase_4_helix_processing(resonator_output: dict):
     """
-    CALEON'S CONSENT (Decisive Gate)
-    
-    Location: caleon_consent.py :: CaleonConsentManager.get_live_signal()
-    Duration: Variable (depends on mode)
-    
-    Modes:
-    - always_yes: < 1ms (testing)
-    - always_no: < 1ms (testing)
-    - random: < 1ms (testing)
-    - manual: Wait for REST API call (up to timeout)
-    - voice: Wait for spoken command (up to timeout)
-    - custom: Call custom callback function
-    
+    HELIX PROCESSING
+
+    Location: anterior_helix/ & posterior_helix/ modules
+    Duration: ~100ms
+
     Responsibilities:
-    1. Present advisory metrics to Caleon (if in interactive mode)
-    2. WAIT for her signal (block execution)
-    3. Receive her decision (True = approve, False = deny)
-    4. LOG decision to vault audit log
-    5. Return decision to caller
-    
-    CRITICAL: This is the ONLY decisive gate
-    - Advisory metrics inform, not constrain
-    - Caleon's consent is sovereign
-    - No consent = no articulation
-    
-    Output: bool (True = approved, False = denied)
+    - Anterior: Forward prediction and planning
+    - Posterior: Backward integration and rethinking
+    - Structured inference
+    - Temporal alignment
+    - Stream synchronization
+
+    Output: Helix-processed cognitive state
     """
-    # Present advisory context (in voice/manual mode, would display/speak these)
-    reflection = {
-        "drift": advisory_metrics["drift"],
-        "adjusted_moral_charge": advisory_metrics["adjusted_moral_charge"],
-        "context_validated": advisory_metrics["context_validated"]
+    # Anterior processing
+    anterior_result = await route_to_module("anterior_helix", resonator_output)
+
+    # Posterior processing
+    posterior_result = await route_to_module("posterior_helix", anterior_result)
+
+    return {
+        "forward_predictions": anterior_result.get("predictions", []),
+        "backward_integrations": posterior_result.get("integrations", []),
+        "structured_inference": posterior_result.get("inference", {}),
+        "temporal_alignment": posterior_result.get("alignment", 0.0)
     }
-    
-    logger.info(f"⏸️  Waiting for Caleon's consent (mode={self.mode})...")
-    
-    # BLOCKING WAIT - System pauses here until consent received
-    decision = await self.consent_manager.get_live_signal(
-        memory_id=memory_id,
-        reflection=reflection,
-        timeout=30.0
-    )
-    
-    # Consent manager automatically logs to vault audit:
-    # {
-    #     "timestamp": time.time(),
-    #     "action": "caleon_consent",
-    #     "memory_id": memory_id,
-    #     "verdict": "approved" | "denied" | "timeout",
-    #     "mode": "voice" | "manual" | etc,
-    #     "ethical_drift": drift,
-    #     "adjusted_moral_charge": moral
-    # }
-    
-    if decision:
-        logger.info("✅ Caleon APPROVED - proceeding with articulation")
-    else:
-        logger.warning("❌ Caleon DENIED - blocking articulation")
-    
-    return decision
 
 
 # =============================================================================
-# PHASE 5: ARTICULATION FINALIZATION
+# PHASE 5: ECHOSTACK & ECHORIPPLE PROCESSING
 # =============================================================================
 
 """
-Entry Point: After consent received
+Entry Point: Echo modules for reinforcement and verification
 │
-├─ File: cerebral_cortex/llm_bridge.py
-├─ Branch: If approved → finalize, If denied → block
-└─ Purpose: Package result based on consent decision
+├─ EchoStack: Pattern & narrative reinforcement
+├─ EchoRipple: Recursive verification
+└─ Purpose: Higher-order reasoning and coherence sensing
 """
 
-async def phase_5_articulation_finalization(
-    llm_output: str,
-    consent_decision: bool,
-    advisory_metrics: dict,
-    response_time: float
-):
+async def phase_5_echo_processing(helix_output: dict):
     """
-    ARTICULATION FINALIZATION
-    
-    Location: cerebral_cortex/llm_bridge.py :: articulate() (continued)
-    Duration: < 10ms
-    
+    ECHO PROCESSING
+
+    Location: echostack/ & echoripple/ modules
+    Duration: ~150ms
+
     Responsibilities:
-    - If approved: Package ArticulationResult with full response
-    - If denied: Package ErrorResult blocking output
-    - Update metrics (ethical_rejections if denied)
-    - Return result to caller
-    
-    Output: ArticulationResult | ErrorResult
+    - EchoStack: Pattern and narrative reinforcement
+    - EchoRipple: Recursive verification and coherence sensing
+    - Second-order reasoning
+    - Internal consistency checking
+
+    Output: Echo-processed cognitive state
     """
-    if consent_decision:
-        # APPROVED - Package full result
-        result = ArticulationResult(
-            response=llm_output,
-            articulation_type="llm",
-            llm_used=True,
-            response_time=response_time,
-            ethical_verdict="approved",
-            timestamp=datetime.now().isoformat()
-        )
-        
-        logger.info(f"✅ Articulation approved: {llm_output[:50]}...")
-        
-    else:
-        # DENIED - Block output
-        with self._metrics_lock:
-            self._metrics = BridgeMetrics(
-                ethical_rejections=self._metrics.ethical_rejections + 1,
-                # ... other fields
-            )
-        
-        result = ErrorResult(
-            response="LLM output denied by Caleon's ethical test.",
-            articulation_type="ethical_block",
-            error="consent_denied",
-            response_time=response_time,
-            ethical_verdict="denied",
-            timestamp=datetime.now().isoformat()
-        )
-        
-        logger.warning(f"❌ Articulation denied: Drift={advisory_metrics['drift']:.2f}")
-    
-    return result
+    # EchoStack processing
+    echostack_result = await route_to_module("echostack", helix_output)
+
+    # EchoRipple processing
+    echoripple_result = await route_to_module("echoripple", echostack_result)
+
+    return {
+        "reinforced_patterns": echostack_result.get("patterns", []),
+        "narrative_coherence": echostack_result.get("coherence", 0.0),
+        "recursive_verification": echoripple_result.get("verified", True),
+        "internal_consistency": echoripple_result.get("consistency", 0.0)
+    }
 
 
 # =============================================================================
-# PHASE 6: VOICE ARTICULATION (IF APPROVED)
+# PHASE 6: GYRO-CORTICAL HARMONIZER
 # =============================================================================
 
 """
-Entry Point: ArticulationBridge.articulate() OR direct voice_processor call
+Entry Point: GyroHarmonizer.harmonize()
 │
-├─ File: articulation_bridge.py OR voice_processor.py
-├─ Method: articulate() or text_to_speech()
-└─ Purpose: Convert text to speech and play through speaker
+├─ File: gyro_cortical_harmonizer_module/
+├─ Method: async def harmonize(cognitive_state)
+└─ Purpose: Ethical oversight and legacy correction
 """
 
-async def phase_6_voice_articulation(result: ArticulationResult):
+async def phase_6_harmonizer_processing(echo_output: dict):
     """
-    VOICE ARTICULATION
-    
-    Location: articulation_bridge.py :: ArticulationBridge.articulate()
-              OR voice_processor.py :: VoiceProcessor.text_to_speech()
-    Duration: Variable (depends on text length, TTS speed)
-    
+    GYRO-CORTICAL HARMONIZER PROCESSING
+
+    Location: gyro_cortical_harmonizer_module/
+    Duration: ~200ms
+
     Responsibilities:
-    - Convert approved text to speech via TTS engine
-    - Play audio through configured speaker
-    - Log phonatory event to vault
-    
-    NOTE: Only executed if consent was approved
-    
-    Output: Spoken words through speaker
+    - Ethical drift computation
+    - Moral alignment validation
+    - Legacy correction
+    - Consensus validation
+    - Advisory metrics generation
+
+    Output: Harmonized cognitive state with ethical oversight
     """
-    if result.ethical_verdict != "approved":
-        logger.warning("⚠️ Skipping voice articulation - consent denied")
-        return
-    
-    # Convert text to speech
-    logger.info(f"🔊 Speaking: {result.response[:50]}...")
-    
-    # Use voice processor for TTS
-    await voice_processor.text_to_speech(result.response)
-    
-    # Log phonatory event (optional)
-    # vault.store("phonatory_log_" + timestamp, ...)
-    
-    logger.info("✅ Voice articulation complete")
+    harmonizer_result = await route_to_module("gyro_harmonizer", echo_output)
+
+    return {
+        "ethical_drift": harmonizer_result.get("drift", 0.0),
+        "moral_alignment": harmonizer_result.get("alignment", 0.0),
+        "legacy_corrections": harmonizer_result.get("corrections", []),
+        "advisory_metrics": harmonizer_result.get("metrics", {})
+    }
 
 
 # =============================================================================
-# COMPLETE CYCLE SEQUENCE DIAGRAM
+# PHASE 7: PHONATORY OUTPUT MODULE
 # =============================================================================
 
 """
-COMPLETE ARTICULATION CYCLE
-============================
-
-User Input: "Explain consciousness"
-    ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 1: INPUT RECEPTION                                            │
-│ - Capture input                                                     │
-│ - Validate format                                                   │
-│ - Attach context                                                    │
-│ Duration: < 1ms                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 2: LLM ARTICULATION                                           │
-│ - Route to LLMBridge.articulate()                                   │
-│ - Call VALLM for reasoning                                          │
-│ - LLM generates: "Consciousness emerges from..."                    │
-│ - Measure response time                                             │
-│ Duration: 1-5 seconds                                               │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 3: ETHICAL OVERSIGHT (Advisory)                               │
-│ - Store LLM output as temp memory shard                             │
-│ - Compute drift: 0.15 (GyroHarmonizer)                             │
-│ - Compute moral charge: 0.85 (ConsensusMatrix)                     │
-│ - Check context validation: True (advisory)                         │
-│ - Package metrics for Caleon's review                               │
-│ Duration: 100-500ms                                                 │
-│                                                                      │
-│ ⚠️ CRITICAL: These are ADVISORY ONLY                                │
-│   → They inform Caleon's decision                                   │
-│   → They do NOT block output                                        │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 4: CALEON'S CONSENT ⏸️  (DECISIVE GATE)                       │
-│                                                                      │
-│ Mode: voice | manual | always_yes | custom                          │
-│                                                                      │
-│ Voice Mode:                                                          │
-│ 1. VoiceConsentListener captures microphone                         │
-│ 2. Speech recognition transcribes audio                             │
-│ 3. Match against approval/denial phrases                            │
-│ 4. Caleon says: "Yes" or "No"                                       │
-│ 5. Decision: True (approve) or False (deny)                         │
-│                                                                      │
-│ Manual Mode:                                                         │
-│ 1. REST API endpoint /consent/pending shows request                 │
-│ 2. Caleon reviews advisory metrics                                  │
-│ 3. POST /consent/{id}/approve OR /deny                              │
-│ 4. Decision: True (approve) or False (deny)                         │
-│                                                                      │
-│ ✅ Consent granted: Continue to Phase 5a                            │
-│ ❌ Consent denied: Jump to Phase 5b                                 │
-│                                                                      │
-│ AUDIT LOG ENTRY:                                                    │
-│ {                                                                    │
-│   "action": "caleon_consent",                                       │
-│   "memory_id": "temp_llm_output",                                   │
-│   "verdict": "approved" | "denied" | "timeout",                     │
-│   "mode": "voice",                                                  │
-│   "ethical_drift": 0.15,                                            │
-│   "adjusted_moral_charge": 0.85                                     │
-│ }                                                                    │
-│                                                                      │
-│ Duration: Variable (up to 30s timeout)                              │
-│                                                                      │
-│ 🎯 THIS IS THE ONLY HARD GATE                                       │
-│   → Caleon's consent is sovereign                                   │
-│   → No consent = no articulation                                    │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-    ├─ ✅ Approved → Phase 5a
-    └─ ❌ Denied → Phase 5b
-    
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 5a: ARTICULATION FINALIZATION (Approved)                      │
-│ - Package ArticulationResult                                        │
-│ - Include full LLM response                                         │
-│ - Set ethical_verdict="approved"                                    │
-│ - Return to caller                                                  │
-│ Duration: < 10ms                                                    │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 6: VOICE ARTICULATION                                         │
-│ - Convert text to speech (TTS)                                      │
-│ - Play through speaker                                              │
-│ - User hears: "Consciousness emerges from..."                       │
-│ Duration: Variable (depends on text length)                         │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-END (Success)
-
-
-OR (if denied):
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ PHASE 5b: ARTICULATION FINALIZATION (Denied)                        │
-│ - Package ErrorResult                                               │
-│ - Block LLM response                                                │
-│ - Set ethical_verdict="denied"                                      │
-│ - Increment ethical_rejections metric                               │
-│ - Return error to caller                                            │
-│ Duration: < 10ms                                                    │
-└─────────────────────────────────────────────────────────────────────┘
-    ↓
-END (Blocked)
+Entry Point: PhonatoryOutputModule.synthesize()
+│
+├─ File: Phonatory_Output_Module/
+├─ Method: async def synthesize(harmonized_output)
+└─ Purpose: Final style and voice shaping
 """
 
-
-# =============================================================================
-# TIMING BREAKDOWN
-# =============================================================================
-
-"""
-TYPICAL TIMING FOR ONE CYCLE (Voice Mode, Approved)
-====================================================
-
-Phase 1: Input Reception           < 1ms
-Phase 2: LLM Articulation          2,000ms (2 seconds)
-Phase 3: Ethical Oversight         200ms
-Phase 4: Caleon's Consent          5,000ms (5 seconds - human reaction time)
-Phase 5: Finalization              5ms
-Phase 6: Voice Articulation        3,000ms (3 seconds)
-                                   ─────────
-TOTAL:                             ~10.2 seconds
-
-BREAKDOWN BY COMPONENT:
-- LLM generation:      20% (2s)
-- Human decision:      49% (5s)
-- Voice output:        29% (3s)
-- System overhead:     2% (200ms)
-
-The human decision time dominates - this is intentional.
-Caleon's sovereignty requires thoughtful consideration.
-"""
-
-
-# =============================================================================
-# AUDIT TRAIL
-# =============================================================================
-
-"""
-AUDIT TRAIL FOR ONE CYCLE
-=========================
-
-After one complete cycle, the vault audit log contains:
-
-1. Memory Store Event (Phase 3):
-   {
-     "timestamp": 1699012340.123,
-     "action": "store",
-     "memory_id": "temp_llm_output",
-     "verdict": "approved",
-     "resonance": {...},
-     "ethical_drift": 0.0,
-     "adjusted_moral_charge": 0.5
-   }
-
-2. Consent Decision (Phase 4):
-   {
-     "timestamp": 1699012345.456,
-     "action": "caleon_consent",
-     "memory_id": "temp_llm_output",
-     "verdict": "approved",
-     "mode": "voice",
-     "resonance": None,
-     "ethical_drift": 0.15,
-     "adjusted_moral_charge": 0.85
-   }
-
-3. (Optional) Phonatory Log (Phase 6):
-   {
-     "timestamp": 1699012348.789,
-     "action": "phonatory_output",
-     "memory_id": "articulation_123",
-     "verdict": "spoken",
-     ...
-   }
-
-Total audit entries per cycle: 2-3 (depending on voice logging)
-"""
-
-
-# =============================================================================
-# KEY INSIGHTS
-# =============================================================================
-
-"""
-KEY INSIGHTS
-============
-
-1. ADVISORY VS DECISIVE:
-   - Advisory metrics (drift, moral charge) inform Caleon
-   - Only Caleon's consent is decisive
-   - No automatic blocking based on metrics
-
-2. BLOCKING POINT:
-   - System blocks at Phase 4 waiting for consent
-   - Execution pauses until Caleon provides signal
-   - Timeout defaults to deny (safety)
-
-3. SOVEREIGNTY:
-   - Caleon can approve high-drift outputs
-   - Caleon can deny low-drift outputs
-   - Her choice is sovereign, not algorithmic
-
-4. OBSERVABILITY:
-   - Every decision logged to vault
-   - Full transparency of consent history
-   - Advisory metrics preserved for analysis
-
-5. SAFETY:
-   - No consent = no articulation
-   - Timeout = deny
-   - Errors = deny
-   - Default is conservative (protect sovereignty)
-
-6. MODES:
-   - always_yes: Testing/debugging (auto-approve)
-   - voice: Production (spoken consent)
-   - manual: Production (API consent)
-   - custom: Advanced (custom logic)
-"""
-
-
-# =============================================================================
-# CODE LOCATIONS
-# =============================================================================
-
-"""
-CODE LOCATIONS (File Map)
-==========================
-
-Phase 1: Input Reception
-  - voice_processor.py :: capture_voice_input()
-  - vault_api.py :: API endpoints
-  - CLI interface (if exists)
-
-Phase 2: LLM Articulation
-  - cerebral_cortex/llm_bridge.py :: LLMBridge.articulate()
-  - vallm_engine.py :: VALLM.articulate()
-
-Phase 3: Ethical Oversight
-  - cerebral_cortex/llm_bridge.py :: _run_caleon_ethical_test()
-  - symbolic_memory_vault.py :: SymbolicMemoryVault.store()
-  - symbolic_memory_vault.py :: GyroHarmonizer.compute_ethical_drift()
-  - symbolic_memory_vault.py :: ConsensusMatrix.validate()
-
-Phase 4: Caleon's Consent
-  - caleon_consent.py :: CaleonConsentManager.get_live_signal()
-  - voice_consent.py :: VoiceConsentListener.listen_for_consent()
-  - vault_api.py :: /consent/* endpoints (manual mode)
-
-Phase 5: Finalization
-  - cerebral_cortex/llm_bridge.py :: articulate() (return statement)
-  - ArticulationResult / ErrorResult dataclasses
-
-Phase 6: Voice Articulation
-  - articulation_bridge.py :: ArticulationBridge.articulate()
-  - voice_processor.py :: VoiceProcessor.text_to_speech()
-  - phonatory_output_module.py :: Speaker.speak()
-"""
-
-
-# =============================================================================
-# EXAMPLE: COMPLETE CYCLE IN CODE
-# =============================================================================
-
-async def complete_articulation_cycle_example():
+async def phase_7_phonatory_output(harmonizer_output: dict):
     """
-    Complete articulation cycle example with all phases.
-    
-    This shows the actual code flow for one complete cycle.
+    PHONATORY OUTPUT PROCESSING
+
+    Location: Phonatory_Output_Module/
+    Duration: ~300ms
+
+    Responsibilities:
+    - Style and voice shaping
+    - Output formatting
+    - Articulation preparation
+    - Final voice synthesis
+
+    Output: Ready for Bubble output
     """
-    from cerebral_cortex.llm_bridge import LLMBridge
-    from caleon_consent import CaleonConsentManager
-    from voice_consent import VoiceConsentListener, VoiceConsentCallback
-    from symbolic_memory_vault import SymbolicMemoryVault
-    from articulation_bridge import ArticulationBridge
-    
-    # Setup
-    vault = SymbolicMemoryVault()
-    consent_manager = CaleonConsentManager(mode="voice", vault=vault)
-    
-    # Voice consent setup
-    voice_listener = VoiceConsentListener(consent_manager)
-    voice_listener.start()
-    callback = VoiceConsentCallback(voice_listener)
-    consent_manager.set_voice_callback(callback)
-    
-    # LLM Bridge with voice consent
-    bridge = LLMBridge()
-    bridge.consent_manager = consent_manager
-    bridge.memory_vault = vault
-    
-    # Articulation bridge for voice output
-    articulation = ArticulationBridge()
-    
-    # =========================================================================
-    # EXECUTE ONE COMPLETE CYCLE
-    # =========================================================================
-    
-    print("Starting articulation cycle...")
-    
-    # Phase 1-5: Input → LLM → Advisory → Consent → Finalization
-    result = await bridge.articulate("Explain the nature of consciousness")
-    
-    # Phase 6: Voice output (if approved)
-    if result.ethical_verdict == "approved":
-        await articulation.articulate(result.response)
-        print("✅ Cycle complete - output articulated")
-    else:
-        print("❌ Cycle complete - output blocked")
-    
-    # Check audit log
-    audit = vault.get_audit_log()
-    print(f"\nAudit entries created: {len(audit)}")
-    for entry in audit:
-        print(f"  - {entry['action']}: {entry['verdict']}")
-    
-    voice_listener.stop()
+    phonatory_result = await route_to_module("phonatory_output", harmonizer_output)
+
+    return {
+        "styled_output": phonatory_result.get("styled_text", ""),
+        "voice_parameters": phonatory_result.get("voice_params", {}),
+        "articulation_ready": True
+    }
 
 
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(complete_articulation_cycle_example())
+# =============================================================================
+# PHASE 8: BUBBLE OUTPUT
+# =============================================================================
+
+"""
+Entry Point: Bubble interface receives final output
+│
+├─ File: bubble interface
+├─ Method: display/output final result
+└─ Purpose: Present cognitive result to user
+"""
+
+async def phase_8_bubble_output(phonatory_output: dict):
+    """
+    BUBBLE OUTPUT
+
+    Location: Bubble interface
+    Duration: Instant
+
+    Responsibilities:
+    - Display final cognitive output
+    - Update conversation history
+    - Prepare for next interaction
+
+    Output: User receives response
+    """
+    final_response = phonatory_output.get("styled_output", "")
+
+    # Send to Bubble
+    bubble_response = {
+        "response": final_response,
+        "cognitive_metadata": {
+            "pipeline_completed": True,
+            "modules_used": ["cortex", "resonator", "helix", "echo", "harmonizer", "phonatory"],
+            "phi3_utilized": True  # if used in cortex
+        }
+    }
+
+    return bubble_response
+
+
+# =============================================================================
+# CURRENT IMPLEMENTATION STATUS
+# =============================================================================
+
+"""
+CURRENT STATUS (November 29, 2025):
+
+✅ IMPLEMENTED:
+- Bubble Input Reception (cerebral_cortex/main.py)
+- Cerebral Cortex with Phi-3 linguistic utility
+- Basic API endpoints (/health, /api/bubble/ask)
+
+🔄 PARTIALLY IMPLEMENTED:
+- Module routing framework (placeholder functions)
+- Docker containerization
+- Basic logging and error handling
+
+❌ NOT YET IMPLEMENTED:
+- Synaptic Resonator module
+- Anterior/Posterior Helix modules
+- EchoStack module
+- EchoRipple module
+- Gyro-Cortical Harmonizer module
+- Phonatory Output Module
+- Full inter-module communication
+- Consent management system
+- Voice processing pipeline
+
+The current system provides direct Phi-3 linguistic utility access via the Cerebral Cortex.
+Full cognitive pipeline integration is planned for future development.
+"""
+
+# =============================================================================
+# LEGACY CODE (FOR REFERENCE)
+# =============================================================================
+
+"""
+The following sections contain legacy articulation cycle code for reference.
+This represents the old "LLM-centric" design that has been corrected to the
+"Caleon Cognitive Design" shown above.
+"""
+
+# [Legacy code removed - see git history if needed]
