@@ -1249,3 +1249,307 @@ curl -v -H "Authorization: Bearer $KEY" http://localhost:7777/stats
 - Key containing newlines
 - Environment variable not loaded
 - Key expired/rotated
+
+### Issue: Database Locked
+**Symptoms:** `sqlite3.OperationalError: database is locked`
+
+**Solutions:**
+```python
+# In database config
+PRAGMA busy_timeout = 5000  # 5 seconds
+PRAGMA journal_mode = WAL
+PRAGMA synchronous = NORMAL
+
+# Or switch to PostgreSQL
+SKG_DATABASE_URL="postgresql://user:pass@db:5432/skg"
+```
+
+---
+
+## CI/CD Pipeline
+
+**GitHub Actions** (`.github/workflows/deploy.yml`):
+```yaml
+name: Deploy SKG API
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - run: |
+        pip install -r requirements-dev.txt
+        pytest tests/ --cov=app --cov-fail-under=90
+        black --check app tests
+        mypy app/
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    - uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  build-and-push:
+    needs: [test, security-scan]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  deploy-staging:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: skg-api-staging
+        manifests: |
+          k8s/configmap.yaml
+          k8s/deployment.yaml
+        images: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+  deploy-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - uses: azure/k8s-deploy@v1
+      with:
+        namespace: skg-api-prod
+        manifests: |
+          k8s/configmap.yaml
+          k8s/deployment.yaml
+          k8s/hpa.yaml
+        images: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        strategy: canary
+        percentage: 25
+        traffic-split-method: smi
+```
+
+---
+
+## Runbooks
+
+### Scale Up for High Load
+```bash
+# Kubernetes
+kubectl scale deployment skg-api --replicas=10 -n skg-api
+
+# Docker Compose
+docker-compose up -d --scale skg-api=10
+
+# Systemd
+# Add more instances on different ports, use nginx upstream
+```
+
+### Emergency Key Rotation
+```bash
+#!/bin/bash
+# scripts/emergency_key_rotation.sh
+set -e
+
+NEW_KEY=$(python scripts/generate_api_key.py)
+NEW_HASH=$(echo -n "$NEW_KEY" | sha256sum | awk '{print "sha256:"$1}')
+
+# Update secrets
+kubectl patch secret skg-api-secrets -n skg-api \
+  --patch="{\"data\": {\"api-key-hash\": \"$(echo -n $NEW_HASH | base64)\"}}"
+
+# Rollout restart
+kubectl rollout restart deployment/skg-api -n skg-api
+
+# Notify clients
+echo "New API key: $NEW_KEY"
+echo "Update your systems immediately. Old key revoked in 5 minutes."
+```
+
+### Database Recovery
+```bash
+# Backup SQLite
+sqlite3 /var/lib/skg-api/ucm_skg.db ".backup /backup/skg_$(date +%Y%m%d).db"
+
+# Restore
+systemctl stop skg-api
+cp /backup/skg_20240115.db /var/lib/skg-api/ucm_skg.db
+chown skg:skg /var/lib/skg-api/ucm_skg.db
+systemctl start skg-api
+```
+
+---
+
+## Migration from Flask API
+
+### Migration Script (Production-Safe)
+```python
+#!/usr/bin/env python3
+# scripts/migrate_from_flask.py
+import sqlite3
+import requests
+import os
+import time
+from tqdm import tqdm
+
+OLD_DB = os.getenv("OLD_DB_PATH", "old_ucm_skg.db")
+NEW_API_URL = os.getenv("NEW_API_URL", "http://localhost:7777")
+API_KEY = os.getenv("SKG_API_KEY")
+BATCH_SIZE = 100
+RATE_LIMIT_DELAY = 0.5
+
+def migrate():
+    old_conn = sqlite3.connect(OLD_DB)
+    cur = old_conn.cursor()
+    cur.execute("SELECT COUNT(*) FROM triples")
+    total = cur.fetchone()[0]
+    
+    cur.execute("SELECT subject, predicate, object, weight FROM triples")
+    
+    batch = []
+    with tqdm(total=total, desc="Migrating triples") as pbar:
+        for row in cur:
+            batch.append({
+                "subject": row[0],
+                "predicate": row[1],
+                "object": row[2],
+                "weight": row[3] or 1.0,
+                "metadata": {"migrated": True}
+            })
+            
+            if len(batch) >= BATCH_SIZE:
+                _send_batch(batch)
+                batch = []
+                time.sleep(RATE_LIMIT_DELAY)
+            pbar.update(1)
+        
+        if batch:
+            _send_batch(batch)
+
+def _send_batch(batch):
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    response = requests.post(
+        f"{NEW_API_URL}/triples/batch",
+        headers=headers,
+        json={"triples": batch, "skip_duplicates": True}
+    )
+    if response.status_code != 202:
+        print(f"Error: {response.status_code} - {response.text}")
+        raise Exception("Batch migration failed")
+
+if __name__ == "__main__":
+    migrate()
+    print("✅ Migration complete. Verify with: curl -H 'Authorization: Bearer $SKG_API_KEY' http://localhost:7777/stats")
+```
+
+### Rollback Plan
+```bash
+# 1. Keep old Flask API running on port 7778
+# 2. If issues detected:
+sudo systemctl stop skg-api
+sudo systemctl start skg-api-flask
+
+# 3. Update load balancer to point to old service
+# 4. Notify clients to use emergency endpoint
+```
+
+---
+
+## Support & Documentation
+
+### Auto-Generated Docs
+- Swagger UI: `https://api.yourcompany.com/docs`
+- ReDoc: `https://api.yourcompany.com/redoc`
+- OpenAPI schema: `https://api.yourcompany.com/openapi.json`
+
+### Custom OpenAPI Schema
+```python
+# In app/main.py
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="SKG API",
+        version="1.2.0",
+        description="Structured Knowledge Graph API",
+        routes=app.routes,
+    )
+    openapi_schema["info"]["x-logo"] = {
+        "url": "https://yourcompany.com/logo.png"
+    }
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+```
+
+### Health Checks
+```bash
+# Quick health check
+curl https://api.yourcompany.com/health | jq
+
+# Full system check
+./scripts/system_check.sh
+```
+
+**scripts/system_check.sh**:
+```bash
+#!/bin/bash
+set -e
+
+echo "🔍 Running system health check..."
+
+# API health
+curl -f https://api.yourcompany.com/ready
+
+# Metrics accessible
+curl -f https://api.yourcompany.com/metrics | grep skg_requests_total > /dev/null
+
+# Database writable
+API_KEY=$(aws secretsmanager get-secret-value --secret-id skg-api-key --query SecretString --output text)
+curl -X POST https://api.yourcompany.com/triples/add \
+  -H "Authorization: Bearer $API_KEY" \
+  -d '{"subject": "HealthCheck", "predicate": "status", "object": "ok"}'
+
+# Log shipping
+journalctl -u skg-api --since="5 minutes ago" | grep ERROR && exit 1
+
+echo "✅ All systems operational"
+```
+
+---
+
+**End of Guide** | Last Updated: 2024-01-15 | Version: 1.2.0
