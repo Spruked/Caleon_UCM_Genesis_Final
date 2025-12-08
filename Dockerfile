@@ -16,6 +16,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Set Python path to include the app directory
+ENV PYTHONPATH=/app
+
 EXPOSE 8000
 
 CMD ["python", "main.py"]
