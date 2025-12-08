@@ -18,6 +18,10 @@ def detect_and_repair(core) -> None:
     Called after every add_triples(). Repairs mutual-exclusion contradictions.
     Works with current SKG Pentagon core data layout.
     """
+    # Guard against empty graphs
+    if 0 not in core.levels or core.levels[0].number_of_edges() == 0:
+        return
+
     g = core.levels[0]  # base level DiGraph
     removed = 0
 

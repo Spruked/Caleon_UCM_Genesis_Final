@@ -7,6 +7,8 @@ from modules.anterior_pituitary_helix import AnteriorPituitaryHelix
 from modules.posterior_pituitary_helix import PosteriorPituitaryHelix
 from modules.echo_stack import EchoStack
 from modules.gyroscopic_harmonizer import GyroscopicHarmonizer
+import time
+
 # EchoRipple logic can be implemented as a trailing EchoStack with randomized logic seeds
 
 class CaleonCore:
@@ -20,17 +22,43 @@ class CaleonCore:
         self.gyro_harmonizer = GyroscopicHarmonizer()
 
     def process(self, input_data):
-        # 1. Micro-resonator grid processes input
-        pyramid_output = self.synaptic_resonator.pyramid_distill(input_data)
-        # 2. Forward to all four core modules
+        # PATCH 1: Normalize input for Synaptic Resonator
+        normalized = {
+            "signal": input_data,
+            "timestamp": time.time(),
+            "pulse": self.synaptic_resonator.next_pulse(),
+            "source": "UCM"
+        }
+        pyramid_output = self.synaptic_resonator.pyramid_distill(normalized)
+
+        # PATCH 2: Enforce biological timing
         anterior_result = self.anterior_helix.process(pyramid_output)
+
+        # Posterior Helix fires 20ms later
+        time.sleep(0.020)
         posterior_result = self.posterior_helix.process(pyramid_output)
+
         echo_stack_result = self.echo_stack.process(pyramid_output)
+
+        # EchoRipple fires immediately after EchoStack — randomized logic
         echo_ripple_result = self.echo_ripple.process(pyramid_output)
+
         # 3. Harmonize all results
         final_decision = self.gyro_harmonizer.harmonize_all(
             anterior_result, posterior_result, echo_stack_result, echo_ripple_result
         )
+
+        # PATCH 3: Push all results into reflection vault
+        self.gyro_harmonizer.vault.store_cycle({
+            "input": input_data,
+            "pyramid": pyramid_output,
+            "anterior": anterior_result,
+            "posterior": posterior_result,
+            "echo": echo_stack_result,
+            "ripple": echo_ripple_result,
+            "final": final_decision,
+        })
+
         return final_decision
 
 # Note: Each module (SynapticResonator, AnteriorPituitaryHelix, etc.) should implement the required logic and interfaces as described in your system design.

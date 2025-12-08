@@ -250,6 +250,45 @@ services:
       retries: 3
       start_period: 40s
 
+  # ENABLED: Unified Cognition Module (UCM) - Main Application
+  ucm:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT=production
+      - HOST=0.0.0.0
+      - PORT=8080
+      - LOG_LEVEL=INFO
+      - POSTGRES_URL=postgresql://cortex_user:cortex_pass@postgres:5432/cortex_db
+      - REDIS_URL=redis://redis:6379
+      - MONGO_URL=mongodb://mongo:27017
+      - ISS_HOST=iss-module
+      - ISS_PORT=8003
+    volumes:
+      - ./vault:/app/vault
+      - ./logs:/app/logs
+      - ./telemetry:/app/telemetry
+      - ./ucm_vault_data:/app/ucm_vault_data
+    depends_on:
+      iss-module:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      - cognition_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
   # DISABLED: Cognitive Monitoring Dashboard (OLD UCM)
   # cognitive-dashboard:
   #   build: .

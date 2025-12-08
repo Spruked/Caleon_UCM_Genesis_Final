@@ -1,7 +1,24 @@
 import networkx as nx, torch, numpy as np
-from torch_geometric.utils import dense_to_sparse
-from torch_geometric.data import Data
-from torch_geometric.nn import GCNConv
+
+# Try to import torch_geometric, but make it optional
+try:
+    from torch_geometric.utils import dense_to_sparse
+    from torch_geometric.data import Data
+    from torch_geometric.nn import GCNConv
+    TORCH_GEOMETRIC_AVAILABLE = True
+except ImportError:
+    TORCH_GEOMETRIC_AVAILABLE = False
+    # Define dummy classes/functions if not available
+    class Data:
+        pass
+    def dense_to_sparse(x):
+        return None, None
+    class GCNConv:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __call__(self, *args, **kwargs):
+            return torch.zeros(1)
+
 import torch.nn as nn
 
 # ----------  original minimal_skg helpers ----------
@@ -26,11 +43,22 @@ def reify_edges(g: nx.DiGraph):
 class EdgeScoreGNN(nn.Module):
     def __init__(self, in_dim, hidden=16):
         super().__init__()
-        self.conv1 = GCNConv(in_dim, hidden)
-        self.conv2 = GCNConv(hidden, 1)
-    def forward(self, x, edge_index):
-        x = self.conv1(x, edge_index).relu()
-        return self.conv2(x, edge_index).squeeze(-1)
+        if TORCH_GEOMETRIC_AVAILABLE:
+            self.conv1 = GCNConv(in_dim, hidden)
+            self.conv2 = GCNConv(hidden, 1)
+        else:
+            # Fallback to simple linear layers
+            self.conv1 = nn.Linear(in_dim, hidden)
+            self.conv2 = nn.Linear(hidden, 1)
+
+    def forward(self, x, edge_index=None):
+        if TORCH_GEOMETRIC_AVAILABLE:
+            x = self.conv1(x, edge_index).relu()
+            return self.conv2(x, edge_index).squeeze(-1)
+        else:
+            # Simple forward pass without graph convolutions
+            x = self.conv1(x).relu()
+            return self.conv2(x).squeeze(-1)
 
 def self_prune(skg: nx.Graph, scores: np.ndarray, thresh=0.1):
     remove = [i for i, s in enumerate(scores) if s < thresh]

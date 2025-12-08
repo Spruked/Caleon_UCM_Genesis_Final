@@ -1,0 +1,7 @@
+[submodule "gyro_cortical_harmonizer_module"]
+	path = gyro_cortical_harmonizer_module
+	url = https://github.com/Spruked/gyro_cortical_harmonizer_module.git
+
+[submodule "synaptic_resonator_core"]
+	path = synaptic_resonator_core
+	url = https://github.com/Spruked/Resonator_Core_Module_Revised.git

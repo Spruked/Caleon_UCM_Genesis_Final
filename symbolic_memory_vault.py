@@ -429,6 +429,9 @@ class SymbolicMemoryVault:
         if not self.storage_path or not self.storage_path.exists():
             return
         raw = self.storage_path.read_bytes()
+        if not raw.strip():  # Handle empty files
+            self.data = {}
+            return
         if self.cipher:
             try:
                 raw = self.cipher.decrypt(raw)

@@ -7,16 +7,12 @@ import torch, torch.nn as nn
 import networkx as nx
 import sqlite3, json, os, pathlib
 import threading
-from torch_geometric.utils import dense_to_sparse
-from torch_geometric.data import Data
-from torch_geometric.nn import GCNConv
-
-# Import the new advanced features
 from .contradiction import detect_and_repair
 from .invent_predicate import maybe_invent_predicate
-from .curiosity import start_curiosity, curiosity_loop
-from .curiosity import start_curiosity
-from .curiosity import start_curiosity
+
+# Force CPU-only mode to prevent CUDA dependency issues
+torch.cuda.is_available = lambda: False
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 # ----------  config ----------
 MAX_DEPTH      = 3          # how many recursive levels
@@ -31,20 +27,14 @@ def conn():
 
 def init_db():
     c = conn()
+    # Create both old SKG schema and new UCM-compatible schema
     for lvl in range(MAX_DEPTH):
         c.execute(f"CREATE TABLE IF NOT EXISTS level_{lvl}(i INT, j INT, weight REAL)")
     c.execute("CREATE TABLE IF NOT EXISTS meta(depth INT)")
+    # UCM-compatible tables
+    c.execute("CREATE TABLE IF NOT EXISTS edges(source TEXT, predicate TEXT, target TEXT, weight REAL)")
+    c.execute("CREATE TABLE IF NOT EXISTS nodes(id TEXT PRIMARY KEY, label TEXT)")
     c.commit(); c.close()
-
-# ----------  GNN edge scorer ----------
-class EdgeScoreGNN(nn.Module):
-    def __init__(self, in_dim, hidden=GNN_HIDDEN):
-        super().__init__()
-        self.conv1 = GCNConv(in_dim, hidden)
-        self.conv2 = GCNConv(hidden, 1)
-    def forward(self, x, edge_index):
-        x = self.conv1(x, edge_index).relu()
-        return torch.sigmoid(self.conv2(x, edge_index)).squeeze(-1)
 
 # ----------  SKG engine ----------
 class SKGCore:
@@ -77,7 +67,7 @@ class SKGCore:
             print(f"[SKG] ➜  {new_total} base facts – bootstrap")
             self.expand_recursive()
             maybe_invent_predicate(self)
-            start_curiosity(self)
+            # start_curiosity(self)  # Disabled for CPU-only mode
 
     # 2.  recursive expansion  Kᵏ → Kᵏ⁺¹
     def expand_recursive(self):
@@ -106,17 +96,16 @@ class SKGCore:
         maybe_invent_predicate(self)
         self._expanding = False
 
-    # Curiosity daemon control
+    # Curiosity daemon control - DISABLED for CPU-only mode
     def start_curiosity_daemon(self):
-        if self._curiosity_thread is None or not self._curiosity_thread.is_alive():
-            self._curiosity_thread = threading.Thread(target=curiosity_loop, args=(self,), daemon=True)
-            self._curiosity_thread.start()
-            print("[SKG] Curiosity daemon started")
+        # Disabled to prevent thread issues in containers
+        print("[SKG] Curiosity daemon disabled for CPU-only mode")
+        pass
 
     def stop_curiosity_daemon(self):
-        if self._curiosity_thread and self._curiosity_thread.is_alive():
-            # Note: daemon threads will stop when main thread exits
-            print("[SKG] Curiosity daemon will stop when main thread exits")
+        # Disabled to prevent thread issues in containers
+        print("[SKG] Curiosity daemon stop not needed (was disabled)")
+        pass
 
     def get_curiosity_goals(self):
         return self.curiosity_goals.copy()
@@ -127,27 +116,35 @@ class SKGCore:
         c = nx.adjacency_matrix(g).todense() * 0.2   # dampen
         return c
 
-    # 4.  non-local proposals via GNN attention
+    # 4.  non-local proposals via degree-based scoring (CPU-only)
     def _propose_edges(self, adj):
         g = nx.from_numpy_array(adj, create_using=nx.DiGraph)
-        edge_index, _ = dense_to_sparse(torch.tensor(adj, dtype=torch.float))
-        x = torch.eye(adj.shape[0])
-        model = EdgeScoreGNN(x.size(1))
-        opt   = torch.optim.Adam(model.parameters(), lr=0.01)
-        # dummy target = degree
-        target = torch.tensor(list(dict(g.degree()).values()), dtype=torch.float)
-        for _ in range(150):
-            opt.zero_grad()
-            out = model(x, edge_index)
-            loss = nn.MSELoss()(out, target)
-            loss.backward(); opt.step()
-        with torch.no_grad():
-            scores = model(x, edge_index).numpy()
-        proposals = (scores > np.percentile(scores, 95)).astype(float) * 0.15
+        n = adj.shape[0]
+
+        # Get degree centrality as simple scoring
+        degrees = np.array(list(dict(g.degree()).values()))
+        degrees = degrees / degrees.max() if degrees.max() > 0 else degrees
+
+        # Create proposal matrix based on degree similarity
+        proposals = np.zeros((n, n))
+        for i in range(n):
+            for j in range(n):
+                if i != j:
+                    # Simple similarity based on degree difference
+                    similarity = 1.0 / (1.0 + abs(degrees[i] - degrees[j]))
+                    proposals[i, j] = similarity
+
+        # Apply percentile threshold (95th percentile)
+        threshold = np.percentile(proposals[proposals > 0], 95) if np.any(proposals > 0) else 0
+        proposals = (proposals > threshold).astype(float) * 0.15
+
         return proposals
 
     # 5.  prune low weights
     def _prune(self, adj):
+        # Guard against empty adjacency matrices
+        if adj.sum() == 0 or np.count_nonzero(adj) == 0:
+            return adj
         thresh = np.percentile(adj[adj>0], PRUNE_THRESH*100)
         adj[adj < thresh] = 0
         return adj
@@ -160,6 +157,26 @@ class SKGCore:
                 for i in range(adj.shape[0]) for j in range(adj.shape[1]) if adj[i,j]>0]
         c.executemany(f"INSERT INTO level_{lvl} VALUES (?,?,?)", rows)
         c.execute("REPLACE INTO meta(depth) VALUES (?)", (lvl+1,))
+
+        # Also populate UCM-compatible edges table for level 0
+        if lvl == 0 and 0 in self.levels:
+            c.execute("DELETE FROM edges")
+            g = self.levels[0]
+            node_list = list(g.nodes())
+            for i in range(len(node_list)):
+                for j in range(len(node_list)):
+                    if adj[i,j] > 0:
+                        source = str(node_list[i])
+                        target = str(node_list[j])
+                        weight = float(adj[i,j])
+                        # For now, use generic predicate since we don't store individual edge predicates in adj matrix
+                        c.execute("INSERT INTO edges (source, predicate, target, weight) VALUES (?, ?, ?, ?)",
+                                (source, "related", target, weight))
+            # Populate nodes table
+            c.execute("DELETE FROM nodes")
+            for node in node_list:
+                c.execute("INSERT INTO nodes (id, label) VALUES (?, ?)", (str(node), str(node)))
+
         c.commit(); c.close()
 
     # 7.  assemble full SKG block matrix
@@ -200,8 +217,9 @@ class SKGService:
         return jsonify(match[:int(request.args.get("k", 10))])
 
     def start(self, port=7777):
-        # Start curiosity daemon
-        start_curiosity(self.core)
+        # Start curiosity daemon - DISABLED for CPU-only mode
+        # start_curiosity(self.core)
+        print("[SKG] Starting SKG service (curiosity disabled for CPU-only mode)")
         self.app.run(host="0.0.0.0", port=port, debug=False)
 
 # ----------  convenience client ----------

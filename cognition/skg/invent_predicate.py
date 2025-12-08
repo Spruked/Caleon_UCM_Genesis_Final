@@ -4,6 +4,10 @@ from networkx.algorithms import community
 from collections import defaultdict
 
 def maybe_invent_predicate(core, thresh=0.3):
+    # Guard against missing levels or insufficient data
+    if 2 not in core.levels or core.levels[2].number_of_edges() < 5:
+        return
+
     g = core.levels[2]                      # meta-meta graph
     if g.number_of_edges() < 5: return
     # greedy modularity

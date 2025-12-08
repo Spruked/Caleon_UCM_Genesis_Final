@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     # Server
     host: str = "0.0.0.0"
-    port: int = 8080
+    port: int = 8006
     workers: int = 4
 
     # Database

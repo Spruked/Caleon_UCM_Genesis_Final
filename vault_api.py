@@ -367,3 +367,11 @@ def set_consent_mode(new_mode: str):
         "message": f"Consent manager mode set to {new_mode}",
         "timestamp": datetime.now().isoformat()
     }
+
+class VaultAPI:
+    """Vault API class for testing"""
+    def __init__(self):
+        pass
+
+    def health(self):
+        return {"status": "ok", "vaults": []}

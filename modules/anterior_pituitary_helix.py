@@ -342,6 +342,44 @@ class AnteriorPituitaryHelix:
             "action_name": action.__name__  # NEW: For better tracking
         })
 
+    # ---------- CaleonCore Interface Method ----------
+
+    def process(self, pyramid_output: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        CaleonCore interface: Process pyramid output and return verdict packet.
+
+        Args:
+            pyramid_output: Dict from SynapticResonator.pyramid_distill()
+
+        Returns:
+            Dict containing verdict packet with confidence and reasoning
+        """
+        # Extract key components from pyramid output
+        resonance_packet = pyramid_output.get("resonance_packet", {})
+        pulse_id = pyramid_output.get("pulse_id", 0)
+        confidence = pyramid_output.get("confidence", 0.5)
+
+        # Convert to anterior helix input format
+        helix_input = {
+            "resonance_confidence": confidence,
+            "pulse_id": pulse_id,
+            "temporal_patterns": resonance_packet.get("layers", {}).get("temporal", {}),
+            "source_attribution": resonance_packet.get("source", "unknown")
+        }
+
+        # Execute anterior reasoning
+        result = self.execute(helix_input)
+
+        # Return standardized verdict packet
+        return {
+            "verdict": result.get("final_decision", "unknown"),
+            "confidence": result.get("confidence", confidence),
+            "reasoning": result.get("reasoning", "anterior_helix_analysis"),
+            "pulse_id": pulse_id,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": result.get("spin_weight", 0.5)
+        }
+
     # ---------- Enhanced Execution with New Logic ----------
 
     def execute(self, inputs: Dict[str, Any]) -> Dict[str, Any]:

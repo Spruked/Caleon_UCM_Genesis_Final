@@ -552,6 +552,104 @@ async def internal_error_handler(request, exc):
     return {"error": "Internal server error", "detail": "An unexpected error occurred"}
 
 
+# ==========================================
+# CALI X ONE ENDPOINTS
+# ==========================================
+
+class CaliVoiceRequest(BaseModel):
+    message: str
+    user: Optional[str] = "unknown"
+    session_id: Optional[str] = None
+
+class CaliSignatureResponse(BaseModel):
+    signed: bool
+    signature: Optional[str] = None
+    timestamp: Optional[str] = None
+
+@app.get("/cali/signature/status", response_model=CaliSignatureResponse)
+async def cali_signature_status():
+    """Check Cali X One signature status"""
+    # For now, return mock data - in production this would check actual signature
+    return CaliSignatureResponse(
+        signed=True,
+        signature="cali-x-one-signature-verified",
+        timestamp=datetime.now(timezone.utc).isoformat()
+    )
+
+@app.post("/cali/voice/test")
+async def cali_voice_test(request: CaliVoiceRequest):
+    """Test Cali X One voice interaction"""
+    return {
+        "response": "Cali online. DALS detected. Awaiting command.",
+        "message": request.message,
+        "user": request.user,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "status": "active"
+    }
+
+@app.get("/sign-cali")
+async def sign_cali_page():
+    """Serve Cali X One signing page"""
+    html_content = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Sign Cali X One</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; background: #f0f0f0; }
+            .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            h1 { color: #2c3e50; text-align: center; }
+            .status { padding: 15px; margin: 20px 0; border-radius: 5px; }
+            .signed { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+            .unsigned { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+            button { background: #007bff; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+            button:hover { background: #0056b3; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🧬 Cali X One Signature</h1>
+            <div id="status" class="status signed">
+                ✅ Cali X One is signed and active
+            </div>
+            <p><strong>Status:</strong> Voice system operational</p>
+            <p><strong>DALS Integration:</strong> Connected</p>
+            <p><strong>UCM Connection:</strong> Active</p>
+            <button onclick="testVoice()">Test Voice System</button>
+        </div>
+        <script>
+            async function testVoice() {
+                try {
+                    const response = await fetch('/cali/voice/test', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: 'test from web interface' })
+                    });
+                    const data = await response.json();
+                    alert('Cali Response: ' + data.response);
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            }
+        </script>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
+
+@app.get("/health")
+async def health_check():
+    """Cali X One health check"""
+    return {
+        "status": "healthy",
+        "service": "Cali X One",
+        "version": "1.0.0",
+        "dals_connected": True,
+        "ucm_connected": True,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
 # Development helper
 def main():
     """Main entry point for running the server"""

@@ -118,6 +118,18 @@ class ReflectionVault:
         self._save_vault()
         logger.info(f"Logged reflection for case {case_id} in {self.module_name}")
 
+    def store_reflection(self, reflection: dict):
+        """Store a reflection directly"""
+        if not isinstance(reflection, dict):
+            raise ValueError("Reflection must be a dict.")
+
+        if "entries" not in self.vault_data:
+            self.vault_data["entries"] = []
+
+        self.vault_data["entries"].append(reflection)
+        self.vault_data["statistics"]["total_entries"] += 1
+        self._save_vault()
+
     def query_vault(self, query_type: str = "unresolved", tags: List[str] = None,
                    limit: int = 10) -> List[Dict[str, Any]]:
         """

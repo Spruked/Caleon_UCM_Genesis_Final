@@ -1,0 +1,189 @@
+version: '3.8'
+
+services:
+  # Database Services
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: cortex_db
+      POSTGRES_USER: cortex_user
+      POSTGRES_PASSWORD: cortex_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database_init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - cognition_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cortex_user -d cortex_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    networks:
+      - cognition_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7-jammy
+    environment:
+      MONGO_INITDB_DATABASE: vallm_db
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - cognition_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # ISS Module with Cali X One (DALS Core - Port 8003)
+  iss-module:
+    build: ./ISS_Module
+    ports:
+      - "8006:8003"
+    environment:
+      - ENVIRONMENT=production
+      - ISS_HOST=0.0.0.0
+      - ISS_PORT=8003
+      - LOG_LEVEL=INFO
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - iss_data:/app/data
+      - iss_exports:/app/exports
+    depends_on:
+      - redis
+    networks:
+      - cognition_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Unified Cognition Module (UCM) - Caleon Prime (Port 8080)
+  ucm:
+    build: .
+    ports:
+      - "8083:8080"
+    environment:
+      - UCM_PORT=8080
+      - UCM_DEVICE=cpu
+      - DISABLE_CUDA=1
+      - TORCH_FORCE_CPU=1
+    env_file:
+      - .env
+    volumes:
+      - ucm_vault:/app/vault
+      - ucm_logs:/app/logs
+      - ucm_telemetry:/app/telemetry
+      - ucm_vault_data:/app/ucm_vault_data
+    depends_on:
+      iss-module:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      - cognition_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # SKG API Service for direct knowledge graph operations
+  skg-service:
+    build: ./skg-core
+    ports:
+      - "8004:8004"
+    environment:
+      - ENVIRONMENT=production
+      - SKG_HOST=0.0.0.0
+      - SKG_PORT=8004
+    volumes:
+      - skg_data:/app/data
+    depends_on:
+      - redis
+    networks:
+      - cognition_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Vault Watch Service
+  vault-watch:
+    build: ./Vault_System_1.0
+    ports:
+      - "8005:8005"
+    environment:
+      - ENVIRONMENT=production
+      - VAULT_HOST=0.0.0.0
+      - VAULT_PORT=8005
+    volumes:
+      - vault_watch_data:/app/data
+    depends_on:
+      - redis
+    networks:
+      - cognition_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - cognition_net
+    restart: unless-stopped
+
+networks:
+  cognition_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongo_data:
+  iss_data:
+  iss_exports:
+  ucm_vault:
+  ucm_logs:
+  ucm_telemetry:
+  ucm_vault_data:
+  skg_data:
+  vault_watch_data:

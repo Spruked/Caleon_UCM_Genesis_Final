@@ -1,0 +1,109 @@
+{
+  "timestamp": "2025-12-07T19:12:44.928186",
+  "total_duration": 0.3453352451324463,
+  "results": {
+    "test_system_boot": {
+      "success": true,
+      "health_data": {
+        "service": "iss-controller",
+        "status": "healthy",
+        "version": "1.0.0",
+        "uptime_seconds": 76733.05253434181,
+        "dependencies": [
+          "captain-log",
+          "time-anchor",
+          "vault-storage"
+        ]
+      },
+      "missing_fields": [],
+      "response_time": 0.009002685546875,
+      "duration": 0.0110015869140625,
+      "status": "PASS"
+    },
+    "test_micro_skg_speed": {
+      "success": false,
+      "error": "Clustering request failed",
+      "response": {
+        "status_code": 404,
+        "data": {
+          "detail": "Not Found"
+        },
+        "duration": 0.007998466491699219,
+        "success": false
+      },
+      "duration": 0.007998466491699219,
+      "status": "FAIL"
+    },
+    "test_uqv_vault": {
+      "success": false,
+      "error": "UQV store failed",
+      "store_response": {
+        "status_code": 404,
+        "data": {
+          "detail": "Not Found"
+        },
+        "duration": 0.037734031677246094,
+        "success": false
+      },
+      "duration": 0.037734031677246094,
+      "status": "FAIL"
+    },
+    "test_caleon_predicates": {
+      "success": false,
+      "error": "Cluster ingestion failed",
+      "ingest_response": {
+        "status_code": 404,
+        "data": {
+          "detail": "Not Found"
+        },
+        "duration": 0.029215574264526367,
+        "success": false
+      },
+      "duration": 0.029215574264526367,
+      "status": "FAIL"
+    },
+    "test_worker_registry": {
+      "success": false,
+      "error": "Worker registration failed",
+      "register_response": {
+        "status_code": 404,
+        "data": {
+          "detail": "Not Found"
+        },
+        "duration": 0.04450035095214844,
+        "success": false
+      },
+      "duration": 0.045500755310058594,
+      "status": "FAIL"
+    },
+    "test_vault_integration": {
+      "success": false,
+      "error": "Vault health check failed",
+      "health_response": {
+        "status_code": 404,
+        "data": {
+          "detail": "Not Found"
+        },
+        "duration": 0.002996206283569336,
+        "success": false
+      },
+      "duration": 0.002996206283569336,
+      "status": "FAIL"
+    },
+    "test_end_to_end_flow": {
+      "success": false,
+      "error": "Query submission failed",
+      "stage": "query_submission",
+      "query_response": {
+        "status_code": 404,
+        "data": {
+          "detail": "Not Found"
+        },
+        "duration": 0.0029973983764648438,
+        "success": false
+      },
+      "duration": 0.0029973983764648438,
+      "status": "FAIL"
+    }
+  }
+}

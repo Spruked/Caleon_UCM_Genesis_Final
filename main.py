@@ -11,6 +11,7 @@ from config import settings
 from telemetry import setup_monitoring
 from api.bubble import router as bubble_router
 from api.health import router as health_router
+from api.iss_integration import router as iss_router
 from cognition.knowledge_store import KnowledgeStore
 
 # Configure structured logging
@@ -68,9 +69,10 @@ app.add_middleware(
 )
 
 # Include routes
-app.include_router(router, prefix="/api/v1")
+app.include_router(router)  # No prefix - routes define their own /api paths
 app.include_router(bubble_router)
 app.include_router(health_router)
+app.include_router(iss_router)
 
 @app.get("/")
 async def root():
