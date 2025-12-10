@@ -190,6 +190,7 @@ synaptic_resonator_reflect.vault.json
 *.svbin
 vault_*.json
 seed_*.json
+!seeds/seed_logic.json
 SeedVault-*.json
 SeedVault-*.svbin
 master_index.json
