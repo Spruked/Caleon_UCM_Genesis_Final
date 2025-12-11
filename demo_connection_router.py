@@ -36,14 +36,16 @@ def test_routing_logic():
     print("Testing DIRECT tasks (should route to DIRECT):")
     for task in direct_tasks:
         result = route_task(task)
-        status = "✅" if result == ConnectionType.DIRECT else "❌"
-        print(f"  {status} {task['type']} -> {result.value}")
+        route_type = result.get("route", "unknown")
+        status = "✅" if route_type == "DIRECT" else "❌"
+        print(f"  {status} {task['type']} -> {route_type} (ACK: {result.get('ack', False)})")
 
     print("\nTesting DALS tasks (should route to DALS):")
     for task in dals_tasks:
         result = route_task(task)
-        status = "✅" if result == ConnectionType.DALS else "❌"
-        print(f"  {status} {task['type']} -> {result.value}")
+        route_type = result.get("route", "unknown")
+        status = "✅" if route_type == "DALS" else "❌"
+        print(f"  {status} {task['type']} -> {route_type} (ACK: {result.get('ack', False)})")
 
     print("\nTesting unknown tasks (should default to DALS):")
     unknown_tasks = [
@@ -54,8 +56,10 @@ def test_routing_logic():
 
     for task in unknown_tasks:
         result = route_task(task)
-        status = "✅" if result == ConnectionType.DALS else "❌"
-        print(f"  {status} {task['type'] or 'empty'} -> {result.value}")
+        route_type = result.get("route", "unknown")
+        status = "✅" if route_type == "DALS" else "❌"
+        task_type = task['type'] or 'empty'
+        print(f"  {status} {task_type} -> {route_type} (ACK: {result.get('ack', False)})")
 
 async def test_execution():
     """Test task execution with mock handlers."""
@@ -94,8 +98,16 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 50)
     print("✅ All tests completed!")
-    print("\nThe One Rule:")
+    print("\nThe One Rule with ACK packets:")
     print("if task.type in ['analysis', 'provenance', 'identity', 'transform']:")
-    print("    use_direct_connection()")
+    print("    ack = routing_ack('DIRECT', 'UCM', task_type)")
     print("else:")
-    print("    use_dals_connection()")
+    print("    ack = routing_ack('DALS', 'DALS', task_type)")
+    print("\nACK Packet Structure:")
+    print("- ack: confirmation boolean")
+    print("- task_id: unique UUID")
+    print("- route: DIRECT or DALS")
+    print("- module: target system")
+    print("- task_type: original task type")
+    print("- timestamp: UTC ISO format")
+    print("- status: 'received'")

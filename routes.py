@@ -374,14 +374,14 @@ async def route_task(request: Dict[str, Any]):
 
         # The One Rule
         from connection_router import route_task
-        connection_type = route_task(task)
+        ack_packet = route_task(task)
 
         # Execute the task
         result = await connection_router.execute(task)
 
         return {
             "task_type": task_type,
-            "routing_decision": connection_type.value,
+            "routing_ack": ack_packet,
             "result": result,
             "rule": "if task.type in ['analysis', 'provenance', 'identity', 'transform'] then DIRECT else DALS"
         }

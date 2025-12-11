@@ -26,6 +26,19 @@ One rule. Zero confusion.
 
 from typing import Dict, Any, Callable
 from enum import Enum
+import uuid
+import datetime
+
+def routing_ack(route_type, module, task_type):
+    return {
+        "ack": True,
+        "task_id": str(uuid.uuid4()),
+        "route": route_type,
+        "module": module,
+        "task_type": task_type,
+        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        "status": "received"
+    }
 
 class ConnectionType(Enum):
     DIRECT = "direct"
@@ -230,9 +243,18 @@ class ConnectionRouter:
 router = ConnectionRouter()
 
 # Convenience functions
-def route_task(task: Dict[str, Any]) -> ConnectionType:
-    """Route a task to the appropriate connection."""
-    return router.route(task)
+def route_task(task: Dict[str, Any]) -> Dict[str, Any]:
+    """Route a task to the appropriate connection and return ACK packet."""
+    task_type = task.get("type", "")
+
+    if task_type in ConnectionRouter.DIRECT_TASKS:
+        # UCM direct connection
+        ack = routing_ack("DIRECT", "UCM", task_type)
+        return ack
+    else:
+        # DALS operational connection
+        ack = routing_ack("DALS", "DALS", task_type)
+        return ack
 
 async def execute_task(task: Dict[str, Any]) -> Any:
     """Execute a task using the appropriate connection."""
