@@ -71,6 +71,22 @@ ROUTING_TABLE = {
             "Verify CLS (Caleon Linguistic State) tracking",
             "Ensure Phi-3 output preserves cognitive integrity"
         ]
+    },
+
+    "connection_routing": {
+        "description": "Clean routing between UCM DIRECT and DALS connections",
+        "direct_connection": {
+            "purpose": "Brain-to-brain operations",
+            "tasks": ["analysis", "provenance", "identity", "transform", "summary", "ethical_weight", "skg_verify", "archive_pull"],
+            "examples": ["analyzing certificates", "generating provenance", "identity logic", "GOAT transformations"]
+        },
+        "dals_connection": {
+            "purpose": "Operational logistics",
+            "tasks": ["spawn_worker", "schedule_mint", "batch_coordinate", "async_trigger", "queue_task", "lifecycle_track", "workload_distribute", "parallel_process"],
+            "examples": ["spawning workers", "scheduling jobs", "batch coordination", "parallel processing"]
+        },
+        "the_rule": "if task.type in ['analysis', 'provenance', 'identity', 'transform'] then DIRECT else DALS",
+        "implementation": "See connection_router.py for the One Rule"
     }
 }
 

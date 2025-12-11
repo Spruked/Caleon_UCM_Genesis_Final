@@ -45,6 +45,13 @@
 - **Immutable Seeds**: Version-controlled foundational knowledge
 - **Integration APIs**: Direct connection to reasoning and validation systems
 
+### 🔀 Connection Routing System
+- **Clean Architecture**: Simple routing table with one rule
+- **Direct Connection**: Brain-to-brain operations (analysis, provenance, identity, transform)
+- **DALS Connection**: Operational tasks (workers, scheduling, batch processing, async operations)
+- **Zero Confusion**: One line determines everything
+- **Automatic Routing**: Tasks automatically routed based on type
+
 ### 🔐 Caleon Cipher Integration
 - **Quantum-Safe Encryption**: Module-LWE KEM + ChaCha20 CPRNG + Keccak streaming
 - **Perfect One-Time-Pad**: Information-theoretic security for sensitive data
@@ -153,6 +160,58 @@ your-app/
 ├── src/
 └── package.json
 ```
+
+## 🔀 Connection Routing API
+
+### The One Rule
+UCM automatically routes tasks based on a simple rule:
+
+```python
+if task.type in ["analysis", "provenance", "identity", "transform"]:
+    use_direct_connection()  # Brain-to-brain operations
+else:
+    use_dals_connection()    # Operational tasks
+```
+
+### Direct Connection (Brain-to-Brain)
+For cognitive operations that require direct UCM processing:
+
+```bash
+# Analyze content
+curl -X POST http://localhost:8000/api/route \
+  -H "Content-Type: application/json" \
+  -d '{"task": {"type": "analysis", "content": "analyze this certificate"}}'
+
+# Generate provenance
+curl -X POST http://localhost:8000/api/route \
+  -H "Content-Type: application/json" \
+  -d '{"task": {"type": "provenance", "content": "generate provenance for data"}}'
+```
+
+### DALS Connection (Operational)
+For logistics and worker management tasks:
+
+```bash
+# Spawn worker
+curl -X POST http://localhost:8000/api/route \
+  -H "Content-Type: application/json" \
+  -d '{"task": {"type": "spawn_worker", "content": "deploy new worker instance"}}'
+
+# Schedule batch job
+curl -X POST http://localhost:8000/api/route \
+  -H "Content-Type: application/json" \
+  -d '{"task": {"type": "batch_coordinate", "content": "process batch of 1000 items"}}'
+```
+
+### Routing Rules Reference
+```bash
+# Get all routing rules
+curl http://localhost:8000/api/routing/rules
+```
+
+**Direct Tasks**: `analysis`, `provenance`, `identity`, `transform`, `summary`, `ethical_weight`, `skg_verify`, `archive_pull`
+
+**DALS Tasks**: `spawn_worker`, `schedule_mint`, `batch_coordinate`, `async_trigger`, `queue_task`, `lifecycle_track`, `workload_distribute`, `parallel_process`
 
 ## 🏗️ System Architecture
 

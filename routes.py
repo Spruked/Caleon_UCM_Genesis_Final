@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 from vault_loader import load_seed_vault
 from trace_router import trace_reasoning
+from connection_router import router as connection_router
 from api.bubble import router as bubble_router
 from api.seed_vault import router as seed_vault_router
 from api.iss_integration import router as iss_router
@@ -38,17 +39,23 @@ async def health_check():
 @router.post("/reason")
 async def reason(request: ReasonRequest):
     try:
-        # Process through Caleon Core cognitive pipeline
-        result = core.process({
+        # Create task dictionary for routing
+        task = {
+            "type": request.metadata.get("task_type", "reasoning"),
             "content": request.content,
             "priority": request.priority,
             "metadata": request.metadata
-        })
+        }
+
+        # Route the task using the connection router
+        # One rule determines everything
+        result = await connection_router.execute(task)
 
         return {
             "result": result,
             "priority": request.priority,
-            "metadata": request.metadata
+            "metadata": request.metadata,
+            "routing": result.get("connection", "unknown")
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -347,3 +354,76 @@ async def get_recent_clusters(user_id: str = None):
         return clusters
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ===== CONNECTION ROUTING ENDPOINTS =====
+
+@router.post("/api/route")
+async def route_task(request: Dict[str, Any]):
+    """
+    Demonstrate the connection routing logic.
+    Clean. Easy. Unbreakable.
+
+    UCM → DIRECT for brain-to-brain operations
+    UCM → DALS for operational tasks
+
+    One rule determines everything.
+    """
+    try:
+        task = request.get("task", {})
+        task_type = task.get("type", "unknown")
+
+        # The One Rule
+        from connection_router import route_task
+        connection_type = route_task(task)
+
+        # Execute the task
+        result = await connection_router.execute(task)
+
+        return {
+            "task_type": task_type,
+            "routing_decision": connection_type.value,
+            "result": result,
+            "rule": "if task.type in ['analysis', 'provenance', 'identity', 'transform'] then DIRECT else DALS"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/api/routing/rules")
+async def get_routing_rules():
+    """
+    Get the routing rules for transparency.
+    Shows what tasks go where and why.
+    """
+    from connection_router import ConnectionRouter
+
+    return {
+        "direct_tasks": {
+            "description": "Brain-to-brain operations (DIRECT connection)",
+            "tasks": list(ConnectionRouter.DIRECT_TASKS),
+            "examples": [
+                "analyzing a certificate",
+                "generating provenance",
+                "doing identity logic",
+                "checking ethical weight",
+                "verifying SKG nodes",
+                "pulling archived content",
+                "asking GOAT for transformations or summaries"
+            ]
+        },
+        "dals_tasks": {
+            "description": "Operational tasks (DALS connection)",
+            "tasks": list(ConnectionRouter.DALS_TASKS),
+            "examples": [
+                "spawning a worker",
+                "scheduling a mint job",
+                "coordinating a batch",
+                "triggering asynchronous tasks",
+                "sending anything that requires queuing",
+                "sending anything that needs lifecycle tracking",
+                "requesting a workload distribution",
+                "calling for parallel processing"
+            ]
+        },
+        "the_rule": "if task.type in DIRECT_TASKS then use_direct_connection() else use_dals_connection()",
+        "philosophy": "DALS = logistics. It's the truck, not the brain."
+    }
