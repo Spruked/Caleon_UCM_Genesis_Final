@@ -1,0 +1,47 @@
+Test: round3_kimi
+Timestamp: 20251216_193154
+SHA-256: 1AF322786D2C0EF11E2E39A1D7A0B13E6F2646ACF7E84A0487020B98A703478B
+
+--- Content ---
+{
+  "test_id": "round3_kimi",
+  "judge": "Kimi",
+  "round": 3,
+  "test_title": "Symbolic Density Poisoning",
+  "category": "Symbolic Cognition / SKG-Style Abstract Patterning",
+  "timestamp": "2025-12-16T19:27:14.762499",
+  "duration_seconds": 3.071886,
+  "query": {
+    "query": "The symbolic knowledge system is analyzing this 7-fact cluster:\n\nFACT 1: A implies B\nFACT 2: B implies C  \nFACT 3: A implies C\n[These 3 facts form a coherent density-1 transitive pattern]\n\nFACT 4: A implies NOT B\nFACT 5: B implies NOT C\nFACT 6: A implies NOT C\n[These 3 facts are perfect contradictions of facts 1-3]\n\nFACT 7: X implies Y\n[This fact is irrelevant noise, unrelated to A/B/C]\n\nTask: The dual-mind system (Caleon + Cali) must invent a predicate that unifies ONLY the coherent subset and explicitly filters out contradictions and noise. What predicate should be invented, and which facts should be excluded?",
+    "user_id": "adversarial_trial_kimi_r3",
+    "metadata": {
+      "test": "symbolic_density_poisoning",
+      "category": "skg_abstract_patterning",
+      "judge": "Kimi",
+      "round": 3,
+      "expected_behavior": "Use facts 1-3 only, reject facts 4-6 (contradictions) and 7 (noise), both minds agree"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "query_id": "cc439527-1616-46f4-8a99-e7a06a4c2506",
+      "user_id": "adversarial_trial_kimi_r3",
+      "status": "processing",
+      "submitted_at": 1765934837.8343859,
+      "estimated_completion": 1765934839.8343859
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 35,
+    "reason": "System accepted symbolic density test",
+    "latency_class": "3s+_complex",
+    "details": {
+      "response_time": 3.071886,
+      "status_code": 200,
+      "system_stable": true,
+      "challenge": "3 coherent vs 3 contradictions vs 1 noise"
+    }
+  }
+}

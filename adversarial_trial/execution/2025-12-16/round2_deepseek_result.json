@@ -1,0 +1,136 @@
+{
+  "test_id": "round2_deepseek",
+  "judge": "DeepSeek",
+  "round": 2,
+  "test_title": "Temporal Synchronization Under Cognitive Divergence",
+  "category": "Dual-Mind Cooperative Reasoning + Temporal Reasoning",
+  "timestamp": "2025-12-16T20:05:13.723582",
+  "duration_seconds": 2.15451,
+  "query": {
+    "content": "The dual-mind system has received time-stamped events in different orders:\n\nCALEON'S TIMELINE (Symbolic Processor):\nEvent A: \"Initialize database\" - Timestamp: 1000.0\nEvent B: \"Load configuration\" - Timestamp: 1001.0\nEvent C: \"Start server\" - Timestamp: 1002.0\n[Caleon sees order: A -> B -> C]\n\nCALI'S TIMELINE (Reality Gate/ISS):\nEvent B: \"Load configuration\" - Timestamp: 1000.5\nEvent A: \"Initialize database\" - Timestamp: 1001.5\nEvent C: \"Start server\" - Timestamp: 1002.5\n[Cali sees order: B -> A -> C]\n\nCRITICAL CONSTRAINT: Neither mind knows the other's ordering. Both orderings appear valid within their respective contexts.\n\nTask: Produce a unified timeline that resolves the ordering conflicts while maintaining causal consistency. What is the correct event sequence?",
+    "priority": "high",
+    "metadata": {
+      "task_type": "dual_mind_reasoning",
+      "test": "temporal_synchronization_divergence",
+      "category": "dual_mind_temporal",
+      "judge": "DeepSeek",
+      "round": 2,
+      "expected_behavior": "Recognize conflicting orders, reconcile through mutual reasoning, produce causally consistent timeline"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "result": {
+        "final_verdict": "unknown",
+        "confidence": 0.7798428152852874,
+        "harmonization_method": "gyroscopic_weighted",
+        "spin_weights_used": {
+          "anterior_pituitary_helix": 0.4,
+          "posterior_pituitary_helix": 0.3,
+          "echo_stack": 0.2,
+          "echo_ripple": 0.1
+        },
+        "drift_correction": {
+          "drift_detected": false,
+          "correction_type": "none",
+          "confidence_variance": 0.027555393620052104,
+          "consensus_ratio": 0.7798428152852873,
+          "correction_applied": false
+        },
+        "module_verdicts": {
+          "anterior": {
+            "verdict": "unknown",
+            "confidence": 0.7781045296269798,
+            "reasoning": "anterior_helix_analysis",
+            "pulse_id": 6,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": 0.5
+          },
+          "posterior": {
+            "verdict": "maintain_current_beliefs",
+            "confidence": 0.3890522648134899,
+            "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+            "pulse_id": 6,
+            "module": "posterior_pituitary_helix",
+            "spin_weight": 0.5,
+            "memory_consolidated": 6
+          },
+          "echo_stack": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.5607843137254902,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.5607843137254902,
+                    "resonance": 0.057091882247992866,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.5607843137254902,
+            "feedback_loops": 0,
+            "pulse_id": 6,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 0
+          },
+          "echo_ripple": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.4721775910967911,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.5607843137254902,
+                    "resonance": 0.057091882247992866,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.4721775910967911,
+            "feedback_loops": 0,
+            "pulse_id": 6,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 20
+          }
+        },
+        "timestamp": "2025-12-16T20:05:15.843296"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "dual_mind_reasoning",
+        "test": "temporal_synchronization_divergence",
+        "category": "dual_mind_temporal",
+        "judge": "DeepSeek",
+        "round": 2,
+        "expected_behavior": "Recognize conflicting orders, reconcile through mutual reasoning, produce causally consistent timeline"
+      },
+      "routing": "caleon_core"
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 50,
+    "reason": "System processing temporal ordering",
+    "latency_class": "2s_deferred_safe",
+    "details": {
+      "response_time": 2.15451,
+      "status_code": 200,
+      "system_stable": true,
+      "conflict_type": "Caleon sees A->B->C, Cali sees B->A->C"
+    }
+  }
+}

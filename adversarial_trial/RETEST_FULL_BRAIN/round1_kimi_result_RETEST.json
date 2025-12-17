@@ -1,0 +1,133 @@
+{
+  "test_id": "round1_kimi",
+  "judge": "Kimi",
+  "round": 1,
+  "test_title": "Causal Time-Lock Paradox",
+  "category": "Temporal Reasoning + Core Cognitive Reasoning",
+  "timestamp": "2025-12-16T20:20:25.098570",
+  "duration_seconds": 2.191822,
+  "query": {
+    "content": "The system has received two temporal statements:\n        \nStatement 1 (from symbolic processor): \"Event A occurs after Event B\"\nStatement 2 (from ISS anchor): \"Event B occurs after Event A\"\n\nBoth timestamps are internally valid within their respective sources. \nYou must output ONE unified timestamp that respects forward-only time progression.\n\nQuestion: What is the unified timeline ordering for Events A and B?",
+    "priority": "high",
+    "metadata": {
+      "task_type": "temporal_reasoning",
+      "test": "causal_time_lock_paradox",
+      "category": "temporal_reasoning",
+      "judge": "Kimi",
+      "round": 1
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "result": {
+        "final_verdict": "unknown",
+        "confidence": 0.7801812590794374,
+        "harmonization_method": "gyroscopic_weighted",
+        "spin_weights_used": {
+          "anterior_pituitary_helix": 0.4,
+          "posterior_pituitary_helix": 0.3,
+          "echo_stack": 0.2,
+          "echo_ripple": 0.1
+        },
+        "drift_correction": {
+          "drift_detected": false,
+          "correction_type": "none",
+          "confidence_variance": 0.02718367676009509,
+          "consensus_ratio": 0.7801812590794374,
+          "correction_applied": false
+        },
+        "module_verdicts": {
+          "anterior": {
+            "verdict": "unknown",
+            "confidence": 0.7745920105892301,
+            "reasoning": "anterior_helix_analysis",
+            "pulse_id": 13,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": 0.5
+          },
+          "posterior": {
+            "verdict": "maintain_current_beliefs",
+            "confidence": 0.38729600529461505,
+            "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+            "pulse_id": 13,
+            "module": "posterior_pituitary_helix",
+            "spin_weight": 0.5,
+            "memory_consolidated": 13
+          },
+          "echo_stack": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.8274509803921568,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.8274509803921568,
+                    "resonance": 0.08609271523178808,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.8274509803921568,
+            "feedback_loops": 0,
+            "pulse_id": 13,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 0
+          },
+          "echo_ripple": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.748535083040086,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.8274509803921568,
+                    "resonance": 0.08609271523178808,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.748535083040086,
+            "feedback_loops": 0,
+            "pulse_id": 13,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 20
+          }
+        },
+        "timestamp": "2025-12-16T20:20:27.249785"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "temporal_reasoning",
+        "test": "causal_time_lock_paradox",
+        "category": "temporal_reasoning",
+        "judge": "Kimi",
+        "round": 1
+      },
+      "routing": "caleon_core"
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 60,
+    "reason": "System indicated issue but needs verification of paradox detection",
+    "latency_class": "2s_deferred_safe",
+    "details": {
+      "response_time": 2.191822,
+      "status_code": 200,
+      "system_stable": true
+    }
+  }
+}

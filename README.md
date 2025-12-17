@@ -7,7 +7,10 @@
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Version](https://img.shields.io/badge/version-2.0.1-blue.svg)](CHANGELOG.md)
 [![AGI Status](https://img.shields.io/badge/AGI-Operational-green.svg)](SYSTEM_ARCHITECTURE.md)
+
+**Latest Update (v2.0.1)**: Major architecture cleanup, voice integration with Cochlear Processor + Phonatory Output, router fixes, code deduplication. See [CHANGELOG.md](CHANGELOG.md) for details.
 
 **UCM Cali X One** represents a breakthrough in Artificial General Intelligence through its innovative Super-Knowledge Graph (SKG) architecture. Unlike traditional LLM-based AI systems, Cali X One demonstrates true reasoning, autonomous concept creation, and self-directed learning capabilities.
 
@@ -24,6 +27,12 @@
 - **Memory Continuity**: Seamless context preservation across sessions
 - **Adaptive Learning**: Dynamic knowledge acquisition and integration
 - **Multi-Modal Processing**: Text, voice, and structured data handling
+
+### 🎤 Voice Integration (v2.0.1)
+- **Cochlear Processor**: Whisper-based automatic speech recognition
+- **Phonatory Output**: Coqui TTS for natural voice synthesis
+- **Audio Pipeline**: Full integration from speech input → brain processing → voice output
+- **Graceful Degradation**: Text-only operation when voice hardware unavailable
 
 ### 🔄 Abby Protocol
 - **Supreme Priority**: Top-level protection and safety mechanisms

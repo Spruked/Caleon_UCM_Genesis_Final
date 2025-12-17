@@ -1,0 +1,36 @@
+Test: health_check
+Timestamp: 20251216_184125
+SHA-256: 2d760403a09e32d9e171d2b463012518b8c9c23690d1cc996924db6c558f29cf
+
+--- Content ---
+{
+  "/health": {
+    "status": 200,
+    "time": "2.066s",
+    "response": {
+      "status": "healthy",
+      "environment": "development",
+      "version": "2.0.0",
+      "timestamp": "2025-11-02T00:00:00Z"
+    }
+  },
+  "/vault/health": {
+    "status": 200,
+    "time": "2.045s",
+    "response": {
+      "status": "healthy",
+      "overall_health": true,
+      "healthy_components": 5,
+      "total_components": 5,
+      "last_check": 1765932083.5199482
+    }
+  },
+  "/": {
+    "status": 200,
+    "time": "2.051s",
+    "response": {
+      "status": "healthy",
+      "service": "Unified Cognition Module"
+    }
+  }
+}

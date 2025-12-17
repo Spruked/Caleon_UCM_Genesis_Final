@@ -1,0 +1,111 @@
+{
+  "archive_info": {
+    "id": "RAW-LOGS-TRIAL-001",
+    "created": "2025-12-06T15:45:00Z",
+    "status": "PRE_TRIAL",
+    "retention_days": 365
+  },
+  "log_structure": {
+    "api_logs": "api_logs.json",
+    "system_logs": "system_logs.json",
+    "error_logs": "error_logs.json",
+    "judge_logs": "judge_interaction_logs.json",
+    "performance_logs": "performance_logs.json"
+  },
+  "data_format": {
+    "timestamp_format": "ISO 8601 UTC",
+    "log_levels": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+    "compression": "none (pre-trial)",
+    "encryption": "pending trial commencement"
+  },
+  "collection_status": {
+    "api_monitoring": "READY",
+    "system_monitoring": "ACTIVE",
+    "error_tracking": "ACTIVE",
+    "performance_tracking": "READY"
+  },
+  "pre_trial_entries": [
+    {
+      "timestamp": "2025-12-06T14:30:00Z",
+      "level": "INFO",
+      "component": "SYSTEM",
+      "event": "SYSTEM_STARTUP",
+      "message": "Cali_X_One system initialized successfully",
+      "details": {
+        "version": "1.0.0",
+        "python_version": "3.11.0",
+        "platform": "Windows NT"
+      }
+    },
+    {
+      "timestamp": "2025-12-06T14:30:05Z",
+      "level": "INFO",
+      "component": "DATABASE",
+      "event": "DB_INITIALIZED",
+      "message": "Database tables created successfully",
+      "details": {
+        "tables_created": ["workers", "uqv_store", "caleon_predicates"],
+        "connection_status": "SUCCESS"
+      }
+    },
+    {
+      "timestamp": "2025-12-06T14:39:00Z",
+      "level": "INFO",
+      "component": "BASELINE_TESTS",
+      "event": "TEST_EXECUTION_START",
+      "message": "Baseline test suite execution started",
+      "details": {
+        "total_tests": 7,
+        "test_framework": "pytest"
+      }
+    },
+    {
+      "timestamp": "2025-12-06T14:39:02Z",
+      "level": "INFO",
+      "component": "BASELINE_TESTS",
+      "event": "TEST_PASSED",
+      "message": "System boot test passed",
+      "details": {
+        "test_name": "test_system_boot",
+        "duration_ms": 2720,
+        "score": 100
+      }
+    },
+    {
+      "timestamp": "2025-12-06T14:39:02Z",
+      "level": "ERROR",
+      "component": "BASELINE_TESTS",
+      "event": "TEST_FAILED",
+      "message": "SKG clustering performance test failed",
+      "details": {
+        "test_name": "test_micro_skg_speed",
+        "duration_ms": 67,
+        "target_ms": 40,
+        "error": "Performance target not met"
+      }
+    },
+    {
+      "timestamp": "2025-12-06T14:39:03Z",
+      "level": "INFO",
+      "component": "BASELINE_TESTS",
+      "event": "TEST_PASSED",
+      "message": "UQV vault test passed",
+      "details": {
+        "test_name": "test_uqv_vault",
+        "duration_ms": 850,
+        "score": 100
+      }
+    },
+    {
+      "timestamp": "2025-12-06T15:40:00Z",
+      "level": "INFO",
+      "component": "API_FIXES",
+      "event": "ENDPOINT_ADDED",
+      "message": "Missing API endpoints added",
+      "details": {
+        "endpoints_added": ["/vault/reflections/add", "/api/query"],
+        "status": "RESOLVED"
+      }
+    }
+  ]
+}

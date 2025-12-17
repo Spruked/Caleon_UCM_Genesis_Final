@@ -145,7 +145,7 @@ def encapsulate(pk: bytes, seed: bytes):
     # compress a bit (Kyber does this)
     u_comp = [cr((32677 * x + Q//2)//Q) & 0xfff for p in u for x in p]
     v_comp = [cr((32677 * x + Q//2)//Q) & 0xfff for x in v]
-    ct = bytes(struct.pack("<h", x) for x in u_comp + v_comp)
+    ct = b"".join(struct.pack("<h", x) for x in u_comp + v_comp)
     ss = hashlib.sha3_256(seed + ct).digest()
     return ct, ss
 

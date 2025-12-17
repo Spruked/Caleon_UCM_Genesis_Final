@@ -1,0 +1,187 @@
+{
+  "archive_info": {
+    "id": "ERROR-LOGS-TRIAL-001",
+    "created": "2025-12-06T15:45:00Z",
+    "status": "PRE_TRIAL",
+    "retention_days": 365
+  },
+  "error_summary": {
+    "total_errors": 3,
+    "critical_errors": 0,
+    "high_priority_errors": 2,
+    "medium_priority_errors": 1,
+    "low_priority_errors": 0,
+    "resolved_errors": 2,
+    "unresolved_errors": 1
+  },
+  "error_log": [
+    {
+      "timestamp": "2025-12-06T14:39:01Z",
+      "error_id": "ERR-001-SKG-PERF",
+      "level": "ERROR",
+      "component": "SKG_CORE",
+      "error_type": "PERFORMANCE_VIOLATION",
+      "error_code": "SKG_PERF_001",
+      "message": "SKG clustering performance below target threshold",
+      "details": {
+        "operation": "semantic_clustering",
+        "actual_duration_ms": 67,
+        "target_duration_ms": 40,
+        "performance_gap_ms": 27,
+        "performance_gap_percent": 67.5,
+        "test_context": "baseline_test_micro_skg_speed"
+      },
+      "stack_trace": null,
+      "request_context": {
+        "endpoint": "/api/skg/cluster",
+        "method": "POST",
+        "user_agent": "pytest/7.4.0",
+        "ip_address": "127.0.0.1"
+      },
+      "system_context": {
+        "cpu_usage_percent": 5,
+        "memory_usage_mb": 145,
+        "python_version": "3.11.0",
+        "platform": "Windows NT"
+      },
+      "resolution_status": "UNRESOLVED",
+      "priority": "MEDIUM",
+      "assigned_to": "Performance Team",
+      "estimated_fix_time": "2-4 hours",
+      "impact_assessment": "Affects real-time semantic processing performance"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:04Z",
+      "error_id": "ERR-002-API-404",
+      "level": "ERROR",
+      "component": "API_SERVER",
+      "error_type": "ENDPOINT_NOT_FOUND",
+      "error_code": "HTTP_404",
+      "message": "API endpoint '/vault/reflections/add' not found",
+      "details": {
+        "requested_endpoint": "/vault/reflections/add",
+        "http_method": "POST",
+        "expected_response": "201 Created",
+        "actual_response": "404 Not Found",
+        "test_context": "baseline_test_vault_integration"
+      },
+      "stack_trace": "Traceback (most recent call last):\n  File \"test_baseline.py\", line 45, in test_vault_integration\n    response = client.post('/vault/reflections/add', json=test_data)\n  File \"fastapi/testclient.py\", line 123, in post\n    raise HTTPException(status_code=404, detail='Not Found')",
+      "request_context": {
+        "endpoint": "/vault/reflections/add",
+        "method": "POST",
+        "request_body_size": 150,
+        "user_agent": "pytest/7.4.0",
+        "ip_address": "127.0.0.1"
+      },
+      "system_context": {
+        "server_status": "RUNNING",
+        "api_routes_loaded": 12,
+        "total_routes_available": 14,
+        "missing_routes": ["/vault/reflections/add", "/api/query"]
+      },
+      "resolution_status": "RESOLVED",
+      "resolution_timestamp": "2025-12-06T15:40:00Z",
+      "resolution_details": "Added POST /vault/reflections/add endpoint to API router",
+      "priority": "HIGH",
+      "assigned_to": "API Development Team",
+      "estimated_fix_time": "30 minutes",
+      "actual_fix_time": "25 minutes",
+      "impact_assessment": "Blocked vault integration testing and consciousness tracking"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:05Z",
+      "error_id": "ERR-003-API-404",
+      "level": "ERROR",
+      "component": "API_SERVER",
+      "error_type": "ENDPOINT_NOT_FOUND",
+      "error_code": "HTTP_404",
+      "message": "API endpoint '/api/query' not found",
+      "details": {
+        "requested_endpoint": "/api/query",
+        "http_method": "POST",
+        "expected_response": "200 OK",
+        "actual_response": "404 Not Found",
+        "test_context": "baseline_test_end_to_end_flow"
+      },
+      "stack_trace": "Traceback (most recent call last):\n  File \"test_baseline.py\", line 78, in test_end_to_end_flow\n    response = client.post('/api/query', json=query_data)\n  File \"fastapi/testclient.py\", line 234, in post\n    raise HTTPException(status_code=404, detail='Not Found')",
+      "request_context": {
+        "endpoint": "/api/query",
+        "method": "POST",
+        "request_body_size": 200,
+        "user_agent": "pytest/7.4.0",
+        "ip_address": "127.0.0.1"
+      },
+      "system_context": {
+        "server_status": "RUNNING",
+        "api_routes_loaded": 12,
+        "total_routes_available": 14,
+        "missing_routes": ["/api/query"]
+      },
+      "resolution_status": "RESOLVED",
+      "resolution_timestamp": "2025-12-06T15:40:01Z",
+      "resolution_details": "Added POST /api/query endpoint to API router",
+      "priority": "HIGH",
+      "assigned_to": "API Development Team",
+      "estimated_fix_time": "30 minutes",
+      "actual_fix_time": "20 minutes",
+      "impact_assessment": "Blocked end-to-end flow testing and query functionality"
+    }
+  ],
+  "error_patterns": {
+    "by_component": {
+      "SKG_CORE": 1,
+      "API_SERVER": 2
+    },
+    "by_type": {
+      "PERFORMANCE_VIOLATION": 1,
+      "ENDPOINT_NOT_FOUND": 2
+    },
+    "by_priority": {
+      "HIGH": 2,
+      "MEDIUM": 1,
+      "LOW": 0
+    },
+    "by_status": {
+      "RESOLVED": 2,
+      "UNRESOLVED": 1
+    }
+  },
+  "error_trends": {
+    "error_rate_over_time": [
+      {"time_window": "14:30-14:45", "error_count": 0, "error_rate": 0.0},
+      {"time_window": "14:45-15:00", "error_count": 3, "error_rate": 100.0},
+      {"time_window": "15:00-15:15", "error_count": 0, "error_rate": 0.0},
+      {"time_window": "15:15-15:30", "error_count": 0, "error_rate": 0.0},
+      {"time_window": "15:30-15:45", "error_count": 0, "error_rate": 0.0}
+    ],
+    "resolution_time_stats": {
+      "average_resolution_minutes": 22.5,
+      "median_resolution_minutes": 22.5,
+      "fastest_resolution_minutes": 20,
+      "slowest_resolution_minutes": 25
+    }
+  },
+  "preventive_actions": [
+    {
+      "action_id": "PREV-001",
+      "description": "Add comprehensive API endpoint testing to CI/CD pipeline",
+      "priority": "HIGH",
+      "estimated_implementation_days": 2,
+      "prevented_errors": ["ENDPOINT_NOT_FOUND"]
+    },
+    {
+      "action_id": "PREV-002",
+      "description": "Implement performance regression testing for SKG operations",
+      "priority": "MEDIUM",
+      "estimated_implementation_days": 3,
+      "prevented_errors": ["PERFORMANCE_VIOLATION"]
+    },
+    {
+      "action_id": "PREV-003",
+      "description": "Add API route validation on server startup",
+      "priority": "MEDIUM",
+      "estimated_implementation_days": 1,
+      "prevented_errors": ["ENDPOINT_NOT_FOUND"]
+    }
+  ]
+}

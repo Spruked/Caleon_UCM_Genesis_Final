@@ -64,7 +64,7 @@ class SKGCore:
         new_total = self.levels[0].number_of_edges()
         if new_total % 50 == 0 and new_total > 0 and new_total // 50 != getattr(self, '_last_banner', -1):
             self._last_banner = new_total // 50
-            print(f"[SKG] ➜  {new_total} base facts – bootstrap")
+            print(f"[SKG] >> {new_total} base facts - bootstrap")
             self.expand_recursive()
             maybe_invent_predicate(self)
             # start_curiosity(self)  # Disabled for CPU-only mode

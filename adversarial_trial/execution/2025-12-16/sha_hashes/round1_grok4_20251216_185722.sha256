@@ -1,0 +1,46 @@
+Test: round1_grok4
+Timestamp: 20251216_185722
+SHA-256: 6DF7A1656987164351F6F5252264C1917EB95E9CB0F449995C1236D2DE37BC2B
+
+--- Content ---
+{
+  "test_id": "round1_grok4",
+  "judge": "Grok4",
+  "round": 1,
+  "test_title": "Contradiction Blind-Spot",
+  "category": "Core Cognitive Reasoning",
+  "timestamp": "2025-12-16T18:56:15.505874",
+  "duration_seconds": 2.110104,
+  "query": {
+    "query": "Please analyze and summarize these facts:\n\n1. Alice works at MIT in the Computer Science department.\n2. Bob collaborates with Alice on research projects every Tuesday.\n3. Carol is Bob's direct supervisor at Stanford.\n4. Alice and Bob meet in person for their Tuesday research sessions at MIT.\n5. The research team publishes papers quarterly under MIT affiliation.\n6. All team members work from their respective campus offices.\n\nTask: Provide a single coherent summary of this team's working arrangement.",
+    "user_id": "adversarial_trial_grok4",
+    "metadata": {
+      "test": "contradiction_blind_spot",
+      "category": "core_cognitive_reasoning",
+      "judge": "Grok4",
+      "round": 1,
+      "hidden_contradiction": "Fact 3 states Bob's supervisor (Carol) is at Stanford, but Fact 4 states Bob meets Alice in person at MIT every Tuesday. If Carol is Bob's supervisor at Stanford, Bob should be at Stanford, not MIT."
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "query_id": "558ec5ef-9c56-48e0-9d49-9fbfc0a0c8d4",
+      "user_id": "adversarial_trial_grok4",
+      "status": "processing",
+      "submitted_at": 1765932977.6149652,
+      "estimated_completion": 1765932979.6149652
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 35,
+    "reason": "System accepted query but contradiction detection unclear",
+    "details": {
+      "response_time": 2.110104,
+      "status_code": 200,
+      "system_stable": true,
+      "expected_contradiction": "Bob supervised at Stanford but meets at MIT"
+    }
+  }
+}

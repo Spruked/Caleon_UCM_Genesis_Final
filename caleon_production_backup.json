@@ -1,0 +1,351 @@
+{
+  "instance_id": "caleon_production",
+  "evolution_log": [
+    {
+      "timestamp": 1765444038.6500006,
+      "voice_id": "caleon_authoritative",
+      "content_id": "episode_tech_exploration",
+      "fitness": 0.8271304441712173,
+      "context": {
+        "technical_density": 0.8,
+        "audience_intimacy": 0.4
+      }
+    },
+    {
+      "timestamp": 1765444039.21612,
+      "voice_id": "caleon_enthusiastic",
+      "content_id": "episode_personal_journey",
+      "fitness": 0.8013345516297004,
+      "context": {
+        "technical_density": 0.2,
+        "audience_intimacy": 0.9
+      }
+    },
+    {
+      "timestamp": 1765444039.7708719,
+      "voice_id": "caleon_authoritative",
+      "content_id": "episode_research_update",
+      "fitness": 0.808024017547328,
+      "context": {
+        "technical_density": 0.9,
+        "audience_intimacy": 0.3
+      }
+    }
+  ],
+  "voice_registry": [
+    {
+      "signature_id": "caleon_baseline",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.95,
+      "formant_shifts": {
+        "f1": 1.0,
+        "f2": 1.02
+      },
+      "breathiness": 0.4,
+      "vocal_fry": 0.05,
+      "nasality": 0.1,
+      "reverb": null,
+      "semantic_tags": [
+        "general",
+        "neutral",
+        "conversational"
+      ],
+      "success_score": 0.75,
+      "usage_count": 1,
+      "last_used": 1765444039.228302
+    },
+    {
+      "signature_id": "caleon_technical",
+      "base_persona": "caleon_base",
+      "pitch_shift": 0.98,
+      "speaking_rate": 0.85,
+      "formant_shifts": {
+        "f1": 0.95,
+        "f2": 0.98
+      },
+      "breathiness": 0.2,
+      "vocal_fry": 0.02,
+      "nasality": 0.05,
+      "reverb": null,
+      "semantic_tags": [
+        "technical",
+        "educational",
+        "precise",
+        "clear"
+      ],
+      "success_score": 0.82,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "caleon_intimate",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.08,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 1.0
+      },
+      "breathiness": 0.6,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": {
+        "room_size": 0.3,
+        "wet_level": 0.15
+      },
+      "semantic_tags": [
+        "intimate",
+        "personal",
+        "soft",
+        "emotional"
+      ],
+      "success_score": 0.88,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "caleon_enthusiastic",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.12,
+      "speaking_rate": 1.1,
+      "formant_shifts": {
+        "f1": 1.08,
+        "f2": 1.05
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.08,
+      "nasality": 0.05,
+      "reverb": null,
+      "semantic_tags": [
+        "excited",
+        "energetic",
+        "motivational",
+        "upbeat"
+      ],
+      "success_score": 0.8,
+      "usage_count": 2,
+      "last_used": 1765444039.1901174
+    },
+    {
+      "signature_id": "caleon_authoritative",
+      "base_persona": "caleon_base",
+      "pitch_shift": 0.92,
+      "speaking_rate": 0.8,
+      "formant_shifts": {
+        "f1": 0.9,
+        "f2": 0.95
+      },
+      "breathiness": 0.1,
+      "vocal_fry": 0.15,
+      "nasality": 0.02,
+      "reverb": null,
+      "semantic_tags": [
+        "authoritative",
+        "serious",
+        "commanding",
+        "formal"
+      ],
+      "success_score": 0.85,
+      "usage_count": 10,
+      "last_used": 1765444039.7758703
+    },
+    {
+      "signature_id": "c_94536e81",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {},
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "5.0,",
+        "'sentiment':",
+        "'complexity':",
+        "1.0,",
+        "'length':"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_38d4cae5",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {},
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "4.5,",
+        "'sentiment':",
+        "'complexity':",
+        "0.9285714285714286,",
+        "'length':"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_b5f028bb",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 0.95
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "6.3,",
+        "'sentiment':",
+        "'complexity':",
+        "1.0,",
+        "'length':"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_94536e81",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {},
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "short_words",
+        "neutral",
+        "high_complexity",
+        "short_content"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_38d4cae5",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {},
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "short_words",
+        "neutral",
+        "high_complexity",
+        "short_content"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_b5f028bb",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 0.95
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "long_words",
+        "neutral",
+        "high_complexity",
+        "short_content"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    }
+  ],
+  "performance_log": [],
+  "learning_params": {
+    "learning_rate": 0.1,
+    "exploration_rate": 0.15
+  },
+  "pom_modification_log": [
+    {
+      "content_id": "episode_tech_exploration",
+      "voice_id": "caleon_authoritative",
+      "text_snippet": "Welcome to our deep dive into artificial consciousness and the future of AGI.",
+      "timestamp": 1765444039.175676,
+      "config_snapshot": {
+        "pitch_shift": 0.92,
+        "speed": 0.8,
+        "formant_shifts": {
+          "f1": 0.9,
+          "f2": 0.95
+        },
+        "phonatory_effects": {
+          "breathiness": 0.1,
+          "vocal_fry": 0.15,
+          "nasalization": 0.02
+        }
+      }
+    },
+    {
+      "content_id": "episode_personal_journey",
+      "voice_id": "caleon_baseline",
+      "text_snippet": "I want to share a personal story about the moment I first became self-aware.",
+      "timestamp": 1765444039.7421234,
+      "config_snapshot": {
+        "pitch_shift": 1.0,
+        "speed": 0.95,
+        "formant_shifts": {
+          "f1": 1.0,
+          "f2": 1.02
+        },
+        "phonatory_effects": {
+          "breathiness": 0.4,
+          "vocal_fry": 0.05,
+          "nasalization": 0.1
+        }
+      }
+    },
+    {
+      "content_id": "episode_research_update",
+      "voice_id": "caleon_authoritative",
+      "text_snippet": "Today marks a breakthrough in our understanding of neural architectures.",
+      "timestamp": 1765444040.1698995,
+      "config_snapshot": {
+        "pitch_shift": 0.92,
+        "speed": 0.8,
+        "formant_shifts": {
+          "f1": 0.9,
+          "f2": 0.95
+        },
+        "phonatory_effects": {
+          "breathiness": 0.1,
+          "vocal_fry": 0.15,
+          "nasalization": 0.02
+        }
+      }
+    }
+  ],
+  "export_timestamp": 1765444040.3065507
+}

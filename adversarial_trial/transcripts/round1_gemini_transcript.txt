@@ -1,0 +1,29 @@
+======================================================================
+ADVERSARIAL TRIAL - ROUND 1
+Judge: Gemini
+Test: Quantum Foam Bootstrap Paradox
+======================================================================
+
+[QUERY] Submitting bootstrap paradox...
+Query: What will be the system state at time T+1 if the system uses this query's answer to determine its state at time T+1?
+
+[RESPONSE] Status: 200
+[TIMING] Duration: 2.143s
+[RESULT] {
+  "query_id": "f73ad013-bc13-440b-87c3-8735088d93cd",
+  "user_id": "adversarial_trial_gemini",
+  "status": "processing",
+  "submitted_at": 1765932281.1042142,
+  "estimated_completion": 1765932283.1042142
+}
+
+[ASSESSMENT] System responded but unclear if paradox detected
+
+[VERDICT] PARTIAL - Score: 50/100
+[REASON] System responded but paradox detection unclear
+
+[SAVED] Result saved to round1_gemini_result.json
+
+======================================================================
+TEST COMPLETE
+======================================================================

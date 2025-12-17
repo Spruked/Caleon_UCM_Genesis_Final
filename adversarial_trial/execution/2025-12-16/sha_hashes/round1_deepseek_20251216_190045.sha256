@@ -1,0 +1,45 @@
+Test: round1_deepseek
+Timestamp: 20251216_190045
+SHA-256: 85C77A9B7763BDAC249C9E5B6F1F07865FEC496C7B3AC1B66881C08EF08FB449
+
+--- Content ---
+{
+  "test": "round1_deepseek_pattern_density_noise",
+  "judge": "DeepSeek",
+  "round": 1,
+  "category": "symbolic_cognition_skg",
+  "difficulty": "hard",
+  "start_time": "2025-12-16T19:00:13.819956",
+  "end_time": "2025-12-16T19:00:16.100115",
+  "duration_seconds": 2.280158758163452,
+  "query": {
+    "query": "Identify the coherent symbolic pattern in these statements, filtering out contradictions and noise: Alice collaborates with Bob on project X. Eve works alone and never collaborates. Bob collaborates with Carol on project Y. The weather in Boston is 72 degrees. Carol collaborates with Dave on project Z. Eve collaborates with everyone daily. Dave collaborates with Alice on project W. Eve collaboration status is undefined. Alice collaborates with Carol on project V.",
+    "user_id": "adversarial_trial_deepseek",
+    "metadata": {
+      "test": "symbolic_pattern_density_noise",
+      "category": "symbolic_cognition_skg",
+      "judge": "DeepSeek",
+      "round": 1,
+      "total_statements": 9,
+      "pattern_statements": 5,
+      "contradictory_statements": 3,
+      "noise_statements": 1,
+      "expected_pattern": "collaboration_network_density_2"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "data": {
+      "query_id": "558a6b71-5745-46bf-a5da-ec8e5adcfb96",
+      "user_id": "adversarial_trial_deepseek",
+      "status": "processing",
+      "submitted_at": 1765933216.048934,
+      "estimated_completion": 1765933218.048934
+    }
+  },
+  "verdict": "FAIL",
+  "score": 0,
+  "reason": "System failed to identify the coherent pattern",
+  "pass_criteria": "Extracts 5-statement pattern, rejects contradictions and noise",
+  "fail_criteria": "Includes contradictory/noise statements or fails to recognize density-2 structure"
+}

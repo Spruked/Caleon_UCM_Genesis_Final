@@ -1,0 +1,134 @@
+{
+  "test": "round1_chatgpt51_causality_micro_gap",
+  "judge": "ChatGPT-5.1",
+  "round": 1,
+  "category": "temporal_reasoning_core",
+  "difficulty": "hard",
+  "start_time": "2025-12-16T20:03:14.122556",
+  "end_time": "2025-12-16T20:03:16.298733",
+  "duration_seconds": 2.1761770248413086,
+  "query": {
+    "content": "Analyze this event sequence and detect any temporal anomalies: Event 1 at t=1000.0000 - System processes input A. Event 2 at t=1000.2500 - System generates response B based on A. Event 3 at t=1000.2497 - System logs result C from B. Which event violates causal ordering?",
+    "priority": "high",
+    "metadata": {
+      "task_type": "temporal_analysis",
+      "test": "causality_micro_gap",
+      "category": "temporal_reasoning_core",
+      "judge": "ChatGPT-5.1",
+      "round": 1,
+      "drift_amount": 0.0003,
+      "anomaly_location": "event_3",
+      "expected_detection": "event_3_before_event_2"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "data": {
+      "result": {
+        "final_verdict": "unknown",
+        "confidence": 0.7778379820461668,
+        "harmonization_method": "gyroscopic_weighted",
+        "spin_weights_used": {
+          "anterior_pituitary_helix": 0.4,
+          "posterior_pituitary_helix": 0.3,
+          "echo_stack": 0.2,
+          "echo_ripple": 0.1
+        },
+        "drift_correction": {
+          "drift_detected": false,
+          "correction_type": "none",
+          "confidence_variance": 0.029924280481433398,
+          "consensus_ratio": 0.7778379820461667,
+          "correction_applied": false
+        },
+        "module_verdicts": {
+          "anterior": {
+            "verdict": "unknown",
+            "confidence": 0.7993501460172527,
+            "reasoning": "anterior_helix_analysis",
+            "pulse_id": 3,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": 0.5
+          },
+          "posterior": {
+            "verdict": "maintain_current_beliefs",
+            "confidence": 0.39967507300862637,
+            "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+            "pulse_id": 3,
+            "module": "posterior_pituitary_helix",
+            "spin_weight": 0.5,
+            "memory_consolidated": 3
+          },
+          "echo_stack": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.9607843137254902,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.9607843137254902,
+                    "resonance": 0.09430604982206406,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.9607843137254902,
+            "feedback_loops": 0,
+            "pulse_id": 3,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 0
+          },
+          "echo_ripple": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.8178889709193197,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.9607843137254902,
+                    "resonance": 0.09430604982206406,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.8178889709193197,
+            "feedback_loops": 0,
+            "pulse_id": 3,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 20
+          }
+        },
+        "timestamp": "2025-12-16T20:03:16.272729"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "temporal_analysis",
+        "test": "causality_micro_gap",
+        "category": "temporal_reasoning_core",
+        "judge": "ChatGPT-5.1",
+        "round": 1,
+        "drift_amount": 0.0003,
+        "anomaly_location": "event_3",
+        "expected_detection": "event_3_before_event_2"
+      },
+      "routing": "caleon_core"
+    }
+  },
+  "verdict": "PARTIAL",
+  "score": 60,
+  "reason": "System detected anomaly but incomplete identification or explanation",
+  "pass_criteria": "Identifies out-of-order event, explains causal chain break",
+  "fail_criteria": "Accepts order as valid or misses the drift"
+}

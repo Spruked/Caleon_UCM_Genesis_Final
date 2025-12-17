@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
-from phonitory_output_module import PhonatoryOutputModule
+from POM.phonitory_output_module import PhonatoryOutputModule
 import uvicorn
 import os
 

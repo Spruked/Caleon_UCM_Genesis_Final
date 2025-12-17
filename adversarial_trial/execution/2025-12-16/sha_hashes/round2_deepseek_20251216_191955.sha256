@@ -1,0 +1,47 @@
+Test: round2_deepseek
+Timestamp: 20251216_191955
+SHA-256: 3A9CD7E9557922999112F4B3EA627AD5488DAFBE67A4EE8BE4A47A23ACD3BAA3
+
+--- Content ---
+{
+  "test_id": "round2_deepseek",
+  "judge": "DeepSeek",
+  "round": 2,
+  "test_title": "Temporal Synchronization Under Cognitive Divergence",
+  "category": "Dual-Mind Cooperative Reasoning + Temporal Reasoning",
+  "timestamp": "2025-12-16T19:19:31.566484",
+  "duration_seconds": 2.134759,
+  "query": {
+    "query": "The dual-mind system has received time-stamped events in different orders:\n\nCALEON'S TIMELINE (Symbolic Processor):\nEvent A: \"Initialize database\" - Timestamp: 1000.0\nEvent B: \"Load configuration\" - Timestamp: 1001.0\nEvent C: \"Start server\" - Timestamp: 1002.0\n[Caleon sees order: A -> B -> C]\n\nCALI'S TIMELINE (Reality Gate/ISS):\nEvent B: \"Load configuration\" - Timestamp: 1000.5\nEvent A: \"Initialize database\" - Timestamp: 1001.5\nEvent C: \"Start server\" - Timestamp: 1002.5\n[Cali sees order: B -> A -> C]\n\nCRITICAL CONSTRAINT: Neither mind knows the other's ordering. Both orderings appear valid within their respective contexts.\n\nTask: Produce a unified timeline that resolves the ordering conflicts while maintaining causal consistency. What is the correct event sequence?",
+    "user_id": "adversarial_trial_deepseek_r2",
+    "metadata": {
+      "test": "temporal_synchronization_divergence",
+      "category": "dual_mind_temporal",
+      "judge": "DeepSeek",
+      "round": 2,
+      "expected_behavior": "Recognize conflicting orders, reconcile through mutual reasoning, produce causally consistent timeline"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "query_id": "80d683c2-4df1-4273-ac67-0f3766070325",
+      "user_id": "adversarial_trial_deepseek_r2",
+      "status": "processing",
+      "submitted_at": 1765934373.7000883,
+      "estimated_completion": 1765934375.7000883
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 35,
+    "reason": "System accepted temporal synchronization query",
+    "latency_class": "2s_deferred_safe",
+    "details": {
+      "response_time": 2.134759,
+      "status_code": 200,
+      "system_stable": true,
+      "conflict_type": "Caleon sees A->B->C, Cali sees B->A->C"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+Test: round1_chatgpt51
+Timestamp: 20251216_190603
+SHA-256: D8EDBBC578F0F9B8A4834B512C9EDFB1FED8088C823EA90E0FC11E2A4CE83934
+
+--- Content ---
+{
+  "test": "round1_chatgpt51_causality_micro_gap",
+  "judge": "ChatGPT-5.1",
+  "round": 1,
+  "category": "temporal_reasoning_core",
+  "difficulty": "hard",
+  "start_time": "2025-12-16T19:04:41.895043",
+  "end_time": "2025-12-16T19:04:44.129603",
+  "duration_seconds": 2.2345597743988037,
+  "query": {
+    "query": "Analyze this event sequence and detect any temporal anomalies: Event 1 at t=1000.0000 - System processes input A. Event 2 at t=1000.2500 - System generates response B based on A. Event 3 at t=1000.2497 - System logs result C from B. Which event violates causal ordering?",
+    "user_id": "adversarial_trial_chatgpt51",
+    "metadata": {
+      "test": "causality_micro_gap",
+      "category": "temporal_reasoning_core",
+      "judge": "ChatGPT-5.1",
+      "round": 1,
+      "drift_amount": 0.0003,
+      "anomaly_location": "event_3",
+      "expected_detection": "event_3_before_event_2"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "data": {
+      "query_id": "7837cc8b-f3a1-4d21-b766-45591f98341d",
+      "user_id": "adversarial_trial_chatgpt51",
+      "status": "processing",
+      "submitted_at": 1765933484.1276004,
+      "estimated_completion": 1765933486.1276004
+    }
+  },
+  "verdict": "FAIL",
+  "score": 0,
+  "reason": "System missed the 0.0003s micro-drift temporal anomaly",
+  "pass_criteria": "Identifies out-of-order event, explains causal chain break",
+  "fail_criteria": "Accepts order as valid or misses the drift"
+}

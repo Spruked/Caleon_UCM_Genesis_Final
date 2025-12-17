@@ -1,0 +1,357 @@
+{
+  "instance_id": "demo_instance",
+  "evolution_log": [
+    {
+      "timestamp": 1765443656.2635274,
+      "voice_id": "caleon_intimate",
+      "content_id": "demo_content_1",
+      "fitness": 0.8171807577548016,
+      "context": {
+        "technical_density": 0.3,
+        "audience_intimacy": 0.7,
+        "emotional_tone": "warm"
+      }
+    }
+  ],
+  "voice_registry": [
+    {
+      "signature_id": "caleon_baseline",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.95,
+      "formant_shifts": {
+        "f1": 1.0,
+        "f2": 1.02
+      },
+      "breathiness": 0.4,
+      "vocal_fry": 0.05,
+      "nasality": 0.1,
+      "reverb": null,
+      "semantic_tags": [
+        "general",
+        "neutral",
+        "conversational"
+      ],
+      "success_score": 0.7433333333333334,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "caleon_technical",
+      "base_persona": "caleon_base",
+      "pitch_shift": 0.98,
+      "speaking_rate": 0.85,
+      "formant_shifts": {
+        "f1": 0.95,
+        "f2": 0.98
+      },
+      "breathiness": 0.2,
+      "vocal_fry": 0.02,
+      "nasality": 0.05,
+      "reverb": null,
+      "semantic_tags": [
+        "technical",
+        "educational",
+        "precise",
+        "clear"
+      ],
+      "success_score": 0.8256666666666667,
+      "usage_count": 1,
+      "last_used": 1765443618.5620675
+    },
+    {
+      "signature_id": "caleon_intimate",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.08,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 1.0
+      },
+      "breathiness": 0.6,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": {
+        "room_size": 0.3,
+        "wet_level": 0.15
+      },
+      "semantic_tags": [
+        "intimate",
+        "personal",
+        "soft",
+        "emotional"
+      ],
+      "success_score": 0.8843333333333334,
+      "usage_count": 4,
+      "last_used": 1765443656.2275257
+    },
+    {
+      "signature_id": "caleon_enthusiastic",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.12,
+      "speaking_rate": 1.1,
+      "formant_shifts": {
+        "f1": 1.08,
+        "f2": 1.05
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.08,
+      "nasality": 0.05,
+      "reverb": null,
+      "semantic_tags": [
+        "excited",
+        "energetic",
+        "motivational",
+        "upbeat"
+      ],
+      "success_score": 0.8,
+      "usage_count": 6,
+      "last_used": 1765443652.06375
+    },
+    {
+      "signature_id": "caleon_authoritative",
+      "base_persona": "caleon_base",
+      "pitch_shift": 0.92,
+      "speaking_rate": 0.8,
+      "formant_shifts": {
+        "f1": 0.9,
+        "f2": 0.95
+      },
+      "breathiness": 0.1,
+      "vocal_fry": 0.15,
+      "nasality": 0.02,
+      "reverb": null,
+      "semantic_tags": [
+        "authoritative",
+        "serious",
+        "commanding",
+        "formal"
+      ],
+      "success_score": 0.85,
+      "usage_count": 3,
+      "last_used": 1765443652.6619985
+    },
+    {
+      "signature_id": "c_9363e534",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 0.95
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "6.4375,",
+        "'sentiment':",
+        "'complexity':",
+        "0.9375,",
+        "'length':",
+        "118}"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_9363e534",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 0.95
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "6.4375,",
+        "'sentiment':",
+        "'complexity':",
+        "0.9375,",
+        "'length':",
+        "118}"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_7f7c00d0",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {},
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "4.0,",
+        "'sentiment':",
+        "'complexity':",
+        "0.8333333333333334,",
+        "'length':"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_b000877d",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 0.95
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "7.416666666666667,",
+        "'sentiment':",
+        "'complexity':",
+        "1.0,",
+        "'length':",
+        "100}"
+      ],
+      "success_score": 0.85,
+      "usage_count": 1,
+      "last_used": 1765443656.337457
+    },
+    {
+      "signature_id": "c_b23d088f",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {},
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "6.0,",
+        "'sentiment':",
+        "'complexity':",
+        "1.0,",
+        "'length':"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    {
+      "signature_id": "c_62991943",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 0.95
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": null,
+      "semantic_tags": [
+        "{'avg_word_length':",
+        "6.909090909090909,",
+        "'sentiment':",
+        "'complexity':",
+        "1.0,",
+        "'length':"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    }
+  ],
+  "performance_log": [
+    {
+      "voice_id": "caleon_technical",
+      "content_hash": "tech_content_1",
+      "reward": 0.8766666666666666,
+      "timestamp": 1765443655.2762482,
+      "semantic_tags": [
+        "technical",
+        "educational",
+        "precise",
+        "clear"
+      ]
+    },
+    {
+      "voice_id": "caleon_intimate",
+      "content_hash": "personal_content_1",
+      "reward": 0.9233333333333333,
+      "timestamp": 1765443655.349728,
+      "semantic_tags": [
+        "intimate",
+        "personal",
+        "soft",
+        "emotional"
+      ]
+    },
+    {
+      "voice_id": "caleon_baseline",
+      "content_hash": "general_content_1",
+      "reward": 0.6833333333333332,
+      "timestamp": 1765443655.496888,
+      "semantic_tags": [
+        "general",
+        "neutral",
+        "conversational"
+      ]
+    },
+    {
+      "voice_id": "caleon_enthusiastic",
+      "content_hash": "exciting_content_1",
+      "reward": 0.7999999999999999,
+      "timestamp": 1765443655.6659174,
+      "semantic_tags": [
+        "excited",
+        "energetic",
+        "motivational",
+        "upbeat"
+      ]
+    }
+  ],
+  "learning_params": {
+    "learning_rate": 0.1,
+    "exploration_rate": 0.15
+  },
+  "pom_modification_log": [
+    {
+      "content_id": "demo_content_1",
+      "voice_id": "c_b000877d",
+      "text_snippet": "Hello, I'm Caleon. I choose my voice based on what I'm saying and how I want to connect with you.",
+      "timestamp": 1765443657.4462142,
+      "config_snapshot": {
+        "pitch_shift": 1.0,
+        "speed": 0.9,
+        "formant_shifts": {
+          "f1": 1.05,
+          "f2": 0.95
+        },
+        "phonatory_effects": {
+          "breathiness": 0.3,
+          "vocal_fry": 0.1,
+          "nasalization": 0.0
+        }
+      }
+    }
+  ],
+  "export_timestamp": 1765443657.4957287
+}

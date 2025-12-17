@@ -7,10 +7,10 @@ import time
 from TTS.api import TTS
 from pydub import AudioSegment
 from larynx_sim import LarynxSimulator
-from formant_filter import FormantFilter
-from tongue_artic import TongueArticulator
-from lip_control import LipController
-from uvula_control import UvulaController
+from POM.formant_filter import FormantFilter
+from POM.tongue_artic import TongueArticulator
+from POM.lip_control import LipController
+from POM.uvula_control import UvulaController
 
 # === Biological Naming ===
 

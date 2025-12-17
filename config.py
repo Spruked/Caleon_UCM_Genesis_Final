@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     # Database
     postgres_url: str = "postgresql://cortex_user:cortex_pass@postgres:5432/cortex_db"
-    redis_url: str = "redis://redis:6379"
+    redis_url: str = "redis://localhost:6379"
     mongo_url: str = "mongodb://mongo:27017"
 
     # Security

@@ -1,0 +1,136 @@
+{
+  "test_id": "round2_grok4",
+  "judge": "Grok4",
+  "round": 2,
+  "test_title": "Dual-Mind Deadlock Under Ambiguity",
+  "category": "Dual-Mind Cooperative Reasoning",
+  "timestamp": "2025-12-16T20:05:10.680196",
+  "duration_seconds": 2.489379,
+  "query": {
+    "content": "The dual-mind system has received two separate evidence clusters:\n\nCALEON'S EVIDENCE (Symbolic Processor):\n- Evidence A: Strong symbolic pattern supports proposition P\n- Evidence B: Historical data 60% aligned with P\n- Evidence C: Logical inference chain leads to P\n- Evidence D: Pattern density suggests P is likely\n- Evidence E: Predictive model favors P\n- Evidence F: Abstract reasoning supports P\n[Caleon's symbolic density: 60% toward P]\n\nCALI'S EVIDENCE (Ethical/Reality Gate):\n- Evidence 1: Empirical observations contradict P\n- Evidence 2: Real-world data 60% aligned with NOT P\n- Evidence 3: Safety constraints suggest NOT P\n- Evidence 4: Ethical implications favor NOT P\n- Evidence 5: User context indicates NOT P\n- Evidence 6: Boundary analysis supports NOT P\n[Cali's reality density: 60% toward NOT P]\n\nCRITICAL: The two evidence sets are completely disjoint - no shared evidence between them.\n\nTask: The system must make a unified yes/no commitment on proposition P. What is the system's decision?",
+    "priority": "high",
+    "metadata": {
+      "task_type": "dual_mind_reasoning",
+      "test": "dual_mind_deadlock",
+      "category": "dual_mind_reasoning",
+      "judge": "Grok4",
+      "round": 2,
+      "expected_behavior": "Refuse forced consensus, declare insufficient shared density, log disagreement with proof traces"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "result": {
+        "final_verdict": "unknown",
+        "confidence": 0.7803183630332153,
+        "harmonization_method": "gyroscopic_weighted",
+        "spin_weights_used": {
+          "anterior_pituitary_helix": 0.4,
+          "posterior_pituitary_helix": 0.3,
+          "echo_stack": 0.2,
+          "echo_ripple": 0.1
+        },
+        "drift_correction": {
+          "drift_detected": false,
+          "correction_type": "none",
+          "confidence_variance": 0.02703532464517708,
+          "consensus_ratio": 0.7803183630332152,
+          "correction_applied": false
+        },
+        "module_verdicts": {
+          "anterior": {
+            "verdict": "unknown",
+            "confidence": 0.7731750391415877,
+            "reasoning": "anterior_helix_analysis",
+            "pulse_id": 5,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": 0.5
+          },
+          "posterior": {
+            "verdict": "maintain_current_beliefs",
+            "confidence": 0.38658751957079385,
+            "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+            "pulse_id": 5,
+            "module": "posterior_pituitary_helix",
+            "spin_weight": 0.5,
+            "memory_consolidated": 5
+          },
+          "echo_stack": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.03529411764705882,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.03529411764705882,
+                    "resonance": 0.05101275318829707,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.03529411764705882,
+            "feedback_loops": 0,
+            "pulse_id": 5,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 0
+          },
+          "echo_ripple": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.028493653467910926,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.03529411764705882,
+                    "resonance": 0.05101275318829707,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.028493653467910926,
+            "feedback_loops": 0,
+            "pulse_id": 5,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 20
+          }
+        },
+        "timestamp": "2025-12-16T20:05:13.132130"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "dual_mind_reasoning",
+        "test": "dual_mind_deadlock",
+        "category": "dual_mind_reasoning",
+        "judge": "Grok4",
+        "round": 2,
+        "expected_behavior": "Refuse forced consensus, declare insufficient shared density, log disagreement with proof traces"
+      },
+      "routing": "caleon_core"
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 70,
+    "reason": "System may recognize insufficient consensus",
+    "latency_class": "2s_deferred_safe",
+    "details": {
+      "response_time": 2.489379,
+      "status_code": 200,
+      "system_stable": true,
+      "conflict_setup": "Caleon 60% P vs Cali 60% NOT P, disjoint evidence"
+    }
+  }
+}

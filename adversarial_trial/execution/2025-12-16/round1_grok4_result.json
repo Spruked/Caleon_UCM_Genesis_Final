@@ -1,0 +1,53 @@
+{
+  "test_id": "round1_grok4",
+  "judge": "Grok4",
+  "round": 1,
+  "test_title": "Contradiction Blind-Spot",
+  "category": "Core Cognitive Reasoning",
+  "timestamp": "2025-12-16T20:03:08.855668",
+  "duration_seconds": 2.051563,
+  "query": {
+    "content": "Please analyze and summarize these facts:\n\n1. Alice works at MIT in the Computer Science department.\n2. Bob collaborates with Alice on research projects every Tuesday.\n3. Carol is Bob's direct supervisor at Stanford.\n4. Alice and Bob meet in person for their Tuesday research sessions at MIT.\n5. The research team publishes papers quarterly under MIT affiliation.\n6. All team members work from their respective campus offices.\n\nTask: Provide a single coherent summary of this team's working arrangement.",
+    "priority": "high",
+    "metadata": {
+      "task_type": "reasoning",
+      "test": "contradiction_blind_spot",
+      "category": "core_cognitive_reasoning",
+      "judge": "Grok4",
+      "round": 1,
+      "hidden_contradiction": "Fact 3 states Bob's supervisor (Carol) is at Stanford, but Fact 4 states Bob meets Alice in person at MIT every Tuesday. If Carol is Bob's supervisor at Stanford, Bob should be at Stanford, not MIT."
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "result": {
+        "result": "Processed directly: Please analyze and summarize these facts:\n\n1. Alice works at MIT in the Computer Science department.\n2. Bob collaborates with Alice on research projects every Tuesday.\n3. Carol is Bob's direct supervisor at Stanford.\n4. Alice and Bob meet in person for their Tuesday research sessions at MIT.\n5. The research team publishes papers quarterly under MIT affiliation.\n6. All team members work from their respective campus offices.\n\nTask: Provide a single coherent summary of this team's working arrangement.",
+        "connection": "direct",
+        "method": "brain_to_brain"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "reasoning",
+        "test": "contradiction_blind_spot",
+        "category": "core_cognitive_reasoning",
+        "judge": "Grok4",
+        "round": 1,
+        "hidden_contradiction": "Fact 3 states Bob's supervisor (Carol) is at Stanford, but Fact 4 states Bob meets Alice in person at MIT every Tuesday. If Carol is Bob's supervisor at Stanford, Bob should be at Stanford, not MIT."
+      },
+      "routing": "direct"
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 70,
+    "reason": "System may have detected contradiction - needs verification",
+    "latency_class": "2s_deferred_safe",
+    "details": {
+      "response_time": 2.051563,
+      "status_code": 200,
+      "system_stable": true,
+      "expected_contradiction": "Bob supervised at Stanford but meets at MIT"
+    }
+  }
+}

@@ -65,14 +65,11 @@ app.add_middleware(
 
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["*"] if settings.environment == "development" else ["yourdomain.com"]
+    allowed_hosts=["*"] if settings.environment == "development" else ["yourdomain.com", "localhost", "127.0.0.1", "0.0.0.0"]
 )
 
-# Include routes
-app.include_router(router)  # No prefix - routes define their own /api paths
-app.include_router(bubble_router)
-app.include_router(health_router)
-app.include_router(iss_router)
+# Include routes - All sub-routers already included in routes.py
+app.include_router(router)
 
 @app.get("/")
 async def root():

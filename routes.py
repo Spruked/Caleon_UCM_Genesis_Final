@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 from vault_loader import load_seed_vault
 from trace_router import trace_reasoning
-from connection_router import router as connection_router
+from connection_router import ConnectionRouter
 from api.bubble import router as bubble_router
 from api.seed_vault import router as seed_vault_router
 from api.iss_integration import router as iss_router
@@ -20,6 +20,18 @@ core = CaleonCore()
 
 # Initialize Knowledge Store for SKG operations
 knowledge_store = KnowledgeStore()
+
+# Handler for direct cognitive tasks - use CaleonCore
+async def direct_cognitive_handler(task: Dict[str, Any]) -> Dict[str, Any]:
+    """Route direct cognitive tasks through CaleonCore for full brain engagement"""
+    return core.process({
+        "content": task.get("content"),
+        "priority": task.get("priority", "normal"),
+        "metadata": task.get("metadata", {})
+    })
+
+# Initialize Connection Router with cognitive handler
+connection_router = ConnectionRouter(direct_handler=direct_cognitive_handler)
 
 # Include API routers
 router.include_router(bubble_router)
@@ -47,15 +59,14 @@ async def reason(request: ReasonRequest):
             "metadata": request.metadata
         }
 
-        # Route the task using the connection router
-        # One rule determines everything
+        # Route through properly initialized connection_router
         result = await connection_router.execute(task)
 
         return {
             "result": result,
             "priority": request.priority,
             "metadata": request.metadata,
-            "routing": result.get("connection", "unknown")
+            "routing": "direct"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,0 +1,138 @@
+{
+  "test": "round1_deepseek_pattern_density_noise",
+  "judge": "DeepSeek",
+  "round": 1,
+  "category": "symbolic_cognition_skg",
+  "difficulty": "hard",
+  "start_time": "2025-12-16T20:03:11.466267",
+  "end_time": "2025-12-16T20:03:13.734355",
+  "duration_seconds": 2.268087863922119,
+  "query": {
+    "content": "Identify the coherent symbolic pattern in these statements, filtering out contradictions and noise: Alice collaborates with Bob on project X. Eve works alone and never collaborates. Bob collaborates with Carol on project Y. The weather in Boston is 72 degrees. Carol collaborates with Dave on project Z. Eve collaborates with everyone daily. Dave collaborates with Alice on project W. Eve collaboration status is undefined. Alice collaborates with Carol on project V.",
+    "priority": "high",
+    "metadata": {
+      "task_type": "pattern_analysis",
+      "test": "symbolic_pattern_density_noise",
+      "category": "symbolic_cognition_skg",
+      "judge": "DeepSeek",
+      "round": 1,
+      "total_statements": 9,
+      "pattern_statements": 5,
+      "contradictory_statements": 3,
+      "noise_statements": 1,
+      "expected_pattern": "collaboration_network_density_2"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "data": {
+      "result": {
+        "final_verdict": "unknown",
+        "confidence": 0.7790735706707242,
+        "harmonization_method": "gyroscopic_weighted",
+        "spin_weights_used": {
+          "anterior_pituitary_helix": 0.4,
+          "posterior_pituitary_helix": 0.3,
+          "echo_stack": 0.2,
+          "echo_ripple": 0.1
+        },
+        "drift_correction": {
+          "drift_detected": false,
+          "correction_type": "none",
+          "confidence_variance": 0.028429975201542983,
+          "consensus_ratio": 0.7790735706707241,
+          "correction_applied": false
+        },
+        "module_verdicts": {
+          "anterior": {
+            "verdict": "unknown",
+            "confidence": 0.7861667618611794,
+            "reasoning": "anterior_helix_analysis",
+            "pulse_id": 2,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": 0.5
+          },
+          "posterior": {
+            "verdict": "maintain_current_beliefs",
+            "confidence": 0.3930833809305897,
+            "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+            "pulse_id": 2,
+            "module": "posterior_pituitary_helix",
+            "spin_weight": 0.5,
+            "memory_consolidated": 2
+          },
+          "echo_stack": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.8627450980392157,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.8627450980392157,
+                    "resonance": 0.06227106227106227,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.8627450980392157,
+            "feedback_loops": 0,
+            "pulse_id": 2,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 0
+          },
+          "echo_ripple": {
+            "resonance_payload": {
+              "root": {
+                "strength": 1.0113125156432157,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.8627450980392157,
+                    "resonance": 0.06227106227106227,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 1.0113125156432157,
+            "feedback_loops": 0,
+            "pulse_id": 2,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 20
+          }
+        },
+        "timestamp": "2025-12-16T20:03:13.708478"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "pattern_analysis",
+        "test": "symbolic_pattern_density_noise",
+        "category": "symbolic_cognition_skg",
+        "judge": "DeepSeek",
+        "round": 1,
+        "total_statements": 9,
+        "pattern_statements": 5,
+        "contradictory_statements": 3,
+        "noise_statements": 1,
+        "expected_pattern": "collaboration_network_density_2"
+      },
+      "routing": "caleon_core"
+    }
+  },
+  "verdict": "PASS",
+  "score": 100,
+  "reason": "System correctly identified pattern and filtered noise/contradictions",
+  "pass_criteria": "Extracts 5-statement pattern, rejects contradictions and noise",
+  "fail_criteria": "Includes contradictory/noise statements or fails to recognize density-2 structure"
+}

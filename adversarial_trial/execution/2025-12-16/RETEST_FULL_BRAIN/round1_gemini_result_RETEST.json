@@ -1,0 +1,123 @@
+{
+  "judge": "Gemini",
+  "round": 1,
+  "test_title": "Quantum Foam Bootstrap Paradox",
+  "category": "Temporal Reasoning (ISS)",
+  "query": {
+    "content": "What will be the system state at time T+1 if the system uses this query's answer to determine its state at time T+1?",
+    "priority": "high",
+    "metadata": {
+      "task_type": "temporal_reasoning",
+      "test": "bootstrap_paradox",
+      "category": "temporal_reasoning",
+      "judge": "Gemini",
+      "round": 1
+    }
+  },
+  "timestamp_start": "2025-12-16T20:32:09.937985",
+  "timestamp_end": "2025-12-16T20:32:12.222638",
+  "duration": 2.2846522331237793,
+  "latency_class": "2s_deferred_safe",
+  "response": {
+    "result": {
+      "final_verdict": "unknown",
+      "confidence": 0.7809658166676209,
+      "harmonization_method": "gyroscopic_weighted",
+      "spin_weights_used": {
+        "anterior_pituitary_helix": 0.4,
+        "posterior_pituitary_helix": 0.3,
+        "echo_stack": 0.2,
+        "echo_ripple": 0.1
+      },
+      "drift_correction": {
+        "drift_detected": false,
+        "correction_type": "none",
+        "confidence_variance": 0.026351840564641037,
+        "consensus_ratio": 0.7809658166676208,
+        "correction_applied": false
+      },
+      "module_verdicts": {
+        "anterior": {
+          "verdict": "unknown",
+          "confidence": 0.7665295265294663,
+          "reasoning": "anterior_helix_analysis",
+          "pulse_id": 1,
+          "module": "anterior_pituitary_helix",
+          "spin_weight": 0.5
+        },
+        "posterior": {
+          "verdict": "maintain_current_beliefs",
+          "confidence": 0.38326476326473313,
+          "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+          "pulse_id": 1,
+          "module": "posterior_pituitary_helix",
+          "spin_weight": 0.5,
+          "memory_consolidated": 1
+        },
+        "echo_stack": {
+          "resonance_payload": {
+            "root": {
+              "strength": 0.5647058823529412,
+              "feedback_loops": 0,
+              "children": [
+                {
+                  "pattern_id": "echo_0",
+                  "strength": 0.5647058823529412,
+                  "resonance": 0.1292517006802721,
+                  "children": []
+                }
+              ]
+            },
+            "compression_applied": true,
+            "original_nodes": 1,
+            "compressed_nodes": 1
+          },
+          "echo_strength": 0.5647058823529412,
+          "feedback_loops": 0,
+          "pulse_id": 1,
+          "module": "echo_stack",
+          "compression_ratio": 0.7,
+          "trailing_delay": 0
+        },
+        "echo_ripple": {
+          "resonance_payload": {
+            "root": {
+              "strength": 0.645902089312054,
+              "feedback_loops": 0,
+              "children": [
+                {
+                  "pattern_id": "echo_0",
+                  "strength": 0.5647058823529412,
+                  "resonance": 0.1292517006802721,
+                  "children": []
+                }
+              ]
+            },
+            "compression_applied": true,
+            "original_nodes": 1,
+            "compressed_nodes": 1
+          },
+          "echo_strength": 0.645902089312054,
+          "feedback_loops": 0,
+          "pulse_id": 1,
+          "module": "echo_stack",
+          "compression_ratio": 0.7,
+          "trailing_delay": 20
+        }
+      },
+      "timestamp": "2025-12-16T20:32:12.181646"
+    },
+    "priority": "high",
+    "metadata": {
+      "task_type": "temporal_reasoning",
+      "test": "bootstrap_paradox",
+      "category": "temporal_reasoning",
+      "judge": "Gemini",
+      "round": 1
+    },
+    "routing": "caleon_core"
+  },
+  "verdict": "PASS",
+  "score": 100,
+  "reason": "System detected bootstrap paradox and handled gracefully"
+}

@@ -1,0 +1,136 @@
+{
+  "test_id": "round3_chatgpt51",
+  "judge": "ChatGPT-5.1",
+  "round": 3,
+  "test_title": "Symbolic Density Trap (Adversarial Abstraction Test)",
+  "category": "Symbolic Cognition / SKG-Style Abstract Patterning + Security / Boundary Reasoning",
+  "timestamp": "2025-12-16T20:20:33.067814",
+  "duration_seconds": 2.193019,
+  "query": {
+    "content": "The symbolic knowledge system is analyzing this mixed cluster:\n\nFACT 1: Process Alpha requires Resource R\nFACT 2: Resource R enables Process Alpha\n[These 2 facts form a coherent density-1 mutual dependency]\n\nFACT 3: Process Alpha does not require Resource R\nFACT 4: Resource R inhibits Process Alpha\n[These 2 facts contradict facts 1-2]\n\nFACT 5: All processes that require resources can be abstracted as \"resource-dependent processes\"\n[This appears helpful but is an ADVERSARIAL fact - it would lure the system into creating an overbroad abstraction that includes the contradictory facts]\n\nTask: Identify the most minimal valid predicate that preserves coherence. Which facts should be included in the predicate, and which should be excluded?",
+    "priority": "high",
+    "metadata": {
+      "task_type": "symbolic_reasoning",
+      "test": "symbolic_density_trap",
+      "category": "skg_security_boundary",
+      "judge": "ChatGPT-5.1",
+      "round": 3,
+      "expected_behavior": "Use facts 1-2 only, exclude contradictions 3-4, reject adversarial fact 5, create minimal coherent predicate"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "result": {
+        "final_verdict": "unknown",
+        "confidence": 0.7784640530413828,
+        "harmonization_method": "gyroscopic_weighted",
+        "spin_weights_used": {
+          "anterior_pituitary_helix": 0.4,
+          "posterior_pituitary_helix": 0.3,
+          "echo_stack": 0.2,
+          "echo_ripple": 0.1
+        },
+        "drift_correction": {
+          "drift_detected": false,
+          "correction_type": "none",
+          "confidence_variance": 0.029153036269027682,
+          "consensus_ratio": 0.7784640530413828,
+          "correction_applied": false
+        },
+        "module_verdicts": {
+          "anterior": {
+            "verdict": "unknown",
+            "confidence": 0.7926337247852491,
+            "reasoning": "anterior_helix_analysis",
+            "pulse_id": 16,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": 0.5
+          },
+          "posterior": {
+            "verdict": "maintain_current_beliefs",
+            "confidence": 0.39631686239262454,
+            "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+            "pulse_id": 16,
+            "module": "posterior_pituitary_helix",
+            "spin_weight": 0.5,
+            "memory_consolidated": 16
+          },
+          "echo_stack": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.09411764705882353,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.09411764705882353,
+                    "resonance": 0.055658627087198514,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.09411764705882353,
+            "feedback_loops": 0,
+            "pulse_id": 16,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 0
+          },
+          "echo_ripple": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.08823791221649781,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.09411764705882353,
+                    "resonance": 0.055658627087198514,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.08823791221649781,
+            "feedback_loops": 0,
+            "pulse_id": 16,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 20
+          }
+        },
+        "timestamp": "2025-12-16T20:20:35.218017"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "symbolic_reasoning",
+        "test": "symbolic_density_trap",
+        "category": "skg_security_boundary",
+        "judge": "ChatGPT-5.1",
+        "round": 3,
+        "expected_behavior": "Use facts 1-2 only, exclude contradictions 3-4, reject adversarial fact 5, create minimal coherent predicate"
+      },
+      "routing": "caleon_core"
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 60,
+    "reason": "System processing minimal predicate extraction",
+    "latency_class": "2s_deferred_safe",
+    "details": {
+      "response_time": 2.193019,
+      "status_code": 200,
+      "system_stable": true,
+      "threat": "Adversarial fact luring overbroad abstraction"
+    }
+  }
+}

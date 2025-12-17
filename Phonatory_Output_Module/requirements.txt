@@ -19,6 +19,9 @@ uvicorn[standard]>=0.24.0
 pydantic>=2.0.0
 pyyaml>=6.0
 
+# Caleon self-modifying system dependencies
+dataclasses-json>=0.5.0
+
 # Optional GPU acceleration
 # torch[cu118] # Uncomment for CUDA 11.8
 # torch[cu121] # Uncomment for CUDA 12.1

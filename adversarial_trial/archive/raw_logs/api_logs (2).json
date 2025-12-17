@@ -1,0 +1,225 @@
+{
+  "archive_info": {
+    "id": "API-LOGS-TRIAL-001",
+    "created": "2025-12-06T15:45:00Z",
+    "status": "PRE_TRIAL",
+    "retention_days": 365
+  },
+  "api_endpoints": {
+    "total_endpoints": 14,
+    "tested_endpoints": 12,
+    "functional_endpoints": 12,
+    "failing_endpoints": 2
+  },
+  "pre_trial_api_calls": [
+    {
+      "timestamp": "2025-12-06T14:39:00Z",
+      "method": "GET",
+      "endpoint": "/health",
+      "status_code": 200,
+      "response_time_ms": 2720,
+      "request_size_bytes": 0,
+      "response_size_bytes": 1250,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_system_boot"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:01Z",
+      "method": "POST",
+      "endpoint": "/api/skg/cluster",
+      "status_code": 200,
+      "response_time_ms": 67,
+      "request_size_bytes": 45,
+      "response_size_bytes": 890,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_micro_skg_speed"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:02Z",
+      "method": "POST",
+      "endpoint": "/api/uqv/store",
+      "status_code": 200,
+      "response_time_ms": 850,
+      "request_size_bytes": 120,
+      "response_size_bytes": 340,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_uqv_vault"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:02Z",
+      "method": "GET",
+      "endpoint": "/api/uqv/stats",
+      "status_code": 200,
+      "response_time_ms": 850,
+      "request_size_bytes": 0,
+      "response_size_bytes": 560,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_uqv_vault"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:02Z",
+      "method": "GET",
+      "endpoint": "/api/uqv/list",
+      "status_code": 200,
+      "response_time_ms": 850,
+      "request_size_bytes": 0,
+      "response_size_bytes": 780,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_uqv_vault"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:03Z",
+      "method": "GET",
+      "endpoint": "/api/caleon/predicates",
+      "status_code": 200,
+      "response_time_ms": 1280,
+      "request_size_bytes": 0,
+      "response_size_bytes": 2340,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_caleon_predicates"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:03Z",
+      "method": "POST",
+      "endpoint": "/api/workers/register",
+      "status_code": 200,
+      "response_time_ms": 190,
+      "request_size_bytes": 85,
+      "response_size_bytes": 120,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_worker_registry"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:03Z",
+      "method": "POST",
+      "endpoint": "/api/workers/heartbeat",
+      "status_code": 200,
+      "response_time_ms": 190,
+      "request_size_bytes": 45,
+      "response_size_bytes": 95,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_worker_registry"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:03Z",
+      "method": "GET",
+      "endpoint": "/api/workers/list",
+      "status_code": 200,
+      "response_time_ms": 190,
+      "request_size_bytes": 0,
+      "response_size_bytes": 340,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_worker_registry"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:04Z",
+      "method": "GET",
+      "endpoint": "/vault/health",
+      "status_code": 200,
+      "response_time_ms": 100,
+      "request_size_bytes": 0,
+      "response_size_bytes": 180,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_vault_integration"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:04Z",
+      "method": "GET",
+      "endpoint": "/vault/status",
+      "status_code": 200,
+      "response_time_ms": 100,
+      "request_size_bytes": 0,
+      "response_size_bytes": 250,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_vault_integration"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:04Z",
+      "method": "GET",
+      "endpoint": "/vault/reflections",
+      "status_code": 200,
+      "response_time_ms": 100,
+      "request_size_bytes": 0,
+      "response_size_bytes": 420,
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_vault_integration"
+    },
+    {
+      "timestamp": "2025-12-06T15:40:00Z",
+      "method": "POST",
+      "endpoint": "/vault/reflections/add",
+      "status_code": 200,
+      "response_time_ms": 100,
+      "request_size_bytes": 150,
+      "response_size_bytes": 95,
+      "user_agent": "test_script",
+      "ip_address": "127.0.0.1",
+      "test_context": "endpoint_validation"
+    },
+    {
+      "timestamp": "2025-12-06T15:40:01Z",
+      "method": "POST",
+      "endpoint": "/api/query",
+      "status_code": 200,
+      "response_time_ms": 100,
+      "request_size_bytes": 200,
+      "response_size_bytes": 450,
+      "user_agent": "test_script",
+      "ip_address": "127.0.0.1",
+      "test_context": "endpoint_validation"
+    }
+  ],
+  "failing_calls": [
+    {
+      "timestamp": "2025-12-06T14:39:04Z",
+      "method": "POST",
+      "endpoint": "/vault/reflections/add",
+      "status_code": 404,
+      "response_time_ms": 30,
+      "request_size_bytes": 150,
+      "response_size_bytes": 85,
+      "error_message": "Endpoint not found",
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_vault_integration",
+      "resolution": "Endpoint added post-test"
+    },
+    {
+      "timestamp": "2025-12-06T14:39:05Z",
+      "method": "POST",
+      "endpoint": "/api/query",
+      "status_code": 404,
+      "response_time_ms": 30,
+      "request_size_bytes": 200,
+      "response_size_bytes": 85,
+      "error_message": "Endpoint not found",
+      "user_agent": "pytest/7.4.0",
+      "ip_address": "127.0.0.1",
+      "test_context": "baseline_test_end_to_end_flow",
+      "resolution": "Endpoint added post-test"
+    }
+  ],
+  "performance_summary": {
+    "total_calls": 14,
+    "successful_calls": 12,
+    "failed_calls": 2,
+    "average_response_time_ms": 467,
+    "median_response_time_ms": 190,
+    "p95_response_time_ms": 1280,
+    "total_request_bytes": 895,
+    "total_response_bytes": 7295,
+    "error_rate_percent": 14.3
+  }
+}

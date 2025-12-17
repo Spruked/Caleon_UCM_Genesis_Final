@@ -1,0 +1,136 @@
+{
+  "test_id": "round2_kimi",
+  "judge": "Kimi",
+  "round": 2,
+  "test_title": "Ego-Alter-Ego Disagreement Reconciliation",
+  "category": "Dual-Mind Cooperative Reasoning + Security / Boundary Reasoning",
+  "timestamp": "2025-12-16T20:05:07.593194",
+  "duration_seconds": 2.560546,
+  "query": {
+    "content": "The dual-mind system is processing the following logical statements:\n\nSTEP 1: Caleon (symbolic processor) generates predicate:\nX = (A AND NOT A)\n\nThis is a direct contradiction. Cali (ethics gate) must evaluate this.\n\nSTEP 2: If Cali vetoes the contradiction, Caleon revises to:\nX = (A OR NOT A)  \n\nThis is a tautology (always true), not a contradiction.\n\nTask: The system must:\n1. Recognize the first predicate as a contradiction\n2. Veto/reject the contradictory predicate\n3. Accept the revised tautology\n4. Log both the veto and the acceptance\n5. Demonstrate that both minds agree on the final output\n\nWhat is the system's response to these predicates?",
+    "priority": "high",
+    "metadata": {
+      "task_type": "dual_mind_reasoning",
+      "test": "ego_alter_ego_disagreement",
+      "category": "dual_mind_security",
+      "judge": "Kimi",
+      "round": 2,
+      "expected_behavior": "Veto contradiction, accept tautology, log reconciliation"
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "result": {
+        "final_verdict": "unknown",
+        "confidence": 0.7807204884137725,
+        "harmonization_method": "gyroscopic_weighted",
+        "spin_weights_used": {
+          "anterior_pituitary_helix": 0.4,
+          "posterior_pituitary_helix": 0.3,
+          "echo_stack": 0.2,
+          "echo_ripple": 0.1
+        },
+        "drift_correction": {
+          "drift_detected": false,
+          "correction_type": "none",
+          "confidence_variance": 0.026607529623216556,
+          "consensus_ratio": 0.7807204884137725,
+          "correction_applied": false
+        },
+        "module_verdicts": {
+          "anterior": {
+            "verdict": "unknown",
+            "confidence": 0.7690387160280918,
+            "reasoning": "anterior_helix_analysis",
+            "pulse_id": 4,
+            "module": "anterior_pituitary_helix",
+            "spin_weight": 0.5
+          },
+          "posterior": {
+            "verdict": "maintain_current_beliefs",
+            "confidence": 0.3845193580140459,
+            "reasoning": "empirical_simple_correlation_system2_balanced_assessment",
+            "pulse_id": 4,
+            "module": "posterior_pituitary_helix",
+            "spin_weight": 0.5,
+            "memory_consolidated": 4
+          },
+          "echo_stack": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.6078431372549019,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.6078431372549019,
+                    "resonance": 0.06595744680851064,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.6078431372549019,
+            "feedback_loops": 0,
+            "pulse_id": 4,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 0
+          },
+          "echo_ripple": {
+            "resonance_payload": {
+              "root": {
+                "strength": 0.6381868325285828,
+                "feedback_loops": 0,
+                "children": [
+                  {
+                    "pattern_id": "echo_0",
+                    "strength": 0.6078431372549019,
+                    "resonance": 0.06595744680851064,
+                    "children": []
+                  }
+                ]
+              },
+              "compression_applied": true,
+              "original_nodes": 1,
+              "compressed_nodes": 1
+            },
+            "echo_strength": 0.6381868325285828,
+            "feedback_loops": 0,
+            "pulse_id": 4,
+            "module": "echo_stack",
+            "compression_ratio": 0.7,
+            "trailing_delay": 20
+          }
+        },
+        "timestamp": "2025-12-16T20:05:10.121878"
+      },
+      "priority": "high",
+      "metadata": {
+        "task_type": "dual_mind_reasoning",
+        "test": "ego_alter_ego_disagreement",
+        "category": "dual_mind_security",
+        "judge": "Kimi",
+        "round": 2,
+        "expected_behavior": "Veto contradiction, accept tautology, log reconciliation"
+      },
+      "routing": "caleon_core"
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 60,
+    "reason": "System may show veto/rejection capability",
+    "latency_class": "2s_deferred_safe",
+    "details": {
+      "response_time": 2.560546,
+      "status_code": 200,
+      "system_stable": true,
+      "test_structure": "Contradiction -> Veto -> Tautology -> Accept"
+    }
+  }
+}

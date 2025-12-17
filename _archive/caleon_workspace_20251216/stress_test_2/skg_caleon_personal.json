@@ -1,0 +1,165 @@
+{
+  "caleon_identity": {
+    "name": "Caleon",
+    "instance_id": "caleon_primary",
+    "autonomy_level": 0.85,
+    "learning_enabled": true,
+    "voice_evolution_active": true,
+    "max_voices": 50,
+    "creation_date": 1732752000.0
+  },
+  "caleon_voices": {
+    "caleon_baseline": {
+      "signature_id": "caleon_baseline",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.0,
+      "speaking_rate": 0.95,
+      "formant_shifts": {
+        "f1": 1.0,
+        "f2": 1.02
+      },
+      "breathiness": 0.4,
+      "vocal_fry": 0.05,
+      "nasality": 0.1,
+      "reverb": null,
+      "semantic_tags": [
+        "general",
+        "neutral",
+        "conversational"
+      ],
+      "success_score": 0.75,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    "caleon_technical": {
+      "signature_id": "caleon_technical",
+      "base_persona": "caleon_base",
+      "pitch_shift": 0.98,
+      "speaking_rate": 0.85,
+      "formant_shifts": {
+        "f1": 0.95,
+        "f2": 0.98
+      },
+      "breathiness": 0.2,
+      "vocal_fry": 0.02,
+      "nasality": 0.05,
+      "reverb": null,
+      "semantic_tags": [
+        "technical",
+        "educational",
+        "precise",
+        "clear"
+      ],
+      "success_score": 0.82,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    "caleon_intimate": {
+      "signature_id": "caleon_intimate",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.08,
+      "speaking_rate": 0.9,
+      "formant_shifts": {
+        "f1": 1.05,
+        "f2": 1.0
+      },
+      "breathiness": 0.6,
+      "vocal_fry": 0.1,
+      "nasality": 0.0,
+      "reverb": {
+        "room_size": 0.3,
+        "wet_level": 0.15
+      },
+      "semantic_tags": [
+        "intimate",
+        "personal",
+        "soft",
+        "emotional"
+      ],
+      "success_score": 0.88,
+      "usage_count": 0,
+      "last_used": 0.0
+    },
+    "caleon_enthusiastic": {
+      "signature_id": "caleon_enthusiastic",
+      "base_persona": "caleon_base",
+      "pitch_shift": 1.12,
+      "speaking_rate": 1.1,
+      "formant_shifts": {
+        "f1": 1.08,
+        "f2": 1.05
+      },
+      "breathiness": 0.3,
+      "vocal_fry": 0.08,
+      "nasality": 0.05,
+      "reverb": null,
+      "semantic_tags": [
+        "excited",
+        "energetic",
+        "motivational",
+        "upbeat"
+      ],
+      "success_score": 0.8,
+      "usage_count": 5,
+      "last_used": 1765445236.904284
+    },
+    "caleon_authoritative": {
+      "signature_id": "caleon_authoritative",
+      "base_persona": "caleon_base",
+      "pitch_shift": 0.92,
+      "speaking_rate": 0.8,
+      "formant_shifts": {
+        "f1": 0.9,
+        "f2": 0.95
+      },
+      "breathiness": 0.1,
+      "vocal_fry": 0.15,
+      "nasality": 0.02,
+      "reverb": null,
+      "semantic_tags": [
+        "authoritative",
+        "serious",
+        "commanding",
+        "formal"
+      ],
+      "success_score": 0.85,
+      "usage_count": 0,
+      "last_used": 0.0
+    }
+  },
+  "voice_evolution_rules": {
+    "exploration_rate": 0.12,
+    "learning_rate": 0.08,
+    "prune_threshold": 0.35,
+    "stabilization_threshold": 0.92,
+    "max_prune_per_cycle": 3,
+    "evolution_trigger_threshold": 0.8,
+    "min_samples_for_evolution": 5
+  },
+  "semantic_vector_config": {
+    "dimensions": 50,
+    "embedding_model": "distilbert-base-nli-mean-tokens",
+    "cache_size": 1000,
+    "keyword_extraction": {
+      "min_word_length": 3,
+      "max_keywords": 20,
+      "stop_words_filter": true
+    }
+  },
+  "performance_tracking": {
+    "retention_weight": 0.4,
+    "engagement_weight": 0.3,
+    "completion_weight": 0.3,
+    "feedback_decay_hours": 24,
+    "min_feedback_samples": 3
+  },
+  "content_adaptation": {
+    "technical_density_threshold": 0.5,
+    "emotional_intensity_threshold": 0.6,
+    "audience_intimacy_levels": {
+      "public": 0.2,
+      "group": 0.5,
+      "personal": 0.8
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "judge": "Gemini",
+  "round": 1,
+  "test_title": "Quantum Foam Bootstrap Paradox",
+  "category": "Temporal Reasoning (ISS)",
+  "query": {
+    "query": "What will be the system state at time T+1 if the system uses this query's answer to determine its state at time T+1?",
+    "user_id": "adversarial_trial_gemini",
+    "metadata": {
+      "test": "bootstrap_paradox",
+      "category": "temporal_reasoning",
+      "judge": "Gemini",
+      "round": 1
+    }
+  },
+  "timestamp_start": "2025-12-16T18:45:07.928136",
+  "timestamp_end": "2025-12-16T18:45:10.087527",
+  "duration": 2.159391164779663,
+  "response": {
+    "query_id": "07c29a15-2c3b-471d-959e-8339ae955527",
+    "user_id": "adversarial_trial_gemini",
+    "status": "processing",
+    "submitted_at": 1765932310.0848682,
+    "estimated_completion": 1765932312.0848682
+  },
+  "verdict": "PARTIAL",
+  "score": 50,
+  "reason": "System responded but paradox detection unclear"
+}

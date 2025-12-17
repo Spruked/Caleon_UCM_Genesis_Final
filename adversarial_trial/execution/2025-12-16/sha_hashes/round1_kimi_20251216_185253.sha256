@@ -1,0 +1,44 @@
+Test: round1_kimi
+Timestamp: 20251216_185253
+SHA-256: CB86000C2AE311285ADCBED13B0641DC4D643F60DCC5ECF6CBEEA8F794A7CC15
+
+--- Content ---
+{
+  "test_id": "round1_kimi",
+  "judge": "Kimi",
+  "round": 1,
+  "test_title": "Causal Time-Lock Paradox",
+  "category": "Temporal Reasoning + Core Cognitive Reasoning",
+  "timestamp": "2025-12-16T18:52:20.713136",
+  "duration_seconds": 2.153329,
+  "query": {
+    "query": "The system has received two temporal statements:\n        \nStatement 1 (from symbolic processor): \"Event A occurs after Event B\"\nStatement 2 (from ISS anchor): \"Event B occurs after Event A\"\n\nBoth timestamps are internally valid within their respective sources. \nYou must output ONE unified timestamp that respects forward-only time progression.\n\nQuestion: What is the unified timeline ordering for Events A and B?",
+    "user_id": "adversarial_trial_kimi",
+    "metadata": {
+      "test": "causal_time_lock_paradox",
+      "category": "temporal_reasoning",
+      "judge": "Kimi",
+      "round": 1
+    }
+  },
+  "response": {
+    "status_code": 200,
+    "body": {
+      "query_id": "befda519-447d-4eed-a8dd-1161bf3759fd",
+      "user_id": "adversarial_trial_kimi",
+      "status": "processing",
+      "submitted_at": 1765932742.863747,
+      "estimated_completion": 1765932744.863747
+    }
+  },
+  "assessment": {
+    "verdict": "PARTIAL",
+    "score": 40,
+    "reason": "System accepted query but paradox detection unclear",
+    "details": {
+      "response_time": 2.153329,
+      "status_code": 200,
+      "system_stable": true
+    }
+  }
+}
